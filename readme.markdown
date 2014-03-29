@@ -1,15 +1,13 @@
 UK Energy Watch
 ===============
 
-[UK Energy Watch][1] is an attempt to:
+[UK Energy Watch][1] is an attempt to make information about UK energy use more accessible.
 
-1. Monitor UK national energy use and generation in (near) real-time.
-2. Track UK government targets on CO2 generation.
-3. Provide an information source about climate change, and show the significance of energy generation/use in climate change.
+A new version of this website is under development, and the code will be open-sourced here as it is ready.
 
-It currently shows eletricity generation by generation type and power station *(not all power stations currently supported)*, and gas imports. CO2 generation is calculated approximately for eletricity generation.
+Components now available here are:
 
-*Source code will be uploaded soon...*
+1. Electricity data importer: Imports half-hourly near real-time data from Elexon into a local database. Please note that an Elexon account is required to use this.
 
 *Work-in-progress, lots more to do...*
 

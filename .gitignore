@@ -1,6 +1,6 @@
-bin
-obj
-*.suo
-*.user
-__*
-*.tmp
+logs
+project/project
+project/target
+target
+tmp
+*~
