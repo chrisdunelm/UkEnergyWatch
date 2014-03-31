@@ -106,18 +106,14 @@ trait RealImporter extends Slogger {
         }
         log.info(s"importOldBmUnits(): gap = $gap  dayStart = $dayStart")
         val linesInInterval = try {
-          Some(LinesInInterval(bmraFileDownloader.getDay(dayStart), gap))
+          val interval = new Interval(dayStart, gap.getEnd)
+          Some(LinesInInterval(bmraFileDownloader.getDay(dayStart), interval))
         } catch {
           case e: Throwable =>
             log.warn(s"Failed to download BMRA day file at: '${dayStart}'", e)
             None
         }
         processBmraLines(linesInInterval)
-        linesInInterval match {
-          case Some(LinesInInterval(_, gap)) =>
-            Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, dayStart.totalSeconds, gap.getEnd.totalSeconds))
-          case None => // Do nothing
-        }
       }
     }
   }
@@ -154,11 +150,6 @@ trait RealImporter extends Slogger {
           None
       }
       processBmraLines(linesInInterval)
-      linesInInterval match {
-        case Some(LinesInInterval(_, interval)) =>
-          Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, interval.getStart.totalSeconds, interval.getEnd.totalSeconds))
-        case None => // Do nothing
-      }
     }
   }
 
@@ -177,6 +168,9 @@ trait RealImporter extends Slogger {
         }
       }
       log.info(s"Processing BMRA file complete. Line-count = $lineCount")
+      val download = Download(Downloads.TYPE_BMRA, interval.getStart.totalSeconds, interval.getEnd.totalSeconds)
+      Downloads.mergeInsert(download)
+      log.info("Merged download")
     case None => // Do nothing
   }
 
