@@ -96,7 +96,7 @@ trait RealImporter extends Slogger {
     database withSession { implicit session =>
       //println(Downloads.list)
       for {
-        gap <- Downloads.getLastGap(Downloads.TYPE_BMUFPN)
+        gap <- Downloads.getLastGap(Downloads.TYPE_BMRA)
         if gap.getEnd >= new DateTime(2003, 1, 1, 0, 0)
       } {
         val dayStart = if (gap.getEnd.getMillisOfDay == 0) {
@@ -115,7 +115,7 @@ trait RealImporter extends Slogger {
         processBmraLines(linesInInterval)
         linesInInterval match {
           case Some(LinesInInterval(_, gap)) =>
-            Downloads.mergeInsert(Download(Downloads.TYPE_BMUFPN, dayStart.totalSeconds, gap.getEnd.totalSeconds))
+            Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, dayStart.totalSeconds, gap.getEnd.totalSeconds))
           case None => // Do nothing
         }
       }
@@ -125,7 +125,7 @@ trait RealImporter extends Slogger {
   def importCurrentBmUnits() {
     // Attempt to download latest half-hour file, if current time is greater than file endtime
     database withSession { implicit session =>
-      val latest = Downloads.getLatest(Downloads.TYPE_BMUFPN)
+      val latest = Downloads.getLatest(Downloads.TYPE_BMRA)
       val nextFileTime = latest match {
         case Some(dt) if dt > clock.nowUtc() - 48.hours =>
           // Previous data exists, use end time
@@ -156,7 +156,7 @@ trait RealImporter extends Slogger {
       processBmraLines(linesInInterval)
       linesInInterval match {
         case Some(LinesInInterval(_, interval)) =>
-          Downloads.mergeInsert(Download(Downloads.TYPE_BMUFPN, interval.getStart.totalSeconds, interval.getEnd.totalSeconds))
+          Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, interval.getStart.totalSeconds, interval.getEnd.totalSeconds))
         case None => // Do nothing
       }
     }

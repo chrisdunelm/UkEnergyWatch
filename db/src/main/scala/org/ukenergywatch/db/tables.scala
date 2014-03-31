@@ -90,14 +90,14 @@ trait DownloadTable extends MergeableTable {
 
   object Downloads extends TableQuery(new Downloads(_)) with Merger[Download, Unit] {
 
-    val TYPE_BMUFPN = 1
+    val TYPE_BMRA = 1
 
     def mergeInsert(item: Download)(implicit session: Session) {
       val q = Downloads
         .filter(x => x.downloadType === item.downloadType && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
         .sortBy(_.fromTime)
-        //.take(3)
-      val result = q.list.take(3)
+        .take(3)
+      val result = q.list
       def insert(e: Download): Unit = Downloads += e
       def updateFrom(e: Download, from: Int): Unit = Downloads.filter(_.id === e.id).map(_.fromTime).update(from)
       def updateTo(e: Download, to: Int): Unit = Downloads.filter(_.id === e.id).map(_.toTime).update(to)
@@ -145,8 +145,8 @@ trait BmUnitFpnsTable extends MergeableTable {
       val q = BmUnitFpns
         .filter(x => x.bmUnitId === item.bmUnitId && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
         .sortBy(_.fromTime)
-        //.take(3)
-      val result = q.list.take(3)
+        .take(3)
+      val result = q.list
       def insert(e: BmUnitFpn): Unit = BmUnitFpns += e
       def updateFrom(e: BmUnitFpn, from: Int): Unit = BmUnitFpns.filter(_.id === e.id).map(_.fromTime).update(from)
       def updateTo(e: BmUnitFpn, to: Int): Unit = BmUnitFpns.filter(_.id === e.id).map(_.toTime).update(to)
@@ -210,30 +210,14 @@ trait GenByFuelTable extends MergeableTable {
       val q = GenByFuels
         .filter(x => x.fuel === item.fuel && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
         .sortBy(_.fromTime)
-        //.take(3)
-      val result = q.list.take(3)
+        .take(3)
+      val result = q.list
       def insert(e: GenByFuel): Unit = GenByFuels += e
       def updateFrom(e: GenByFuel, from: Int): Unit = GenByFuels.filter(_.id === e.id).map(_.fromTime).update(from)
       def updateTo(e: GenByFuel, to: Int): Unit = GenByFuels.filter(_.id === e.id).map(_.toTime).update(to)
       def delete(e: GenByFuel): Unit = GenByFuels.filter(_.id === e.id).delete
       merge(result, item, insert, updateFrom, updateTo, delete)
     }
-    /*def getSpot(bmUnitId: String, when: ReadableInstant)(implicit session: Session): Option[Double] = {
-      val whenSeconds = (when.getMillis / 1000).toInt
-      val q = BmUnitFpns.filter(x => x.bmUnitId === bmUnitId && x.fromTime <= whenSeconds && x.toTime > whenSeconds)
-      val item = q.firstOption
-      for (item <- item) yield {
-        val itemRange = (item.toTime - item.fromTime).toDouble
-        val tFraction = (whenSeconds.toDouble - item.fromTime.toDouble) / itemRange
-        item.fromMw + (item.toMw - item.fromMw) * tFraction
-      }
-    }
-    def getRange(bmUnitId: String, interval: ReadableInterval)(implicit session: Session): Seq[BmUnitFpn] = {
-      val seconds0 = (interval.getStartMillis / 1000).toInt
-      val seconds1 = (interval.getEndMillis / 1000).toInt
-      val q = BmUnitFpns.filter(x => x.bmUnitId === bmUnitId && x.toTime > seconds0 && x.fromTime < seconds1).sortBy(_.fromTime)
-      q.list
-    }*/
   }
 
 }
@@ -246,7 +230,6 @@ trait GridFrequencyTable extends IntTimeRangeTable {
   case class GridFrequency(endTime: Int, frequency: Float)
 
   class GridFrequencies(tag: Tag) extends Table[GridFrequency](tag, "gridfrequencies") with IntTimeRange {
-    //def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def endTime = column[Int]("endTime", O.PrimaryKey)
     def frequency = column[Float]("frequency")
     def * = (endTime, frequency) <> (GridFrequency.tupled, GridFrequency.unapply)
@@ -257,7 +240,7 @@ trait GridFrequencyTable extends IntTimeRangeTable {
 
   object GridFrequencies extends TableQuery(new GridFrequencies(_)) {
     def insert(item: GridFrequency)(implicit session: Session) {
-      val result = GridFrequencies.filter(_.endTime === item.endTime).take(1).list.headOption
+      val result = GridFrequencies.filter(_.endTime === item.endTime).firstOption
       result match {
         case Some(_) => // Do nothing, already inserted
         case None => GridFrequencies += item
