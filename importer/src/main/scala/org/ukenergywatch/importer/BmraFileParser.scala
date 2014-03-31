@@ -1,10 +1,11 @@
 package org.ukenergywatch.importer
 
+import org.ukenergywatch.utils.Slogger
 import scala.util.matching.Regex
 import org.joda.time._
 import org.joda.time.format.DateTimeFormatterBuilder
 
-object BmraFileParser {
+object BmraFileParser extends Slogger {
 
   private val bmraFormatter =
     (new DateTimeFormatterBuilder)
@@ -46,7 +47,7 @@ object BmraFileParser {
           val data = for (Seq(("TS", ts), ("VP", vp)) <- ps.drop(m.size + 1).grouped(2)) yield BmraFpnData(ts, vp)
           Some(BmraFpn(publishTime, bmu, m("SD"), m("SP"), data.toSeq))
         } catch {
-          case ex: Throwable =>
+          case e: Throwable =>
             // TODO: Log error
             None
         }
@@ -54,8 +55,25 @@ object BmraFileParser {
     }
   }
 
+  case class BmraGridFrequency(publishTime: DateTime, gridTime: DateTime, frequency: Double) extends BmraDataItem
+  private object BmraGridFrequency {
+    // 2013:10:31:09:30:09:GMT: subject=BMRA.SYSTEM.FREQ, message={TS=2013:10:31:09:28:00:GMT,SF=49.976}
+    val rx = msgRx("""BMRA\.SYSTEM\.FREQ""")
+    def unapply(s: String): Option[BmraGridFrequency] = s match {
+      case rx(publishTime, msg) =>
+        try {
+           val m = msgParts(msg).toMap
+           Some(BmraGridFrequency(publishTime, m("TS"), m("SF")))
+        } catch {
+          case e: Throwable =>
+            None
+        }
+    }
+  }
+
   def parse(line: String): Option[BmraDataItem] = line match {
     case BmraFpn(fpn) => Some(fpn)
+    case BmraGridFrequency(gridFrequency) => Some(gridFrequency)
     case _ => None
   }
 }

@@ -20,4 +20,4 @@ libraryDependencies ++= Seq(
 
 //assemblySettings
 
-testOptions in Test += Tests.Argument("-oF")
+//testOptions in Test += Tests.Argument("-oF")

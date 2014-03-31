@@ -1,10 +1,7 @@
 package org.ukenergywatch.db
 
 import scala.slick.driver.JdbcProfile
-import org.joda.time.ReadableInstant
-import org.joda.time.ReadableInterval
-import org.joda.time.Instant
-import org.joda.time.Interval
+import org.joda.time._
 import org.ukenergywatch.utils.JodaTimeExtensions._
 
 
@@ -49,23 +46,29 @@ trait Merger[T <: Mergeable[U], U] {
   }
 }
 
-trait MergeableTable {
+trait IntTimeRangeTable {
   val profile: JdbcProfile
 
   import profile.simple._
 
   trait IntTimeRange {
-    def fromTime: Column[Int]
-    def toTime: Column[Int]
-
-    def from: ReadableInstant = ???
-    def to: ReadableInstant = ???
+    def from: ReadableInstant
+    def to: ReadableInstant
   }
+}
+
+trait MergeableTable extends IntTimeRangeTable {
+  val profile: JdbcProfile
+
+  import profile.simple._
 
   abstract class TimeMergeTable[T](tag: Tag, name: String) extends Table[T](tag, name) with IntTimeRange {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def fromTime = column[Int]("fromTime")
     def toTime = column[Int]("toTime")
+
+    def from: ReadableInstant = ???
+    def to: ReadableInstant = ???
   }
 
 }
@@ -75,14 +78,14 @@ trait DownloadTable extends MergeableTable {
 
   import profile.simple._
 
-  case class Download(id: Int, downloadType: Int, fromTime: Int, toTime: Int) extends Mergeable[Unit] {
+  case class Download(downloadType: Int, fromTime: Int, toTime: Int, id: Int = 0) extends Mergeable[Unit] {
     protected def fromValue: Unit = Unit
     protected def toValue: Unit = Unit
   }
 
   class Downloads(tag: Tag) extends TimeMergeTable[Download](tag, "downloads") {
     def downloadType = column[Int]("downloadType")
-    def * = (id, downloadType, fromTime, toTime) <> (Download.tupled, Download.unapply)
+    def * = (downloadType, fromTime, toTime, id) <> (Download.tupled, Download.unapply)
   }
 
   object Downloads extends TableQuery(new Downloads(_)) with Merger[Download, Unit] {
@@ -125,7 +128,7 @@ trait BmUnitFpnsTable extends MergeableTable {
 
   import profile.simple._
 
-  case class BmUnitFpn(id: Int, bmUnitId: String, fromTime: Int, fromMw: Float, toTime: Int, toMw: Float) extends Mergeable[Float] {
+  case class BmUnitFpn(bmUnitId: String, fromTime: Int, fromMw: Float, toTime: Int, toMw: Float, id: Int = 0) extends Mergeable[Float] {
     protected def fromValue: Float = fromMw
     protected def toValue: Float = toMw
   }
@@ -134,7 +137,7 @@ trait BmUnitFpnsTable extends MergeableTable {
     def bmUnitId = column[String]("bmUnitId")
     def fromMw = column[Float]("fromMw")
     def toMw = column[Float]("toMw")
-    def * = (id, bmUnitId, fromTime, fromMw, toTime, toMw) <> (BmUnitFpn.tupled, BmUnitFpn.unapply)
+    def * = (bmUnitId, fromTime, fromMw, toTime, toMw, id) <> (BmUnitFpn.tupled, BmUnitFpn.unapply)
   }
 
   object BmUnitFpns extends TableQuery(new BmUnitFpns(_)) with Merger[BmUnitFpn, Float] {
@@ -170,11 +173,107 @@ trait BmUnitFpnsTable extends MergeableTable {
 
 }
 
+trait GenByFuelTable extends MergeableTable {
+  val profile: JdbcProfile
+
+  import profile.simple._
+
+  case class GenByFuel(fuel: String, fromTime: Int, fromMw: Float, toTime: Int, toMw: Float, id: Int = 0) extends Mergeable[Float] {
+    protected def fromValue: Float = fromMw
+    protected def toValue: Float = toMw
+  }
+
+  class GenByFuels(tag: Tag) extends TimeMergeTable[GenByFuel](tag, "genbyfuel") {
+    def fuel = column[String]("fuel")
+    def fromMw = column[Float]("fromMw")
+    def toMw = column[Float]("toMw")
+    def * = (fuel, fromTime, fromMw, toTime, toMw, id) <> (GenByFuel.tupled, GenByFuel.unapply)
+  }
+
+  object GenByFuels extends TableQuery(new GenByFuels(_)) with Merger[GenByFuel, Float] {
+
+    val ccgt = "CCGT"
+    val coal = "COAL"
+    val intew = "INTEW"
+    val intfr = "INTFR"
+    val intirl = "INTIRL"
+    val intned = "INTNED"
+    val npshyd = "NPSHYD"
+    val nuclear = "NUCLEAR"
+    val ocgt = "OCGT"
+    val oil = "OIL"
+    val other = "OTHER"
+    val ps = "PS"
+    val wind = "WIND"
+
+    def mergeInsert(item: GenByFuel)(implicit session: Session) {
+      val q = GenByFuels
+        .filter(x => x.fuel === item.fuel && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
+        .sortBy(_.fromTime)
+        //.take(3)
+      val result = q.list.take(3)
+      def insert(e: GenByFuel): Unit = GenByFuels += e
+      def updateFrom(e: GenByFuel, from: Int): Unit = GenByFuels.filter(_.id === e.id).map(_.fromTime).update(from)
+      def updateTo(e: GenByFuel, to: Int): Unit = GenByFuels.filter(_.id === e.id).map(_.toTime).update(to)
+      def delete(e: GenByFuel): Unit = GenByFuels.filter(_.id === e.id).delete
+      merge(result, item, insert, updateFrom, updateTo, delete)
+    }
+    /*def getSpot(bmUnitId: String, when: ReadableInstant)(implicit session: Session): Option[Double] = {
+      val whenSeconds = (when.getMillis / 1000).toInt
+      val q = BmUnitFpns.filter(x => x.bmUnitId === bmUnitId && x.fromTime <= whenSeconds && x.toTime > whenSeconds)
+      val item = q.firstOption
+      for (item <- item) yield {
+        val itemRange = (item.toTime - item.fromTime).toDouble
+        val tFraction = (whenSeconds.toDouble - item.fromTime.toDouble) / itemRange
+        item.fromMw + (item.toMw - item.fromMw) * tFraction
+      }
+    }
+    def getRange(bmUnitId: String, interval: ReadableInterval)(implicit session: Session): Seq[BmUnitFpn] = {
+      val seconds0 = (interval.getStartMillis / 1000).toInt
+      val seconds1 = (interval.getEndMillis / 1000).toInt
+      val q = BmUnitFpns.filter(x => x.bmUnitId === bmUnitId && x.toTime > seconds0 && x.fromTime < seconds1).sortBy(_.fromTime)
+      q.list
+    }*/
+  }
+
+}
+
+trait GridFrequencyTable extends IntTimeRangeTable {
+  val profile: JdbcProfile
+
+  import profile.simple._
+
+  case class GridFrequency(endTime: Int, frequency: Float)
+
+  class GridFrequencies(tag: Tag) extends Table[GridFrequency](tag, "gridfrequencies") with IntTimeRange {
+    //def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def endTime = column[Int]("endTime", O.PrimaryKey)
+    def frequency = column[Float]("frequency")
+    def * = (endTime, frequency) <> (GridFrequency.tupled, GridFrequency.unapply)
+
+    def from: ReadableInstant = ???
+    def to: ReadableInstant = ???
+  }
+
+  object GridFrequencies extends TableQuery(new GridFrequencies(_)) {
+    def insert(item: GridFrequency)(implicit session: Session) {
+      val result = GridFrequencies.filter(_.endTime === item.endTime).take(1).list.headOption
+      result match {
+        case Some(_) => // Do nothing, already inserted
+        case None => GridFrequencies += item
+      }
+    }
+  }
+
+}
+
 trait DalComp {
   val dal: Dal
   trait Dal
       extends DownloadTable
-      with BmUnitFpnsTable {
+      with BmUnitFpnsTable
+      with GenByFuelTable
+      with GridFrequencyTable {
 
     val profile: JdbcProfile
     import profile.simple._
@@ -183,7 +282,9 @@ trait DalComp {
 
     def ddls: Seq[profile.DDL] = Seq(
       Downloads.ddl,
-      BmUnitFpns.ddl
+      BmUnitFpns.ddl,
+      GenByFuels.ddl,
+      GridFrequencies.ddl
     )
 
   }

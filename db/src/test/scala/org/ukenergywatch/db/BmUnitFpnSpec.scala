@@ -32,38 +32,38 @@ class BmUnitFpnSpec extends TestBaseDb {
   def t(time: Int): ReadableInstant = new Instant(time * 1000L)
   def i(t0: Int, t1: Int): ReadableInterval = new Interval(t(t0), t(t1))
 
-  def a(time: Int, mw0: Float, mw1: Float) = BmUnitFpn(0, "a", time, mw0, time + 1, mw1)
-  def a(time0: Int, mw0: Float, time1: Int, mw1: Float) = BmUnitFpn(0, "a", time0, mw0, time1, mw1)
+  def a(time: Int, mw0: Float, mw1: Float) = BmUnitFpn("a", time, mw0, time + 1, mw1)
+  def a(time0: Int, mw0: Float, time1: Int, mw1: Float) = BmUnitFpn("a", time0, mw0, time1, mw1)
 
   "BmUnitFpns" should "insert a single item" in prepare { implicit session =>
-    mergeIn(BmUnitFpn(0, "a", 10, 1, 20, 2))
-    all() shouldBe Seq(BmUnitFpn(0, "a", 10, 1, 20, 2))
+    mergeIn(BmUnitFpn("a", 10, 1, 20, 2))
+    all() shouldBe Seq(BmUnitFpn("a", 10, 1, 20, 2))
   }
 
   it should "check canMerge" in {
-    val a = BmUnitFpn(0, "a", 10, 1, 20, 1)
-    val b = BmUnitFpn(0, "a", 20, 2, 30, 2)
+    val a = BmUnitFpn("a", 10, 1, 20, 1)
+    val b = BmUnitFpn("a", 20, 2, 30, 2)
     a.canMerge(b) shouldBe false
   }
   
   it should "insert two non-adjacent items" in prepare { implicit session =>
-    mergeIn(BmUnitFpn(0, "a", 10, 1, 20, 2), BmUnitFpn(0, "a", 30, 2, 40, 3))
-    all() shouldBe Seq(BmUnitFpn(0, "a", 10, 1, 20, 2), BmUnitFpn(0, "a", 30, 2, 40, 3))
+    mergeIn(BmUnitFpn("a", 10, 1, 20, 2), BmUnitFpn("a", 30, 2, 40, 3))
+    all() shouldBe Seq(BmUnitFpn("a", 10, 1, 20, 2), BmUnitFpn("a", 30, 2, 40, 3))
   }
   
   it should "not merge two adjacent items with different mw" in prepare { implicit session =>
-    mergeIn(BmUnitFpn(0, "a", 10, 1, 20, 1), BmUnitFpn(0, "a", 20, 2, 30, 2))
-    all() shouldBe Seq(BmUnitFpn(0, "a", 10, 1, 20, 1), BmUnitFpn(0, "a", 20, 2, 30, 2))
+    mergeIn(BmUnitFpn("a", 10, 1, 20, 1), BmUnitFpn("a", 20, 2, 30, 2))
+    all() shouldBe Seq(BmUnitFpn("a", 10, 1, 20, 1), BmUnitFpn("a", 20, 2, 30, 2))
   }
   
   it should "merge two adjacent items with same mw" in prepare { implicit session =>
-    mergeIn(BmUnitFpn(0, "a", 10, 1, 20, 1), BmUnitFpn(0, "a", 20, 1, 30, 1))
-    all() shouldBe Seq(BmUnitFpn(0, "a", 10, 1, 30, 1))
+    mergeIn(BmUnitFpn("a", 10, 1, 20, 1), BmUnitFpn("a", 20, 1, 30, 1))
+    all() shouldBe Seq(BmUnitFpn("a", 10, 1, 30, 1))
   }
   
   it should "merge two adjacent items with same mw backwards" in prepare { implicit session =>
-    mergeIn(BmUnitFpn(0, "a", 20, 1, 30, 1), BmUnitFpn(0, "a", 10, 1, 20, 1))
-    all() shouldBe Seq(BmUnitFpn(0, "a", 10, 1, 30, 1))
+    mergeIn(BmUnitFpn("a", 20, 1, 30, 1), BmUnitFpn("a", 10, 1, 20, 1))
+    all() shouldBe Seq(BmUnitFpn("a", 10, 1, 30, 1))
   }
 
   it should "merge between two compatible items" in prepare { implicit session =>

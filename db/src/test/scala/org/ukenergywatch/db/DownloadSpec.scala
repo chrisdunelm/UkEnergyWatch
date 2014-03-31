@@ -12,10 +12,9 @@ class DownloadSpec extends TestBaseDb {
   }
 
   "Downloads" should "insert two initial items" in prepare { implicit session =>
-    val item = Download(0, 0, 1, 2)
-    Downloads.mergeInsert(Download(0, 0, 1, 2))
-    Downloads.mergeInsert(Download(0, 1, 1, 2))
-    all().toSet shouldBe Set(Download(0, 0, 1, 2), Download(0, 1, 1, 2))
+    Downloads.mergeInsert(Download(0, 1, 2))
+    Downloads.mergeInsert(Download(1, 1, 2))
+    all().toSet shouldBe Set(Download(0, 1, 2), Download(1, 1, 2))
   }
 
 }

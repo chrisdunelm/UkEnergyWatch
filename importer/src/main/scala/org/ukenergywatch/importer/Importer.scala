@@ -89,6 +89,8 @@ trait RealImporter extends Slogger {
     }
   }
 
+  case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)
+
   def importOldBmUnits() {
     // Find most recent gap
     database withSession { implicit session =>
@@ -102,36 +104,25 @@ trait RealImporter extends Slogger {
         } else {
           gap.getEnd.toDateTime.withMillisOfDay(0)
         }
-        //println(s"dayStart = '$dayStart'")
-        val lines0 = try {
-          Some(bmraFileDownloader.getDay(dayStart))
+        log.info(s"importOldBmUnits(): gap = $gap  dayStart = $dayStart")
+        val linesInInterval = try {
+          Some(LinesInInterval(bmraFileDownloader.getDay(dayStart), gap))
         } catch {
           case e: Throwable =>
-            log.warn(s"Failed to download day file at: '${dayStart}'", e)
+            log.warn(s"Failed to download BMRA day file at: '${dayStart}'", e)
             None
         }
-        lines0 match {
-          case Some(lines) =>
-            for (line <- lines) {
-              BmraFileParser.parse(line) match {
-                case Some(dataItem) if gap.contains(dataItem.publishTime) => dataItem match {
-                  case fpn: BmraFpn => insertFpnData(fpn)
-                  case _ => // Do nothing
-                }
-                case _ => // Do nothing
-              }
-            }
-            val download = Download(0, Downloads.TYPE_BMUFPN, dayStart.totalSeconds, gap.getEnd.totalSeconds)
-            Downloads.mergeInsert(download)
-          case _ => // Do nothing
+        processBmraLines(linesInInterval)
+        linesInInterval match {
+          case Some(LinesInInterval(_, gap)) =>
+            Downloads.mergeInsert(Download(Downloads.TYPE_BMUFPN, dayStart.totalSeconds, gap.getEnd.totalSeconds))
+          case None => // Do nothing
         }
       }
     }
   }
 
-  def importCurrentBmUnits() { //dal: org.ukenergywatch.db.DAL, database: scala.slick.jdbc.JdbcBackend.Database) {
-    import dal._
-    import dal.profile.simple._
+  def importCurrentBmUnits() {
     // Attempt to download latest half-hour file, if current time is greater than file endtime
     database withSession { implicit session =>
       val latest = Downloads.getLatest(Downloads.TYPE_BMUFPN)
@@ -139,7 +130,7 @@ trait RealImporter extends Slogger {
         case Some(dt) if dt > clock.nowUtc() - 48.hours =>
           // Previous data exists, use end time
           // But not it it's too soon for the next download to be available
-          if (dt + 31.minutes < clock.nowUtc()) {
+          if (dt + 33.minutes < clock.nowUtc()) {
             Some(dt)
           } else {
             None
@@ -149,35 +140,44 @@ trait RealImporter extends Slogger {
           val useTime = clock.nowUtc() - 45.minutes
           Some(useTime.withMillisOfSecond(0).withSecondOfMinute(0).withMinuteOfHour(if (useTime.getMinuteOfHour < 30) 0 else 30))
       }
-      log.info(s"nextFileTime = $nextFileTime")
-      val lines0 = try {
-        nextFileTime.map(bmraFileDownloader.getHalfHour(_))
+      log.info(s"importCurrentBmUnits(): nextFileTime = $nextFileTime")
+      println(s"importCurrentBmUnits(): nextFileTime = $nextFileTime")
+      val linesInInterval = try {
+        nextFileTime.map { nextFileTime =>
+          val lines = bmraFileDownloader.getHalfHour(nextFileTime)
+          val interval = new Interval(nextFileTime, nextFileTime + 30.minutes)
+          LinesInInterval(lines, interval)
+        }
       } catch {
-        // TODO: Catch only correct exception(s)
         case e: Throwable =>
-          log.warn(s"Failed to download HH file at: '${nextFileTime}'", e)
+          log.warn(s"Failed to download BMRA HH file at: '${nextFileTime}'", e)
           None
       }
-      lines0 match {
-        case Some(lines) =>
-          log.info(s"Downloaded file from elexon")
-          for (line <- lines) {
-            BmraFileParser.parse(line) match {
-              case Some(dataItem) => dataItem match {
-                case fpn: BmraFpn => insertFpnData(fpn)
-                case _ => // Do nothing
-              }
-              case None => // Do nothing
-            }
-          }
-          val t0 = (nextFileTime.get.getMillis / 1000L).toInt
-          val t1 = ((nextFileTime.get + 30.minutes).getMillis / 1000L).toInt
-          val download = Download(0, Downloads.TYPE_BMUFPN, t0, t1)
-          Downloads.mergeInsert(download)
-        case _ =>
-          // Do nothing
+      processBmraLines(linesInInterval)
+      linesInInterval match {
+        case Some(LinesInInterval(_, interval)) =>
+          Downloads.mergeInsert(Download(Downloads.TYPE_BMUFPN, interval.getStart.totalSeconds, interval.getEnd.totalSeconds))
+        case None => // Do nothing
       }
     }
+  }
+
+  def processBmraLines(linesInInterval: Option[LinesInInterval])(implicit session: Session): Unit = linesInInterval match {
+    case Some(LinesInInterval(lines, interval)) => 
+      log.info("Processing BMRA file from Elexon")
+      var lineCount = 0
+      for (line <- lines) {
+        lineCount += 1
+        BmraFileParser.parse(line) match {
+          case Some(dataItem) if interval.contains(dataItem.publishTime) => dataItem match {
+            case item: BmraFpn => insertFpnData(item)
+            case item: BmraGridFrequency => insertGridFrequency(item)
+          }
+          case _ => // Do nothing
+        }
+      }
+      log.info(s"Processing BMRA file complete. Line-count = $lineCount")
+    case None => // Do nothing
   }
 
   def insertFpnData(fpn: BmraFpn)(implicit session: Session) {
@@ -185,11 +185,14 @@ trait RealImporter extends Slogger {
       Seq(a, b) <- fpn.ps.sliding(2)
       if a.ts != b.ts
     } {
-      val t0 = (a.ts.getMillis / 1000L).toInt
-      val t1 = (b.ts.getMillis / 1000L).toInt
-      val ins = BmUnitFpn(0, fpn.bmu, t0, a.vp.toFloat, t1, b.vp.toFloat)
+      val ins = BmUnitFpn(fpn.bmu, a.ts.totalSeconds, a.vp.toFloat, b.ts.totalSeconds, b.vp.toFloat)
       BmUnitFpns.mergeInsert(ins)
     }
+  }
+
+  def insertGridFrequency(freq: BmraGridFrequency)(implicit session: Session) {
+    val ins = GridFrequency(freq.gridTime.totalSeconds, freq.frequency.toFloat)
+    GridFrequencies.insert(ins)
   }
 
 }
