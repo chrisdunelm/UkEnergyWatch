@@ -69,13 +69,14 @@ object BmraFileParser extends Slogger {
             log.warn(s"Failed to parse BmraGridFrequency message: '$msg'")
             None
         }
+      case _ => None
     }
   }
 
-  case class BmraGenByFuel(publishTime: DateTime, tp: DateTime, ts: DateTime, ft: String, fg: Double)
+  case class BmraGenByFuel(publishTime: DateTime, tp: DateTime, ts: DateTime, ft: String, fg: Double) extends BmraDataItem
   private object BmraGenByFuel {
     // 2013:10:31:09:30:25:GMT: subject=BMRA.SYSTEM.FUELINST, message={TP=2013:10:31:09:30:00:GMT,SD=2013:10:31:00:00:00:GMT,SP=19,TS=2013:10:31:09:25:00:GMT,FT=CCGT,FG=10105}
-    var rx = msgRx("""BMRA\.SYSTEM\.FUELINST"""")
+    var rx = msgRx("""BMRA\.SYSTEM\.FUELINST""")
     def unapply(s: String): Option[BmraGenByFuel] = s match {
       case rx(publishTime, msg) =>
         try {
@@ -86,12 +87,14 @@ object BmraFileParser extends Slogger {
             log.warn(s"Failed to parse BmraGenByFuel message: '$msg'")
             None
         }
+      case _ => None
     }
   }
 
   def parse(line: String): Option[BmraDataItem] = line match {
     case BmraFpn(fpn) => Some(fpn)
     case BmraGridFrequency(gridFrequency) => Some(gridFrequency)
+    case BmraGenByFuel(genByFuel) => Some(genByFuel)
     case _ => None
   }
 }

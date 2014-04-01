@@ -178,16 +178,15 @@ trait GenByFuelTable extends MergeableTable {
 
   import profile.simple._
 
-  case class GenByFuel(fuel: String, fromTime: Int, fromMw: Float, toTime: Int, toMw: Float, id: Int = 0) extends Mergeable[Float] {
-    protected def fromValue: Float = fromMw
-    protected def toValue: Float = toMw
+  case class GenByFuel(fuel: String, fromTime: Int, toTime: Int, mw: Float, id: Int = 0) extends Mergeable[Float] {
+    protected def fromValue: Float = mw
+    protected def toValue: Float = mw
   }
 
   class GenByFuels(tag: Tag) extends TimeMergeTable[GenByFuel](tag, "genbyfuel") {
     def fuel = column[String]("fuel")
-    def fromMw = column[Float]("fromMw")
-    def toMw = column[Float]("toMw")
-    def * = (fuel, fromTime, fromMw, toTime, toMw, id) <> (GenByFuel.tupled, GenByFuel.unapply)
+    def mw = column[Float]("toMw")
+    def * = (fuel, fromTime, toTime, mw, id) <> (GenByFuel.tupled, GenByFuel.unapply)
   }
 
   object GenByFuels extends TableQuery(new GenByFuels(_)) with Merger[GenByFuel, Float] {

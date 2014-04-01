@@ -161,6 +161,7 @@ trait RealImporter extends Slogger {
           case Some(dataItem) if interval.contains(dataItem.publishTime) => dataItem match {
             case item: BmraFpn => insertFpnData(item)
             case item: BmraGridFrequency => insertGridFrequency(item)
+            case item: BmraGenByFuel => insertGenByFuel(item)
           }
           case _ => // Do nothing
         }
@@ -172,7 +173,7 @@ trait RealImporter extends Slogger {
     case None => // Do nothing
   }
 
-  def insertFpnData(fpn: BmraFpn)(implicit session: Session) {
+  def insertFpnData(fpn: BmraFpn)(implicit session: Session): Unit = {
     for {
       Seq(a, b) <- fpn.ps.sliding(2)
       if a.ts != b.ts
@@ -182,9 +183,14 @@ trait RealImporter extends Slogger {
     }
   }
 
-  def insertGridFrequency(freq: BmraGridFrequency)(implicit session: Session) {
+  def insertGridFrequency(freq: BmraGridFrequency)(implicit session: Session): Unit = {
     val ins = GridFrequency(freq.ts.totalSeconds, freq.sf.toFloat)
     GridFrequencies.insert(ins)
+  }
+
+  def insertGenByFuel(gbf: BmraGenByFuel)(implicit session: Session): Unit = {
+    val ins = GenByFuel(gbf.ft, gbf.ts.totalSeconds, (gbf.ts + 5.minutes).totalSeconds, gbf.fg.toFloat)
+    GenByFuels.mergeInsert(ins)
   }
 
 }
