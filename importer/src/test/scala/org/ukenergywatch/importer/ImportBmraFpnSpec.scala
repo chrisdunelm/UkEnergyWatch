@@ -19,7 +19,7 @@ class ImportBmraFpnSpec extends TestBase {
 
     TestImporter.clock.set(new DateTime(2014, 3, 3, 22, 15, DateTimeZone.UTC))
     TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.21.30-22.00.gz", s)
-    TestImporter.run(Importer.CurrentBmUnits)
+    TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 3, 22, 00)))
     BmUnitFpns.sortBy(_.id).list.id0 shouldBe List(
@@ -40,7 +40,7 @@ class ImportBmraFpnSpec extends TestBase {
 
     TestImporter.clock.set(new DateTime(2014, 3, 4, 23, 0, DateTimeZone.UTC))
     TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.22.00-22.30.gz", s)
-    TestImporter.run(Importer.CurrentBmUnits)
+    TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 3, 22, 30)))
     BmUnitFpns.list.id0 shouldBe List(BmUnitFpn("T_BARKB2", t(2014, 3, 3, 22, 0), 0, t(2014, 3, 3, 22, 30), 0))
@@ -55,7 +55,7 @@ class ImportBmraFpnSpec extends TestBase {
 
     TestImporter.clock.set(new DateTime(2014, 3, 3, 22, 0, DateTimeZone.UTC))
     TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.21.00-21.30.gz", s)
-    TestImporter.run(Importer.CurrentBmUnits)
+    TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(
       Download(Downloads.TYPE_BMRA, t(2014, 3, 1, 21, 30), t(2014, 3, 1, 22, 0)),
@@ -68,7 +68,7 @@ class ImportBmraFpnSpec extends TestBase {
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 1, 21, 30), t(2014, 3, 1, 22, 0)))
 
     TestImporter.clock.set(new DateTime(2014, 3, 2, 22, 15, DateTimeZone.UTC))
-    TestImporter.run(Importer.CurrentBmUnits)
+    TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 1, 21, 30), t(2014, 3, 1, 22, 0)))
     BmUnitFpns.list.id0 shouldBe List()
@@ -83,7 +83,7 @@ class ImportBmraFpnSpec extends TestBase {
 
     TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.22.00-22.30.gz", s)
     TestImporter.clock.set(new DateTime(2014, 3, 3, 22, 30, DateTimeZone.UTC))
-    TestImporter.run(Importer.CurrentBmUnits)
+    TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 3, 22, 0)))
     BmUnitFpns.list.id0 shouldBe List()
@@ -91,7 +91,7 @@ class ImportBmraFpnSpec extends TestBase {
 
   it should "load no old files if no current files exist" in prepare { implicit session =>
     TestImporter.clock.set(new DateTime(2014, 2, 20, 10, 15, DateTimeZone.UTC))
-    TestImporter.run(Importer.OldBmUnits)
+    TestImporter.run(Importer.ImportOld)
 
     Downloads.list shouldBe List()
     BmUnitFpns.list shouldBe List()
@@ -106,7 +106,7 @@ class ImportBmraFpnSpec extends TestBase {
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 5, 0, 0)))
 
     TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages.2014-03-03.gz", s)
-    TestImporter.run(Importer.OldBmUnits)
+    TestImporter.run(Importer.ImportOld)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 0, 0), t(2014, 3, 5, 0, 0)))
     BmUnitFpns.list.id0 shouldBe List(BmUnitFpn("T_BARKB1", t(2014, 3, 3, 21, 30), 1, t(2014, 3, 3, 22, 0), 1))
@@ -120,7 +120,7 @@ class ImportBmraFpnSpec extends TestBase {
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 0, 0), t(2014, 3, 5, 0, 0)))
 
     TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages.2014-03-02.gz", s)
-    TestImporter.run(Importer.OldBmUnits)
+    TestImporter.run(Importer.ImportOld)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 2, 0, 0), t(2014, 3, 5, 0, 0)))
     BmUnitFpns.list.id0 shouldBe List(BmUnitFpn("T_BARKB1", t(2014, 3, 2, 21, 30), 1, t(2014, 3, 2, 22, 0), 1))

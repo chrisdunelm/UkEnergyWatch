@@ -13,8 +13,8 @@ object Importer {
 
   sealed trait Mode
   case object CreateTables extends Mode
-  case object OldBmUnits extends Mode
-  case object CurrentBmUnits extends Mode
+  case object ImportOld extends Mode
+  case object ImportCurrent extends Mode
 
   object Flags extends Options {
     register(org.ukenergywatch.slogger.impl.Slogger.Flags)
@@ -72,8 +72,8 @@ trait RealImporter extends Slogger {
     log.info(s"Importer running - mode = '$mode'")
     mode match {
       case CreateTables => createTables()
-      case OldBmUnits => importOldBmUnits()
-      case CurrentBmUnits => importCurrentBmUnits()
+      case ImportOld => importOld()
+      case ImportCurrent => importCurrent()
     }
   }
 
@@ -91,7 +91,7 @@ trait RealImporter extends Slogger {
 
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)
 
-  def importOldBmUnits() {
+  def importOld() {
     // Find most recent gap
     database withSession { implicit session =>
       for {
@@ -117,7 +117,7 @@ trait RealImporter extends Slogger {
     }
   }
 
-  def importCurrentBmUnits() {
+  def importCurrent() {
     // Attempt to download latest half-hour file, if current time is greater than file endtime
     database withSession { implicit session =>
       val latest = Downloads.getLatest(Downloads.TYPE_BMRA)

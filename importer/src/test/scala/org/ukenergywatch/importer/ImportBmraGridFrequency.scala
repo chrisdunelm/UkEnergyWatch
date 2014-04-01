@@ -19,7 +19,7 @@ class ImportBmraGridFrequencySpec extends TestBase {
 
     TestImporter.clock.set(new DateTime(2013, 10, 31, 10, 30, DateTimeZone.UTC))
     TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2013-10-31.09.30-10.00.gz", s)
-    TestImporter.run(Importer.CurrentBmUnits)
+    TestImporter.run(Importer.ImportCurrent)
 
     GridFrequencies.sortBy(_.endTime).list shouldBe List(
       GridFrequency(t(2013, 10, 31, 9, 28, 0), 49.976f),
