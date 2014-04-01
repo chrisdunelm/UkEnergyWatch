@@ -94,7 +94,6 @@ trait RealImporter extends Slogger {
   def importOldBmUnits() {
     // Find most recent gap
     database withSession { implicit session =>
-      //println(Downloads.list)
       for {
         gap <- Downloads.getLastGap(Downloads.TYPE_BMRA)
         if gap.getEnd >= new DateTime(2003, 1, 1, 0, 0)
@@ -137,7 +136,6 @@ trait RealImporter extends Slogger {
           Some(useTime.withMillisOfSecond(0).withSecondOfMinute(0).withMinuteOfHour(if (useTime.getMinuteOfHour < 30) 0 else 30))
       }
       log.info(s"importCurrentBmUnits(): nextFileTime = $nextFileTime")
-      println(s"importCurrentBmUnits(): nextFileTime = $nextFileTime")
       val linesInInterval = try {
         nextFileTime.map { nextFileTime =>
           val lines = bmraFileDownloader.getHalfHour(nextFileTime)
@@ -185,7 +183,7 @@ trait RealImporter extends Slogger {
   }
 
   def insertGridFrequency(freq: BmraGridFrequency)(implicit session: Session) {
-    val ins = GridFrequency(freq.gridTime.totalSeconds, freq.frequency.toFloat)
+    val ins = GridFrequency(freq.ts.totalSeconds, freq.sf.toFloat)
     GridFrequencies.insert(ins)
   }
 

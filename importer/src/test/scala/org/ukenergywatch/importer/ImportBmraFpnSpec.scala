@@ -1,103 +1,16 @@
 package org.ukenergywatch.importer
 
 import org.scalatest._
-import org.ukenergywatch.db.DalComp
-import org.ukenergywatch.utils._
 import org.joda.time._
-import java.io.ByteArrayOutputStream
-import java.util.zip.GZIPOutputStream
-import scala.collection.mutable
 
-trait MemoryDalComp extends DalComp {
-  val dal = MemoryDal
-  object MemoryDal extends Dal {
-    val profile = scala.slick.driver.H2Driver
-    val database = profile.simple.Database.forURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
-  }
-}
-
-class ImporterSpec extends FlatSpec with Matchers {
-
-  def t(dt: DateTime): Int = (dt.getMillis / 1000L).toInt
-  def t(year: Int, month: Int, day: Int, hour: Int, minute: Int): Int = t(new DateTime(year, month, day, hour, minute, DateTimeZone.UTC))
-
-  trait FakeFetcherComp extends HttpFetcherComp {
-    lazy val httpFetcher: FakeFetcher = new FakeFetcher
-    class FakeFetcher extends HttpFetcher {
-      private val map = mutable.Map[String, String]()
-      def fetch(url: String): Array[Byte] = {
-        map.get(url) match {
-          case None =>
-            // TODO throw correct exception
-            throw new Exception
-          case Some(s) =>
-            // TODO zip data and return
-            val bos = new ByteArrayOutputStream
-            val gzos = new GZIPOutputStream(bos)
-            gzos.write(s.getBytes("UTF-8"))
-            gzos.close()
-            bos.toByteArray
-        }
-      }
-      def set(url: String, value: String): Unit = map.update(url, value)
-    }
-  }
-
-  trait FakeConfigComp extends ConfigComp {
-    lazy val config: FakeConfig = new FakeConfig
-    class FakeConfig extends Config {
-      val map = mutable.Map[String, String]()
-      def getString(key: String): Option[String] = map.get(key)
-      def set(key: String, value: String): Unit = map.update(key, value)
-    }
-  }
-
-  object TestImporter extends RealImporter
-    with HttpBmraFileDownloaderComp
-    with FakeFetcherComp
-    with MemoryDalComp
-    with FakeClockComp
-    with FakeConfigComp {
-
-    object Implicits {
-      import dal._
-
-      implicit class RichDownload(val v: Download) {
-        def id0: Download = v.copy(id = 0)
-      }
-
-      implicit class RichDownloadSeq(val vs: Seq[Download]) {
-        def id0: Seq[Download] = vs.map(_.id0)
-      }
-  
-      implicit class RichBmUnitFpn(val v: BmUnitFpn) {
-        def id0: BmUnitFpn = v.copy(id = 0)
-      }
-
-      implicit class RichBmUnitFpnSeq(val vs: Seq[BmUnitFpn]) {
-        def id0: Seq[BmUnitFpn] = vs.map(_.id0)
-      }
-    }
-
-  }
+class ImportBmraFpnSpec extends TestBase {
 
   import TestImporter.dal
   import TestImporter.dal._
   import TestImporter.dal.profile.simple._
   import TestImporter.Implicits._
 
-  def prepare(fn: Session => Unit): Unit = {
-    dal.database withSession { implicit session =>
-      import TestImporter.dal.profile.simple._
-      for (ddl <- dal.ddls) {
-        try { ddl.drop } catch { case _: Throwable => }
-        ddl.create
-      }
-      fn(session)
-    }
-  }
-
-  "Importer" should "collect initial current data" in prepare { implicit session =>
+  "Import BMRA FPN" should "collect initial current data" in prepare { implicit session =>
     val s = """
 2014:03:03:21:31:39:GMT: subject=BMRA.BM.T_BARKB2.FPN, message={SD=2014:03:03:00:00:00:GMT,SP=46,NP=2,TS=2014:03:03:22:30:00:GMT,VP=0.0,TS=2014:03:03:23:00:00:GMT,VP=0.0}
 2014:03:03:21:31:39:GMT: subject=BMRA.BM.E_BETHW-1.FPN, message={SD=2014:03:03:00:00:00:GMT,SP=46,NP=3,TS=2014:03:03:22:30:00:GMT,VP=2.0,TS=2014:03:03:22:31:00:GMT,VP=3.0,TS=2014:03:03:23:00:00:GMT,VP=3.0}

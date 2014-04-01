@@ -48,14 +48,14 @@ object BmraFileParser extends Slogger {
           Some(BmraFpn(publishTime, bmu, m("SD"), m("SP"), data.toSeq))
         } catch {
           case e: Throwable =>
-            // TODO: Log error
+            log.warn(s"Failed to parse BmraFpn message: '$msg'")
             None
         }
       case _ => None
     }
   }
 
-  case class BmraGridFrequency(publishTime: DateTime, gridTime: DateTime, frequency: Double) extends BmraDataItem
+  case class BmraGridFrequency(publishTime: DateTime, ts: DateTime, sf: Double) extends BmraDataItem
   private object BmraGridFrequency {
     // 2013:10:31:09:30:09:GMT: subject=BMRA.SYSTEM.FREQ, message={TS=2013:10:31:09:28:00:GMT,SF=49.976}
     val rx = msgRx("""BMRA\.SYSTEM\.FREQ""")
@@ -66,6 +66,24 @@ object BmraFileParser extends Slogger {
            Some(BmraGridFrequency(publishTime, m("TS"), m("SF")))
         } catch {
           case e: Throwable =>
+            log.warn(s"Failed to parse BmraGridFrequency message: '$msg'")
+            None
+        }
+    }
+  }
+
+  case class BmraGenByFuel(publishTime: DateTime, tp: DateTime, ts: DateTime, ft: String, fg: Double)
+  private object BmraGenByFuel {
+    // 2013:10:31:09:30:25:GMT: subject=BMRA.SYSTEM.FUELINST, message={TP=2013:10:31:09:30:00:GMT,SD=2013:10:31:00:00:00:GMT,SP=19,TS=2013:10:31:09:25:00:GMT,FT=CCGT,FG=10105}
+    var rx = msgRx("""BMRA\.SYSTEM\.FUELINST"""")
+    def unapply(s: String): Option[BmraGenByFuel] = s match {
+      case rx(publishTime, msg) =>
+        try {
+          val m = msgParts(msg).toMap
+          Some(BmraGenByFuel(publishTime, m("TP"), m("TS"), m("FT"), m("FG")))
+        } catch {
+          case e: Throwable =>
+            log.warn(s"Failed to parse BmraGenByFuel message: '$msg'")
             None
         }
     }
