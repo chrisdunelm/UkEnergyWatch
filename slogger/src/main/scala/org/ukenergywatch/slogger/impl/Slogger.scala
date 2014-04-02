@@ -32,13 +32,17 @@ object Slogger {
 class Slogger(name: String) extends MarkerIgnoringBase {
   import Slogger._
 
+  private val dir = Flags.logDir()
+  private val filePrefix = Flags.logFilePrefix()
+  private val exceptionLines = Flags.logExceptionLines()
+
   private def logToFile(now: DateTime, s: String, e: Option[String]) {
     val exStrLimited = e.map { e =>
-      if (Flags.logExceptionLines() == 0) e else e.split("\n").take(Flags.logExceptionLines()).mkString("\n")
+      if (exceptionLines == 0) e else e.split("\n").take(exceptionLines).mkString("\n")
     }
     import java.io.FileWriter
     val nowStr = now.toString("yyyy'-'MM'-'dd")
-    val filename = s"${Flags.logDir()}/${Flags.logFilePrefix()}$nowStr.log"
+    val filename = s"$dir/$filePrefix$nowStr.log"
     try {
       val fw = new FileWriter(filename, true)
       try {
