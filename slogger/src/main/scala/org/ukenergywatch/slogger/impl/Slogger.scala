@@ -6,6 +6,7 @@ import org.slf4j.helpers.MessageFormatter.arrayFormat
 import org.slf4j.helpers.FormattingTuple
 import org.joda.time._
 import org.ukenergywatch.utils.Options
+import org.ukenergywatch.utils.OptionSpec
 
 
 object Slogger {
@@ -17,6 +18,7 @@ object Slogger {
     val logToStdOut = opt(false)
     val logMaxFileSize = opt(100L * 1024L * 1024L)
     val logKeepDays = opt(30)
+    val logExceptionLines = opt(0, OptionSpec(help = "Number of lines of exceptions to log. 0 = all in file, minimal to stdout"))
   }
 
   sealed abstract class Level(val level: Int)
@@ -62,9 +64,11 @@ class Slogger(name: String) extends MarkerIgnoringBase {
       if (Flags.logDir() != "") {
         logToFile(now, out, exStr)
       } 
-      if (Flags.logToStdOut()) {
+      if (Flags.logToStdOut() || Flags.logDir() == "") {
         println(out)
-        if (exStr.nonEmpty) println(exStr.get)
+        if (exStr.nonEmpty) {
+          println(exStr.get.split("\n").take(Flags.logExceptionLines() + 1).mkString("\n"))
+        }
       }
     }
   }
