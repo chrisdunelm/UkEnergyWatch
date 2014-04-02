@@ -33,6 +33,9 @@ class Slogger(name: String) extends MarkerIgnoringBase {
   import Slogger._
 
   private def logToFile(now: DateTime, s: String, e: Option[String]) {
+    val exStrLimited = e.map { e =>
+      if (Flags.logExceptionLines() == 0) e else e.split("\n").take(Flags.logExceptionLines()).mkString("\n")
+    }
     import java.io.FileWriter
     val nowStr = now.toString("yyyy'-'MM'-'dd")
     val filename = s"${Flags.logDir()}/${Flags.logFilePrefix()}$nowStr.log"
@@ -40,6 +43,11 @@ class Slogger(name: String) extends MarkerIgnoringBase {
       val fw = new FileWriter(filename, true)
       try {
         fw.write(s)
+        fw.write("\n")
+        if (exStrLimited.nonEmpty) {
+          fw.write(exStrLimited.get)
+          fw.write("\n")
+        }
       } finally {
         fw.close()
       }
@@ -64,10 +72,12 @@ class Slogger(name: String) extends MarkerIgnoringBase {
       if (Flags.logDir() != "") {
         logToFile(now, out, exStr)
       } 
-      if (Flags.logToStdOut() || Flags.logDir() == "") {
+      if (Flags.logToStdOut()) {
         println(out)
         if (exStr.nonEmpty) {
-          println(exStr.get.split("\n").take(Flags.logExceptionLines() + 1).mkString("\n"))
+          val exLines = if (Flags.logExceptionLines() == 0) 1 else Flags.logExceptionLines()
+          val exStrLimited = exStr.get.split("\n").take(exLines).mkString("\n")
+          println(exStrLimited)
         }
       }
     }
