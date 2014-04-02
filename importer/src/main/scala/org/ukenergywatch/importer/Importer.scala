@@ -94,7 +94,6 @@ trait RealImporter extends Slogger {
   }
 
   def dropTables() {
-    println(DateTime.now().toString("YYYY-MM-dd"))
     if (DateTime.now().toString("YYYY-MM-dd") != Flags.dropPassword()) {
       println("Incorrect drop password")
     } else {
