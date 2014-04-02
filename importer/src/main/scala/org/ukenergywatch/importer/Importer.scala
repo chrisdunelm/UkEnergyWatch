@@ -13,6 +13,7 @@ object Importer {
 
   sealed trait Mode
   case object CreateTables extends Mode
+  case object DropTables extends Mode
   case object ImportOld extends Mode
   case object ImportCurrent extends Mode
 
@@ -22,10 +23,12 @@ object Importer {
     val mode = opt[Mode](OptionSpec(help = "The main mode in which this Importer runs"))
     val elexonKey = opt[String]("")
 
-    val mysqlHost = opt[String]
-    val mysqlDatabase = opt[String]
-    val mysqlUser = opt[String]
-    val mysqlPassword = opt[String]
+    val mysqlHost = opt[String]("localhost")
+    val mysqlDatabase = opt[String]("")
+    val mysqlUser = opt[String]("")
+    val mysqlPassword = opt[String]("")
+
+    val dropPassword = opt("", OptionSpec(help = "To drop tables put today's date here: yyyy-mm-dd"))
   }
 
   trait FlagsConfigComp extends ConfigComp {
@@ -72,6 +75,7 @@ trait RealImporter extends Slogger {
     log.info(s"Importer running - mode = '$mode'")
     mode match {
       case CreateTables => createTables()
+      case DropTables => dropTables()
       case ImportOld => importOld()
       case ImportCurrent => importCurrent()
     }
@@ -84,6 +88,23 @@ trait RealImporter extends Slogger {
           ddl.create
         } catch {
           case e: java.sql.SQLException => log.error("Can't create table", e)
+        }
+      }
+    }
+  }
+
+  def dropTables() {
+    println(DateTime.now().toString("YYYY-MM-dd"))
+    if (DateTime.now().toString("YYYY-MM-dd") != Flags.dropPassword()) {
+      println("Incorrect drop password")
+    } else {
+      database withSession { implicit session =>
+        for (ddl <- dal.ddls) {
+          try {
+            ddl.drop
+          } catch {
+            case e: java.sql.SQLException => log.error("Can't drop table", e)
+          }
         }
       }
     }
