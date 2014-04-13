@@ -4,19 +4,19 @@ import org.scalatra._
 import scalatags._
 import scalatags.all._
 
+import org.ukenergywatch.www.views._
+
 object UkewServlet extends ScalatraServlet {
 
-  get("/") {
-    val frag = html(
-      head(
-        Tags2.title("Hello")
-      ),
-      body(
-        h1("Hello world from scalatags")
-      )
-    )
+  private def output(node: Node): ActionResult = {
     contentType = "text/html"
-    frag.toString
+    Ok(s"<!DOCTYPE HTML>\n$node")
+  }
+
+  val index = get("/") { output(Index.render()) }
+
+  notFound {
+    serveStaticResource() getOrElse resourceNotFound()
   }
 
 }

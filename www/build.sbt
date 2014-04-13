@@ -8,4 +8,6 @@ libraryDependencies ++= Seq(
   "com.scalatags" % "scalatags_2.10" % "0.2.4"
 )
 
+resourceDirectory <<= baseDirectory(_ / "src/main/webapp")
+
 Revolver.settings

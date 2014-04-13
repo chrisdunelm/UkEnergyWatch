@@ -1,3 +1,6 @@
+import scala.scalajs.sbtplugin.ScalaJSPlugin._
+import ScalaJSKeys._
+
 name := "root"
 
 version := "0.1"
@@ -10,9 +13,24 @@ lazy val slogger = project
 lazy val db = project
   .dependsOn(utils)
 
+lazy val wwwjs = project
+
+val scalajsOutputDir = Def.settingKey[File]("Directory for JS output from scala.js")
+
 lazy val www = project
   .dependsOn(utils)
+  .dependsOn(db)
   .dependsOn(slogger)
+  .settings(
+    scalajsOutputDir := (crossTarget in Compile).value,
+    compile in Compile <<= (compile in Compile) dependsOn (packageJS in (wwwjs, Compile)),
+    watchSources ++= ((sourceDirectory in (wwwjs, Compile)).value ** "*").get
+  )
+  .settings(
+    Seq(packageExternalDepsJS, packageInternalDepsJS, packageExportedProductsJS, preoptimizeJS, optimizeJS) map { t =>
+      crossTarget in (wwwjs, Compile, t) := scalajsOutputDir.value / "webapp" / "js"
+    }: _*
+  )
 
 lazy val importer = project
   .dependsOn(utils)

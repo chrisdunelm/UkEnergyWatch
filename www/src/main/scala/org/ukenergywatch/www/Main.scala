@@ -15,7 +15,7 @@ object Main extends Slogger {
 
     val context = new WebAppContext
     context.setContextPath("/")
-    context.setResourceBase("src/main/webapp")
+    context.setResourceBase("target/scala-2.10/webapp")
     context.addEventListener(new ScalatraListener)
     context.addServlet(classOf[DefaultServlet], "/")
 
