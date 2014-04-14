@@ -14,6 +14,7 @@ object Main extends Slogger {
     log.info("UkEnergywatch website starting")
 
     val context = new WebAppContext
+    context.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false")
     context.setContextPath("/")
     context.setResourceBase("target/scala-2.10/webapp")
     context.addEventListener(new ScalatraListener)

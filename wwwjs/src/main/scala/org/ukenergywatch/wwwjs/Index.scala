@@ -10,9 +10,10 @@ object Index {
 
   @JSExport
   def main(): Unit = {
-    val p = global.document.createElement("p")
+    val doc = global.document
+    val p = doc.createElement("p")
     p.innerHTML = "Hello ScalaJS world!"
-    global.document.getElementById("a").appendChild(p)
+    doc.getElementById("a").appendChild(p)
   }
 
 }
