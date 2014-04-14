@@ -16,6 +16,7 @@ object Importer {
   case object DropTables extends Mode
   case object ImportOld extends Mode
   case object ImportCurrent extends Mode
+  case object ImportLiveGenByFuel extends Mode
 
   object Flags extends Options {
     register(org.ukenergywatch.slogger.impl.Slogger.Flags)
@@ -54,6 +55,7 @@ object Importer {
 
     object Runner extends RealImporter
       with HttpBmraFileDownloaderComp
+      with HttpBmReportsDownloaderComp
       with RealHttpFetcherComp
       with FlagsConfigComp
       with MysqlDalComp
@@ -65,7 +67,7 @@ object Importer {
 }
 
 trait RealImporter extends Slogger {
-  this: BmraFileDownloaderComp with DalComp with ClockComp =>
+  this: BmraFileDownloaderComp with BmReportsDownloaderComp with DalComp with ClockComp =>
   import BmraFileParser._
   import Importer._
   import dal._
@@ -78,6 +80,7 @@ trait RealImporter extends Slogger {
       case DropTables => dropTables()
       case ImportOld => importOld()
       case ImportCurrent => importCurrent()
+      case ImportLiveGenByFuel => importLiveGenByFuel()
     }
   }
 
@@ -110,6 +113,25 @@ trait RealImporter extends Slogger {
   }
 
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)
+
+  def importLiveGenByFuel() {
+    database withSession { implicit session =>
+      val downloadFrom = GenByFuelsLive.getLatestTime() match {
+        // Download if existing data is more than 6 minutes old
+        case Some(dt) if dt < clock.nowUtc() - 6.minutes => Some(dt)
+        case None => Some(new DateTime(2000, 1, 1, 0, 0))
+        case _ => None
+      }
+      for (downloadFrom <- downloadFrom) {
+        val xml = bmReportsDownloader.getGenByFuelType()
+        for {
+          inst <- xml \ "INST" // if (inst \ "@AT") > downloadFrom
+        } {
+          println(inst \ "@AT")
+        }
+      }
+    }    
+  }
 
   def importOld() {
     // Find most recent gap

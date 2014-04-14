@@ -20,7 +20,7 @@ trait Mergeable[T] {
 }
 
 trait Merger[T <: Mergeable[U], U] {
-  protected def merge(cur: Seq[T], item: T, insert: T => Unit, updateFrom: (T, Int) => Unit, updateTo: (T, Int) => Unit, delete: T => Unit) {
+  protected def merge(cur: Seq[T], item: T, insert: T => Unit, updateFrom: (T, Int) => Unit, updateTo: (T, Int) => Unit, delete: T => Unit): Unit = {
     cur match {
       case list if list.length > 2 =>
         throw new Exception
@@ -92,7 +92,7 @@ trait DownloadTable extends MergeableTable {
 
     val TYPE_BMRA = 1
 
-    def mergeInsert(item: Download)(implicit session: Session) {
+    def mergeInsert(item: Download)(implicit session: Session): Unit = {
       val q = Downloads
         .filter(x => x.downloadType === item.downloadType && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
         .sortBy(_.fromTime)
@@ -106,12 +106,12 @@ trait DownloadTable extends MergeableTable {
     }
 
     def getLatest(downloadType: Int)(implicit session: Session): Option[ReadableInstant] = {
-      Downloads.sortBy(_.toTime.desc).firstOption.map(x => new Instant(x.toTime * 1000L))
+      Downloads.sortBy(_.toTime.desc).firstOption.map(_.toTime.toInstant)
     }
 
     def getLastGap(downloadType: Int)(implicit session: Session): Option[ReadableInterval] = {
-      val q = Downloads.sortBy(_.toTime.desc)//.take(2)
-      val res = q.list.take(2).reverse
+      val q = Downloads.sortBy(_.toTime.desc).take(2)
+      val res = q.list.reverse
       res match {
         case List() => None
         case List(a) => Some(new Interval(0.toInstant, a.fromTime.toInstant))
@@ -141,7 +141,7 @@ trait BmUnitFpnsTable extends MergeableTable {
   }
 
   object BmUnitFpns extends TableQuery(new BmUnitFpns(_)) with Merger[BmUnitFpn, Float] {
-    def mergeInsert(item: BmUnitFpn)(implicit session: Session) {
+    def mergeInsert(item: BmUnitFpn)(implicit session: Session): Unit = {
       val q = BmUnitFpns
         .filter(x => x.bmUnitId === item.bmUnitId && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
         .sortBy(_.fromTime)
@@ -183,14 +183,16 @@ trait GenByFuelTable extends MergeableTable {
     protected def toValue: Float = mw
   }
 
-  class GenByFuels(tag: Tag) extends TimeMergeTable[GenByFuel](tag, "genbyfuel") {
+  abstract class GenByFuelsBase(tag: Tag, name: String) extends TimeMergeTable[GenByFuel](tag, name) {
     def fuel = column[String]("fuel")
     def mw = column[Float]("toMw")
     def * = (fuel, fromTime, toTime, mw, id) <> (GenByFuel.tupled, GenByFuel.unapply)
   }
 
-  object GenByFuels extends TableQuery(new GenByFuels(_)) with Merger[GenByFuel, Float] {
+  class GenByFuels(tag: Tag) extends GenByFuelsBase(tag, "genbyfuel")
+  class GenByFuelsLive(tag: Tag) extends GenByFuelsBase(tag, "genbyfuellive")
 
+  trait GenByFuelsObjBase {
     val ccgt = "CCGT"
     val coal = "COAL"
     val intew = "INTEW"
@@ -204,8 +206,11 @@ trait GenByFuelTable extends MergeableTable {
     val other = "OTHER"
     val ps = "PS"
     val wind = "WIND"
+  }
 
-    def mergeInsert(item: GenByFuel)(implicit session: Session) {
+  object GenByFuels extends TableQuery(new GenByFuels(_)) with Merger[GenByFuel, Float] with GenByFuelsObjBase {
+
+    def mergeInsert(item: GenByFuel)(implicit session: Session): Unit = {
       val q = GenByFuels
         .filter(x => x.fuel === item.fuel && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
         .sortBy(_.fromTime)
@@ -215,6 +220,26 @@ trait GenByFuelTable extends MergeableTable {
       def updateFrom(e: GenByFuel, from: Int): Unit = GenByFuels.filter(_.id === e.id).map(_.fromTime).update(from)
       def updateTo(e: GenByFuel, to: Int): Unit = GenByFuels.filter(_.id === e.id).map(_.toTime).update(to)
       def delete(e: GenByFuel): Unit = GenByFuels.filter(_.id === e.id).delete
+      merge(result, item, insert, updateFrom, updateTo, delete)
+    }
+  }
+
+  object GenByFuelsLive extends TableQuery(new GenByFuelsLive(_)) with Merger[GenByFuel, Float] with GenByFuelsObjBase {
+
+    def getLatestTime()(implicit session: Session): Option[ReadableInstant] = {
+      GenByFuelsLive.sortBy(_.toTime.desc).firstOption.map(_.toTime.toInstant)
+    }
+
+    def mergeInsert(item: GenByFuel)(implicit session: Session): Unit = {
+      val q = GenByFuelsLive
+        .filter(x => x.fuel === item.fuel && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
+        .sortBy(_.fromTime)
+        .take(3)
+      val result = q.list
+      def insert(e: GenByFuel): Unit = GenByFuelsLive += e
+      def updateFrom(e: GenByFuel, from: Int): Unit = GenByFuelsLive.filter(_.id === e.id).map(_.fromTime).update(from)
+      def updateTo(e: GenByFuel, to: Int): Unit = GenByFuelsLive.filter(_.id === e.id).map(_.toTime).update(to)
+      def delete(e: GenByFuel): Unit = GenByFuelsLive.filter(_.id === e.id).delete
       merge(result, item, insert, updateFrom, updateTo, delete)
     }
   }
@@ -238,7 +263,7 @@ trait GridFrequencyTable extends IntTimeRangeTable {
   }
 
   object GridFrequencies extends TableQuery(new GridFrequencies(_)) {
-    def insert(item: GridFrequency)(implicit session: Session) {
+    def insert(item: GridFrequency)(implicit session: Session): Unit = {
       val result = GridFrequencies.filter(_.endTime === item.endTime).firstOption
       result match {
         case Some(_) => // Do nothing, already inserted
@@ -266,6 +291,7 @@ trait DalComp {
       Downloads.ddl,
       BmUnitFpns.ddl,
       GenByFuels.ddl,
+      GenByFuelsLive.ddl,
       GridFrequencies.ddl
     )
 
