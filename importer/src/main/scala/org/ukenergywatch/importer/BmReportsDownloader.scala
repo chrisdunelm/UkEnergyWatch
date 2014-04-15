@@ -40,7 +40,7 @@ trait HttpBmReportsDownloaderComp extends BmReportsDownloaderComp {
     }
 
     def getGridFrequency(): Elem = {
-      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=rollingfrequencyhistoric&output=XML"
+      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=rollingfrequency&output=XML"
       getXml(url)
     }
 

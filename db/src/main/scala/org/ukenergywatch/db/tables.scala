@@ -253,7 +253,7 @@ trait GridFrequencyTable extends IntTimeRangeTable {
 
   case class GridFrequency(endTime: Int, frequency: Float)
 
-  class GridFrequencies(tag: Tag) extends Table[GridFrequency](tag, "gridfrequencies") with IntTimeRange {
+  abstract class GridFrequenciesBase(tag: Tag, name: String) extends Table[GridFrequency](tag, name) with IntTimeRange {
     def endTime = column[Int]("endTime", O.PrimaryKey)
     def frequency = column[Float]("frequency")
     def * = (endTime, frequency) <> (GridFrequency.tupled, GridFrequency.unapply)
@@ -262,12 +262,28 @@ trait GridFrequencyTable extends IntTimeRangeTable {
     def to: ReadableInstant = ???
   }
 
+  class GridFrequencies(tag: Tag) extends GridFrequenciesBase(tag, "gridfrequency")
+  class GridFrequenciesLive(tag: Tag) extends GridFrequenciesBase(tag, "gridfrequencylive")
+
   object GridFrequencies extends TableQuery(new GridFrequencies(_)) {
     def insert(item: GridFrequency)(implicit session: Session): Unit = {
       val result = GridFrequencies.filter(_.endTime === item.endTime).firstOption
       result match {
         case Some(_) => // Do nothing, already inserted
         case None => GridFrequencies += item
+      }
+    }
+  }
+
+  object GridFrequenciesLive extends TableQuery(new GridFrequenciesLive(_)) {
+    def getLatestTime()(implicit session: Session): Option[ReadableInstant] = {
+      GridFrequenciesLive.sortBy(_.endTime.desc).firstOption.map(_.endTime.toInstant)
+    }
+    def insert(item: GridFrequency)(implicit session: Session): Unit = {
+      val result = GridFrequenciesLive.filter(_.endTime === item.endTime).firstOption
+      result match {
+        case Some(_) => // Do nothing, already inserted
+        case None => GridFrequenciesLive += item
       }
     }
   }
@@ -292,7 +308,8 @@ trait DalComp {
       BmUnitFpns.ddl,
       GenByFuels.ddl,
       GenByFuelsLive.ddl,
-      GridFrequencies.ddl
+      GridFrequencies.ddl,
+      GridFrequenciesLive.ddl
     )
 
   }

@@ -12,6 +12,7 @@ class ImportBmReportsLiveGenByFuelSpec extends TestBase {
 
   "Import BmReports live GenByFuel" should "import initial data" in prepare { implicit session =>
     val s = """
+<?xml version="1.0"?>
 <GENERATION_BY_FUEL_TYPE_TABLE>
  <INST AT="2014-04-15 06:00:00" TOTAL="32970">
   <FUEL TYPE="CCGT" IC="N" VAL="6131" PCT="18.6"></FUEL>

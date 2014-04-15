@@ -18,6 +18,7 @@ object Importer {
   case object ImportOld extends Mode
   case object ImportCurrent extends Mode
   case object ImportLiveGenByFuel extends Mode
+  case object ImportLiveGridFrequency extends Mode
 
   object Flags extends Options {
     register(org.ukenergywatch.slogger.impl.Slogger.Flags)
@@ -82,6 +83,7 @@ trait RealImporter extends Slogger {
       case ImportOld => importOld()
       case ImportCurrent => importCurrent()
       case ImportLiveGenByFuel => importLiveGenByFuel()
+      case ImportLiveGridFrequency => importLiveGridFrequency()
     }
   }
 
@@ -115,17 +117,18 @@ trait RealImporter extends Slogger {
 
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)
 
+  private val dtFormatter =
+    (new DateTimeFormatterBuilder)
+      .appendYear(4, 4).appendLiteral('-')
+      .appendMonthOfYear(2).appendLiteral('-')
+      .appendDayOfMonth(2).appendLiteral(' ')
+      .appendHourOfDay(2).appendLiteral(':')
+      .appendMinuteOfHour(2).appendLiteral(':')
+      .appendSecondOfMinute(2)
+      .toFormatter
+      .withZone(DateTimeZone.UTC)
+
   def importLiveGenByFuel() {
-    val dtFormatter =
-      (new DateTimeFormatterBuilder)
-        .appendYear(4, 4).appendLiteral('-')
-        .appendMonthOfYear(2).appendLiteral('-')
-        .appendDayOfMonth(2).appendLiteral(' ')
-        .appendHourOfDay(2).appendLiteral(':')
-        .appendMinuteOfHour(2).appendLiteral(':')
-        .appendSecondOfMinute(2)
-        .toFormatter
-        .withZone(DateTimeZone.UTC)
     database withSession { implicit session =>
       // Delete data older than 24 hours
       val expiry = (clock.nowUtc() - 24.hours).totalSeconds
@@ -152,6 +155,29 @@ trait RealImporter extends Slogger {
         }
       }
     }    
+  }
+
+  def importLiveGridFrequency() {
+    database withSession { implicit session =>
+      // Import new data
+      val downloadFrom = GridFrequenciesLive.getLatestTime() match {
+        // Download if existing data is more than 2 minutes old
+        case Some(dt) if dt < (clock.nowUtc() - 2.minutes) => Some(dt)
+        case None => Some(new DateTime(2000, 1, 1, 0, 0))
+        case _ => None
+      }
+      for (downloadFrom <- downloadFrom) {
+        val xml = bmReportsDownloader.getGridFrequency()
+        for {
+          xItem <- xml \ "ST"
+          st = DateTime.parse((xItem \ "@ST").text, dtFormatter)
+          if st > downloadFrom
+        } {
+          val item = GridFrequency(st.totalSeconds, (xItem \ "@VAL").text.toFloat)
+          GridFrequenciesLive += item
+        }
+      }
+    }
   }
 
   def importOld() {
