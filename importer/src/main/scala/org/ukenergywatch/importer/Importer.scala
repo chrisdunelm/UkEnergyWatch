@@ -159,6 +159,9 @@ trait RealImporter extends Slogger {
 
   def importLiveGridFrequency() {
     database withSession { implicit session =>
+      // Delete data older than 24 hours
+      var expiry = (clock.nowUtc() - 24.hours).totalSeconds
+      GridFrequenciesLive.filter(_.endTime < expiry).delete
       // Import new data
       val downloadFrom = GridFrequenciesLive.getLatestTime() match {
         // Download if existing data is more than 2 minutes old

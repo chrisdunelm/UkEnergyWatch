@@ -29,4 +29,45 @@ class ImportBmReportsLiveGridFrequencySpec extends TestBase {
     )
   }
 
+  it should "not import too soon" in prepare { implicit session =>
+    GridFrequenciesLive += GridFrequency(t(2014, 4, 15, 15, 30, 45), 49.0f)
+    
+    val s = """
+<?xml version="1.0"?>
+<ROLLING_SYSTEM_FREQUENCY>
+ <ST ST="2014-04-15 15:31:00" VAL="49.974"></ST>
+ <ST ST="2014-04-15 15:31:15" VAL="49.975"></ST>
+</ROLLING_SYSTEM_FREQUENCY>
+      """.trim
+
+    TestImporter.clock.set(new DateTime(2014, 4, 15, 15, 32, 30, DateTimeZone.UTC))
+    TestImporter.httpFetcher.set("http://www.bmreports.com/bsp/additional/saveoutput.php?element=rollingfrequency&output=XML", s)
+    TestImporter.run(Importer.ImportLiveGridFrequency)
+
+    GridFrequenciesLive.sortBy(_.endTime).list shouldBe List(
+      GridFrequency(t(2014, 4, 15, 15, 30, 45), 49.0f)
+    )
+  }
+
+  it should "delete data more than 24 hours old" in prepare { implicit session =>
+    GridFrequenciesLive += GridFrequency(t(2014, 4, 14, 15, 30, 45), 49.0f)
+    
+    val s = """
+<?xml version="1.0"?>
+<ROLLING_SYSTEM_FREQUENCY>
+ <ST ST="2014-04-15 15:31:00" VAL="49.974"></ST>
+ <ST ST="2014-04-15 15:31:15" VAL="49.975"></ST>
+</ROLLING_SYSTEM_FREQUENCY>
+      """.trim
+
+    TestImporter.clock.set(new DateTime(2014, 4, 15, 15, 32, 30, DateTimeZone.UTC))
+    TestImporter.httpFetcher.set("http://www.bmreports.com/bsp/additional/saveoutput.php?element=rollingfrequency&output=XML", s)
+    TestImporter.run(Importer.ImportLiveGridFrequency)
+
+    GridFrequenciesLive.sortBy(_.endTime).list shouldBe List(
+      GridFrequency(t(2014, 4, 15, 15, 31, 0), 49.974f),
+      GridFrequency(t(2014, 4, 15, 15, 31, 15), 49.975f)
+    )
+  }
+
 }
