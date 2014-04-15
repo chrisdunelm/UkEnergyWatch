@@ -127,6 +127,10 @@ trait RealImporter extends Slogger {
         .toFormatter
         .withZone(DateTimeZone.UTC)
     database withSession { implicit session =>
+      // Delete data older than 24 hours
+      val expiry = (clock.nowUtc() - 24.hours).totalSeconds
+      GenByFuelsLive.filter(_.toTime < expiry).delete
+      // Import new data
       val downloadFrom = GenByFuelsLive.getLatestTime() match {
         // Download if existing data is more than 5.5 minutes old
         case Some(dt) if dt < (clock.nowUtc() - (5.minutes + 30.seconds)) => Some(dt)
@@ -141,7 +145,6 @@ trait RealImporter extends Slogger {
           if at > downloadFrom
           fuel <- inst \ "FUEL"
         } {
-          println(s"$at: $fuel")
           val t0 = (at - 5.minutes).totalSeconds
           val t1 = at.totalSeconds
           val item = GenByFuel((fuel \ "@TYPE").text, t0, t1, (fuel \ "@VAL").text.toFloat)
