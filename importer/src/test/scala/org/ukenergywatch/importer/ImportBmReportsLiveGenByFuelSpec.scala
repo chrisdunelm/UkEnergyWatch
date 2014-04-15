@@ -73,7 +73,6 @@ class ImportBmReportsLiveGenByFuelSpec extends TestBase {
     GenByFuelsLive.list.id0.toSet shouldBe Set(
       GenByFuel("CCGT", t0, t1, 1000)
     )
-    
   }
 
   it should "delete data older than 24 hours" in prepare { implicit session =>
