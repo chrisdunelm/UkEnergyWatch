@@ -5,6 +5,7 @@ import org.joda.time._
 object JodaTimeExtensions {
 
   implicit class RichDateTime(val dt: DateTime) extends AnyVal {
+    def +(d: ReadableDuration): DateTime = dt.plus(d)
     def -(d: ReadableDuration): DateTime = dt.minus(d)
   }
 
@@ -23,6 +24,11 @@ object JodaTimeExtensions {
     def <(other: ReadableInstant): Boolean = i.isBefore(other)
     def >=(other: ReadableInstant): Boolean = !(i < other)
     def <=(other: ReadableInstant): Boolean = !(i > other)
+  }
+
+  implicit class RichReadableDuration(val d: ReadableDuration) extends AnyVal {
+    def +(o: ReadableDuration): ReadableDuration = d.toDuration.plus(o)
+    def -(o: ReadableDuration): ReadableDuration = d.toDuration.minus(o)
   }
 
   implicit class RichInt(val i: Int) extends AnyVal {

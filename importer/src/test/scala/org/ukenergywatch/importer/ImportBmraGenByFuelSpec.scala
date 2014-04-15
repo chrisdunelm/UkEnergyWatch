@@ -17,7 +17,7 @@ class ImportBmraGenByFuelSpec extends TestBase {
       """.trim
 
     TestImporter.clock.set(new DateTime(2013, 10, 31, 10, 30, DateTimeZone.UTC))
-    TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2013-10-31.09.30-10.00.gz", s)
+    TestImporter.httpFetcher.setZ("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2013-10-31.09.30-10.00.gz", s)
     TestImporter.run(Importer.ImportCurrent)
 
     GenByFuels.list.id0.toSet shouldBe Set(

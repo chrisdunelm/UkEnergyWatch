@@ -35,7 +35,7 @@ trait HttpBmReportsDownloaderComp extends BmReportsDownloaderComp {
     }
 
     def getGenByFuelType(): Elem = {
-      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=generationbyfueltypetablehistoric&output=XML"
+      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=generationbyfueltypetable&output=XML"
       getXml(url)
     }
 

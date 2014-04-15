@@ -18,7 +18,7 @@ class ImportBmraFpnSpec extends TestBase {
       """.trim
 
     TestImporter.clock.set(new DateTime(2014, 3, 3, 22, 15, DateTimeZone.UTC))
-    TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.21.30-22.00.gz", s)
+    TestImporter.httpFetcher.setZ("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.21.30-22.00.gz", s)
     TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 3, 22, 00)))
@@ -39,7 +39,7 @@ class ImportBmraFpnSpec extends TestBase {
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 3, 22, 0)))
 
     TestImporter.clock.set(new DateTime(2014, 3, 4, 23, 0, DateTimeZone.UTC))
-    TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.22.00-22.30.gz", s)
+    TestImporter.httpFetcher.setZ("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.22.00-22.30.gz", s)
     TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 3, 22, 30)))
@@ -54,7 +54,7 @@ class ImportBmraFpnSpec extends TestBase {
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 1, 21, 30), t(2014, 3, 1, 22, 0)))
 
     TestImporter.clock.set(new DateTime(2014, 3, 3, 22, 0, DateTimeZone.UTC))
-    TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.21.00-21.30.gz", s)
+    TestImporter.httpFetcher.setZ("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.21.00-21.30.gz", s)
     TestImporter.run(Importer.ImportCurrent)
 
     Downloads.list.id0 shouldBe List(
@@ -81,7 +81,7 @@ class ImportBmraFpnSpec extends TestBase {
 
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 3, 22, 0)))
 
-    TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.22.00-22.30.gz", s)
+    TestImporter.httpFetcher.setZ("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages_hh.2014-03-03.22.00-22.30.gz", s)
     TestImporter.clock.set(new DateTime(2014, 3, 3, 22, 30, DateTimeZone.UTC))
     TestImporter.run(Importer.ImportCurrent)
 
@@ -105,7 +105,7 @@ class ImportBmraFpnSpec extends TestBase {
 
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 21, 30), t(2014, 3, 5, 0, 0)))
 
-    TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages.2014-03-03.gz", s)
+    TestImporter.httpFetcher.setZ("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages.2014-03-03.gz", s)
     TestImporter.run(Importer.ImportOld)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 0, 0), t(2014, 3, 5, 0, 0)))
@@ -119,7 +119,7 @@ class ImportBmraFpnSpec extends TestBase {
 
     Downloads.mergeInsert(Download(Downloads.TYPE_BMRA, t(2014, 3, 3, 0, 0), t(2014, 3, 5, 0, 0)))
 
-    TestImporter.httpFetcher.set("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages.2014-03-02.gz", s)
+    TestImporter.httpFetcher.setZ("https://downloads.elexonportal.co.uk/bmradataarchive/download?key=&filename=tib_messages.2014-03-02.gz", s)
     TestImporter.run(Importer.ImportOld)
 
     Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_BMRA, t(2014, 3, 2, 0, 0), t(2014, 3, 5, 0, 0)))

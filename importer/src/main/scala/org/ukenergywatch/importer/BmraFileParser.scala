@@ -17,10 +17,11 @@ object BmraFileParser extends Slogger {
       .appendSecondOfMinute(2).appendLiteral(':')
       .appendLiteral("GMT")
       .toFormatter
-  implicit def parseBmraDateTime(s: String): DateTime = DateTime.parse(s, bmraFormatter)
-  implicit def parseBmraDate(s: String): DateMidnight = DateMidnight.parse(s, bmraFormatter)
-  implicit def parseBmraInt(s: String): Int = augmentString(s).toInt
-  implicit def parseBmraDouble(s: String): Double = augmentString(s).toDouble
+      .withZone(DateTimeZone.UTC)
+  private implicit def parseBmraDateTime(s: String): DateTime = DateTime.parse(s, bmraFormatter)
+  private implicit def parseBmraDate(s: String): DateMidnight = DateMidnight.parse(s, bmraFormatter)
+  private implicit def parseBmraInt(s: String): Int = augmentString(s).toInt
+  private implicit def parseBmraDouble(s: String): Double = augmentString(s).toDouble
 
   def msgRx(subject: String): Regex = ("""^([\d:]{19}:GMT): subject=""" + subject + """, message=\{(.*)}$""").r
   def msgParts(s: String): Seq[(String, String)] = {

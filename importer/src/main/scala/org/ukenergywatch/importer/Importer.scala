@@ -7,6 +7,7 @@ import org.ukenergywatch.utils.OptionSpec
 import org.ukenergywatch.utils.RealClockComp
 import org.ukenergywatch.utils.Slogger
 import org.joda.time._
+import org.joda.time.format.DateTimeFormatterBuilder
 import org.ukenergywatch.utils.JodaTimeExtensions._
 
 object Importer {
@@ -115,19 +116,36 @@ trait RealImporter extends Slogger {
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)
 
   def importLiveGenByFuel() {
+    val dtFormatter =
+      (new DateTimeFormatterBuilder)
+        .appendYear(4, 4).appendLiteral('-')
+        .appendMonthOfYear(2).appendLiteral('-')
+        .appendDayOfMonth(2).appendLiteral(' ')
+        .appendHourOfDay(2).appendLiteral(':')
+        .appendMinuteOfHour(2).appendLiteral(':')
+        .appendSecondOfMinute(2)
+        .toFormatter
+        .withZone(DateTimeZone.UTC)
     database withSession { implicit session =>
       val downloadFrom = GenByFuelsLive.getLatestTime() match {
-        // Download if existing data is more than 6 minutes old
-        case Some(dt) if dt < clock.nowUtc() - 6.minutes => Some(dt)
+        // Download if existing data is more than 5.5 minutes old
+        case Some(dt) if dt < (clock.nowUtc() - (5.minutes + 30.seconds)) => Some(dt)
         case None => Some(new DateTime(2000, 1, 1, 0, 0))
         case _ => None
       }
       for (downloadFrom <- downloadFrom) {
         val xml = bmReportsDownloader.getGenByFuelType()
         for {
-          inst <- xml \ "INST" // if (inst \ "@AT") > downloadFrom
+          inst <- xml \ "INST"
+          at = DateTime.parse((inst \ "@AT").text, dtFormatter)
+          if at > downloadFrom
+          fuel <- inst \ "FUEL"
         } {
-          println(inst \ "@AT")
+          println(s"$at: $fuel")
+          val t0 = (at - 5.minutes).totalSeconds
+          val t1 = at.totalSeconds
+          val item = GenByFuel((fuel \ "@TYPE").text, t0, t1, (fuel \ "@VAL").text.toFloat)
+          GenByFuelsLive += item
         }
       }
     }    
