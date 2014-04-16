@@ -42,4 +42,13 @@ object JodaTimeExtensions {
     def toInstant: ReadableInstant = new Instant(i.toLong * 1000L)
   }
 
+  implicit class RichDouble(val d: Double) extends AnyVal {
+    def seconds: ReadableDuration = Duration.millis((d * 1000.0).toLong)
+    def second = seconds
+    def minutes: ReadableDuration = Duration.millis((d * 1000.0 * 60.0).toLong)
+    def minute = minutes
+    def hours: ReadableDuration = Duration.millis((d * 1000.0 * 60.0 * 60.0).toLong)
+    def hour = hours
+  }
+
 }

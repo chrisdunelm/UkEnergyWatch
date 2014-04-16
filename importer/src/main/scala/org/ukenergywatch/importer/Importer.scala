@@ -136,7 +136,7 @@ trait RealImporter extends Slogger {
       // Import new data
       val downloadFrom = GenByFuelsLive.getLatestTime() match {
         // Download if existing data is more than 5.5 minutes old
-        case Some(dt) if dt < (clock.nowUtc() - (5.minutes + 30.seconds)) => Some(dt)
+        case Some(dt) if dt < (clock.nowUtc() - 5.5.minutes) => Some(dt)
         case None => Some(new DateTime(2000, 1, 1, 0, 0))
         case _ => None
       }
