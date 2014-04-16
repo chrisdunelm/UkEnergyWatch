@@ -117,7 +117,7 @@ trait RealImporter extends Slogger {
 
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)
 
-  private val dtFormatter =
+  private val bmReportsDtFormatter =
     (new DateTimeFormatterBuilder)
       .appendYear(4, 4).appendLiteral('-')
       .appendMonthOfYear(2).appendLiteral('-')
@@ -144,14 +144,13 @@ trait RealImporter extends Slogger {
         val xml = bmReportsDownloader.getGenByFuelType()
         for {
           inst <- xml \ "INST"
-          at = DateTime.parse((inst \ "@AT").text, dtFormatter)
+          at = DateTime.parse((inst \ "@AT").text, bmReportsDtFormatter)
           if at > downloadFrom
           fuel <- inst \ "FUEL"
         } {
           val t0 = (at - 5.minutes).totalSeconds
           val t1 = at.totalSeconds
-          val item = GenByFuel((fuel \ "@TYPE").text, t0, t1, (fuel \ "@VAL").text.toFloat)
-          GenByFuelsLive += item
+          GenByFuelsLive += GenByFuel((fuel \ "@TYPE").text, t0, t1, (fuel \ "@VAL").text.toFloat)
         }
       }
     }    
@@ -172,12 +171,11 @@ trait RealImporter extends Slogger {
       for (downloadFrom <- downloadFrom) {
         val xml = bmReportsDownloader.getGridFrequency()
         for {
-          xItem <- xml \ "ST"
-          st = DateTime.parse((xItem \ "@ST").text, dtFormatter)
+          item <- xml \ "ST"
+          st = DateTime.parse((item \ "@ST").text, bmReportsDtFormatter)
           if st > downloadFrom
         } {
-          val item = GridFrequency(st.totalSeconds, (xItem \ "@VAL").text.toFloat)
-          GridFrequenciesLive += item
+          GridFrequenciesLive += GridFrequency(st.totalSeconds, (item \ "@VAL").text.toFloat)
         }
       }
     }
