@@ -14,6 +14,8 @@ import org.ukenergywatch.wwwcommon.P1
 
 import java.util.Random
 
+import importedjs.d3
+
 @JSExport
 object Index {
 
@@ -37,6 +39,8 @@ object Index {
       // Unpickle
       val obj = PicklerRegistry.unpickle(JSON.parse(req.responseText): js.Any)
       show(obj.toString)
+
+      d3.selectAll("p").style("color", "red")
     }
   }
 
