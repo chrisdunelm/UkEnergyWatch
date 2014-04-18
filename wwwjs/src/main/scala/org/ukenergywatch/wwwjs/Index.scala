@@ -17,9 +17,10 @@ import java.util.Random
 @JSExport
 object Index {
 
+  PicklerRegistry.register[P1]
+
   @JSExport
   def main(): Unit = {
-  PicklerRegistry.register[P1]
     val doc = dom.document
 
     def show(s: String): Unit = {
