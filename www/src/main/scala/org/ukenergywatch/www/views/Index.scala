@@ -11,9 +11,7 @@ object Layout {
     html(
       head(
         Tags2.title(s"UK Energy Watch - ${data.title}"),
-        script(src := "/js/wwwjs-extdeps.js"),
-        script(src := "/js/wwwjs-intdeps.js"),
-        script(src := "/js/wwwjs.js")
+        script(src := "/js/wwwjs-preopt.js")
       ),
       body(
         h1("UK Energy Watch"),
