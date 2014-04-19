@@ -40,7 +40,7 @@ object Index {
       val obj = PicklerRegistry.unpickle(JSON.parse(req.responseText): js.Any)
       show(obj.toString)
 
-      d3.selectAll("p").style("color", "red")
+      d3.selectAll("p").style("color", () => s"hsl(${rnd.nextDouble * 360.0},100%,50%)")
     }
   }
 

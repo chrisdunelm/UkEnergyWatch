@@ -10,6 +10,8 @@ import org.joda.time._
 import org.joda.time.format.DateTimeFormatterBuilder
 import org.ukenergywatch.utils.JodaTimeExtensions._
 
+import generated.InstantaneousFlowWebServiceSoap
+
 object Importer {
 
   sealed trait Mode
@@ -19,6 +21,7 @@ object Importer {
   case object ImportCurrent extends Mode
   case object ImportLiveGenByFuel extends Mode
   case object ImportLiveGridFrequency extends Mode
+  case object ImportGas extends Mode
 
   object Flags extends Options {
     register(org.ukenergywatch.slogger.impl.Slogger.Flags)
@@ -84,6 +87,7 @@ trait RealImporter extends Slogger {
       case ImportCurrent => importCurrent()
       case ImportLiveGenByFuel => importLiveGenByFuel()
       case ImportLiveGridFrequency => importLiveGridFrequency()
+      case ImportGas => importGas()
     }
   }
 
@@ -113,6 +117,15 @@ trait RealImporter extends Slogger {
         }
       }
     }
+  }
+
+  def importGas(): Unit = {
+    //val service = (new InstantaneousFlowWebServiceSoap with scalaxb.SoapClients with scalaxb.DispatchHttpClients {})
+    object Y extends generated.XMLProtocol
+    object Z extends Y.InstantaneousFlowWebServiceSoap12Bindings with scalaxb.SoapClients with scalaxb.DispatchHttpClients
+    val service = Z.service
+    val res = service.getLatestPublicationTime()
+    println(res)
   }
 
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)

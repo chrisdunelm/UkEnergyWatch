@@ -1,4 +1,5 @@
 //import AssemblyKeys._
+import ScalaxbKeys._
 
 name := "importer"
 
@@ -9,7 +10,8 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.3",
   "org.joda" % "joda-convert" % "1.6",
   "org.slf4j" % "slf4j-api" % "1.7.6",
-  "mysql" % "mysql-connector-java" % "5.1.29"
+  "mysql" % "mysql-connector-java" % "5.1.29",
+  "net.databinder.dispatch" %% "dispatch-core" % "0.11.0"
 )
 
 // Test deps
@@ -19,5 +21,9 @@ libraryDependencies ++= Seq(
 )
 
 //assemblySettings
+
+scalaxbSettings
+
+sourceGenerators in Compile <+= scalaxb in Compile
 
 //testOptions in Test += Tests.Argument("-oF")
