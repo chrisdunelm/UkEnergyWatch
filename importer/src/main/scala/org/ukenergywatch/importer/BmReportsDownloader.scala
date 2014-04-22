@@ -6,6 +6,7 @@ import org.ukenergywatch.utils.Slogger
 import scala.xml.Elem
 import scala.xml.XML
 import java.io.ByteArrayInputStream
+import java.net.URL
 
 trait BmReportsDownloaderComp {
 
@@ -29,7 +30,7 @@ trait HttpBmReportsDownloaderComp extends BmReportsDownloaderComp {
   object HttpBmReportsDownloader extends BmReportsDownloader with Slogger {
 
     private def getXml(url: String): Elem = {
-      val xmlBytes = httpFetcher.fetch(url)
+      val xmlBytes = httpFetcher.fetch(new URL(url))
       val is = new ByteArrayInputStream(xmlBytes)
       XML.load(is)
     }

@@ -3,6 +3,7 @@ package org.ukenergywatch.importer
 import org.joda.time.ReadableInstant
 import org.ukenergywatch.utils.JodaTimeExtensions._
 import org.ukenergywatch.utils.Slogger
+import java.net.URL
 
 trait BmraFileDownloaderComp {
 
@@ -31,10 +32,10 @@ trait HttpBmraFileDownloaderComp extends BmraFileDownloaderComp {
 
     private val key = config.getString("elexonKey").getOrElse("")
 
-    private def makeUrl(filename: String): String =
-      s"https://downloads.elexonportal.co.uk/bmradataarchive/download?key=$key&filename=$filename"
+    private def makeUrl(filename: String): URL =
+      new URL(s"https://downloads.elexonportal.co.uk/bmradataarchive/download?key=$key&filename=$filename")
 
-    private def getFile(url: String): Iterator[String] = {
+    private def getFile(url: URL): Iterator[String] = {
       log.info(s"Downloading file: '$url'")
       val compressedBytes = httpFetcher.fetch(url)
       val is = new GZIPInputStream(new ByteArrayInputStream(compressedBytes))

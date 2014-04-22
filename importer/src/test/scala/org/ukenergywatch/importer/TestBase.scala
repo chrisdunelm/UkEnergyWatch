@@ -22,22 +22,9 @@ trait TestBase extends FlatSpec with Matchers {
   trait FakeFetcherComp extends HttpFetcherComp {
     lazy val httpFetcher: FakeFetcher = new FakeFetcher
     class FakeFetcher extends HttpFetcher {
+      import java.net.URL
       private val map = mutable.Map[String, Array[Byte]]()
-      def fetch(url: String): Array[Byte] = map(url)
-      /*def fetch(url: String): Array[Byte] = {
-        map.get(url) match {
-          case None =>
-            // TODO throw correct exception
-            throw new Exception
-          case Some(s) =>
-            // TODO zip data and return
-            val bos = new ByteArrayOutputStream
-            val gzos = new GZIPOutputStream(bos)
-            gzos.write(s.getBytes("UTF-8"))
-            gzos.close()
-            bos.toByteArray
-        }
-      }*/
+      def fetch(url: URL, body: Option[String], headers: Map[String, String]): Array[Byte] = map(url.toString)
       def set(url: String, value: String): Unit = map.update(url, value.getBytes("UTF-8"))
       def setZ(url: String, value: String): Unit = {
         val bos = new ByteArrayOutputStream
@@ -61,6 +48,7 @@ trait TestBase extends FlatSpec with Matchers {
   object TestImporter extends RealImporter
     with HttpBmraFileDownloaderComp
     with HttpBmReportsDownloaderComp
+    with WsdlGasDataDownloaderComp
     with FakeFetcherComp
     with MemoryDalComp
     with FakeClockComp

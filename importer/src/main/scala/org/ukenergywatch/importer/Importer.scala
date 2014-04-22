@@ -62,6 +62,7 @@ object Importer {
       with HttpBmraFileDownloaderComp
       with HttpBmReportsDownloaderComp
       with RealHttpFetcherComp
+      with WsdlGasDataDownloaderComp
       with FlagsConfigComp
       with MysqlDalComp
       with RealClockComp
@@ -72,7 +73,7 @@ object Importer {
 }
 
 trait RealImporter extends Slogger {
-  this: BmraFileDownloaderComp with BmReportsDownloaderComp with DalComp with ClockComp =>
+  this: BmraFileDownloaderComp with BmReportsDownloaderComp with GasDataDownloaderComp with DalComp with ClockComp =>
   import BmraFileParser._
   import Importer._
   import dal._
@@ -120,12 +121,10 @@ trait RealImporter extends Slogger {
   }
 
   def importGas(): Unit = {
-    //val service = (new InstantaneousFlowWebServiceSoap with scalaxb.SoapClients with scalaxb.DispatchHttpClients {})
-    object Y extends generated.XMLProtocol
-    object Z extends Y.InstantaneousFlowWebServiceSoap12Bindings with scalaxb.SoapClients with scalaxb.DispatchHttpClients
-    val service = Z.service
-    val res = service.getLatestPublicationTime()
+    //val res = gasDataDownloader.getInstantaneousFlowData()
+    val res = gasDataDownloader.getLatestPublicationTime()
     println(res)
+    println("Done")
   }
 
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)
