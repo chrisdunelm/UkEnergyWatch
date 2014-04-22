@@ -26,26 +26,13 @@ trait RealHttpFetcherComp extends HttpFetcherComp {
       val urlIs = connection.getInputStream
       val os = new ByteArrayOutputStream()
       val buffer = new Array[Byte](10000)
-//println("READING")
       var len = urlIs.read(buffer)
       while (len != -1) {
         os.write(buffer, 0, len)
-//println("READING")
         len = urlIs.read(buffer)
       }
-//println("DONE")
       urlIs.close()
       os.toByteArray()
-/*
-      val length = connection.getContentLength
-      val data = new Array[Byte](length)
-      try {
-        val dis = new DataInputStream(urlIs)
-        dis.readFully(data)
-        data
-      } finally {
-        urlIs.close()
-      }*/
     }
 
   }
