@@ -31,11 +31,11 @@ trait WsdlGasDataDownloaderComp extends GasDataDownloaderComp {
         import java.net._
         import java.io._
         def request(in: String, address: URI, headers: Map[String, String]): String = {
-println(in)
+//println(in)
           val hs = headers + ("Accept-Encoding" -> "gzip")
           val bytes = httpFetcher.fetch(address.toURL, Some(in), hs)
           val s = new String(bytes, "UTF-8")
-println(s)
+//println(s)
 s
         }
       }

@@ -121,10 +121,27 @@ trait RealImporter extends Slogger {
   }
 
   def importGas(): Unit = {
-    //val res = gasDataDownloader.getInstantaneousFlowData()
-    val res = gasDataDownloader.getLatestPublicationTime()
-    println(res)
-    println("Done")
+    database withSession { implicit session =>
+      val availDt = gasDataDownloader.getLatestPublicationTime()
+      log.info(s"Gas latest publication time: '$availDt'")
+      val dataStartTime = Downloads.getLatest(Downloads.TYPE_GAS) match {
+        case Some(gotDt) if gotDt > availDt - 1.minute => None // Don't even try to download if existing data very recent
+        case Some(gotDt) if gotDt < availDt - 1.hour => Some(availDt - 1.hour) // Allow missing data for up to 1 hour
+        case Some(gotDt) => Some(gotDt) // Normal behaviour - use previous time as time for start of this data
+        case None => Some(availDt - 15.minutes) // If no data, assume current data started 15 minutes ago
+      }
+      //println(s"dataStartTime = $dataStartTime")
+      for (dataStartTime <- dataStartTime) {
+        // Download data it new data available
+        val data = gasDataDownloader.getInstantaneousFlowData()
+        // TODO: Process and store gas import data...
+        // Keep track of download
+        log.info("Gas import processing complete")
+        val download = Download(Downloads.TYPE_GAS, dataStartTime.totalSeconds, availDt.totalSeconds)
+        Downloads.mergeInsert(download)
+        log.info("Merged download")
+      }
+    }
   }
 
   case class LinesInInterval(lines: Iterator[String], interval: ReadableInterval)

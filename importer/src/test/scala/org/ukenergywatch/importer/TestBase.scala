@@ -23,15 +23,22 @@ trait TestBase extends FlatSpec with Matchers {
     lazy val httpFetcher: FakeFetcher = new FakeFetcher
     class FakeFetcher extends HttpFetcher {
       import java.net.URL
-      private val map = mutable.Map[String, Array[Byte]]()
-      def fetch(url: URL, body: Option[String], headers: Map[String, String]): Array[Byte] = map(url.toString)
-      def set(url: String, value: String): Unit = map.update(url, value.getBytes("UTF-8"))
-      def setZ(url: String, value: String): Unit = {
+      case class Serve(url: String, bodyContains: Option[String], data: Array[Byte])
+      private val serves = mutable.MutableList[Serve]()
+      def fetch(url: URL, body: Option[String], headers: Map[String, String]): Array[Byte] = {
+        serves.find(x => x.url == url.toString && x.bodyContains.map(y => body.get.contains(y)).getOrElse(true)) match {
+          case Some(v) => v.data
+          case None => throw new Exception(s"Cannot server url '$url'")
+        }
+      }
+      def set(url: String, value: String, bodyContains: Option[String] = None): Unit =
+        serves += Serve(url, bodyContains, value.getBytes("UTF-8"))
+      def setZ(url: String, value: String, bodyContains: Option[String] = None): Unit = {
         val bos = new ByteArrayOutputStream
         val gzos = new GZIPOutputStream(bos)
         gzos.write(value.getBytes("UTF-8"))
         gzos.close()
-        map.update(url, bos.toByteArray)
+        serves += Serve(url, bodyContains, bos.toByteArray)
       }
     }
   }

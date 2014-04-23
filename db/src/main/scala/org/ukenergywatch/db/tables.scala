@@ -91,6 +91,7 @@ trait DownloadTable extends MergeableTable {
   object Downloads extends TableQuery(new Downloads(_)) with Merger[Download, Unit] {
 
     val TYPE_BMRA = 1
+    val TYPE_GAS = 2
 
     def mergeInsert(item: Download)(implicit session: Session): Unit = {
       val q = Downloads
@@ -121,6 +122,40 @@ trait DownloadTable extends MergeableTable {
 
   }
   
+}
+
+trait GasImportTable extends MergeableTable {
+  val profile: JdbcProfile
+
+  import profile.simple._
+
+  case class GasImport(supplyType: String, location: String, fromTime: Int, toTime: Int, flowRate: Float, id: Int = 0) extends Mergeable[Float] {
+    protected def fromValue: Float = flowRate
+    protected def toValue: Float = flowRate
+  }
+
+  class GasImports(tag: Tag) extends TimeMergeTable[GasImport](tag, "gasimports") {
+    def supplyType = column[String]("supplyType")
+    def location = column[String]("location")
+    def flowRate = column[Float]("flowRate")
+    def * = (supplyType, location, fromTime, toTime, flowRate, id) <> (GasImport.tupled, GasImport.unapply)
+  }
+
+  object GasImports extends TableQuery(new GasImports(_)) with Merger[GasImport, Float] {
+    def mergeInsert(item: GasImport)(implicit session: Session): Unit = {
+      val q = GasImports
+        .filter(x => x.supplyType === item.supplyType && x.location === item.location && x.toTime >= item.fromTime && x.fromTime <= item.toTime)
+        .sortBy(_.fromTime)
+        .take(3)
+      val result = q.list
+      def insert(e: GasImport): Unit = GasImports += e
+      def updateFrom(e: GasImport, from: Int): Unit = GasImports.filter(_.id === e.id).map(_.fromTime).update(from)
+      def updateTo(e: GasImport, to: Int): Unit = GasImports.filter(_.id === e.id).map(_.toTime).update(to)
+      def delete(e: GasImport): Unit = GasImports.filter(_.id === e.id).delete
+      merge(result, item, insert, updateFrom, updateTo, delete)
+    }
+  }
+
 }
 
 trait BmUnitFpnsTable extends MergeableTable {
@@ -294,6 +329,7 @@ trait DalComp {
   val dal: Dal
   trait Dal
       extends DownloadTable
+      with GasImportTable
       with BmUnitFpnsTable
       with GenByFuelTable
       with GridFrequencyTable {
@@ -305,6 +341,7 @@ trait DalComp {
 
     def ddls: Seq[profile.DDL] = Seq(
       Downloads.ddl,
+      GasImports.ddl,
       BmUnitFpns.ddl,
       GenByFuels.ddl,
       GenByFuelsLive.ddl,
