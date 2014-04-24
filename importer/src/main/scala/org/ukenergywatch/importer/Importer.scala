@@ -135,6 +135,18 @@ trait RealImporter extends Slogger {
         // Download data it new data available
         val data = gasDataDownloader.getInstantaneousFlowData()
         // TODO: Process and store gas import data...
+        import generated._
+        for {
+          supplyType: EDPEnergyGraphTableBE <- data.GetInstantaneousFlowDataResult.get.EDPReportPage.get.EDPEnergyGraphTableCollection.get.EDPEnergyGraphTableBE.map(_.get)
+          obj: EDPObjectBE <- supplyType.EDPObjectCollection.get.EDPObjectBE.map(_.get)
+          item: EDPEnergyDataBE <- obj.EnergyDataList.get.EDPEnergyDataBE.map(_.get)
+        } {
+          val supplyTypeDescription: String = supplyType.Description.get
+          val location: String = obj.EDPObjectName.get
+          val flowRate: Double = item.FlowRate
+          val toTime: DateTime = new DateTime(item.ApplicableAt.toGregorianCalendar.getTimeInMillis, DateTimeZone.UTC)
+println(s"desc:'$supplyTypeDescription' location:'$location' time:'$toTime' flowRate:$flowRate")
+        }
         // Keep track of download
         log.info("Gas import processing complete")
         val download = Download(Downloads.TYPE_GAS, dataStartTime.totalSeconds, availDt.totalSeconds)

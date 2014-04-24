@@ -10,7 +10,7 @@ trait GasDataDownloaderComp {
   trait GasDataDownloader {
 
     def getLatestPublicationTime(): DateTime
-    def getInstantaneousFlowData(): Any
+    def getInstantaneousFlowData(): generated.GetInstantaneousFlowDataResponse
 
   }
 
@@ -31,12 +31,9 @@ trait WsdlGasDataDownloaderComp extends GasDataDownloaderComp {
         import java.net._
         import java.io._
         def request(in: String, address: URI, headers: Map[String, String]): String = {
-//println(in)
           val hs = headers + ("Accept-Encoding" -> "gzip")
           val bytes = httpFetcher.fetch(address.toURL, Some(in), hs)
-          val s = new String(bytes, "UTF-8")
-//println(s)
-s
+          new String(bytes, "UTF-8")
         }
       }
     }
@@ -52,8 +49,9 @@ s
       new DateTime(utcMillis, DateTimeZone.UTC)
     }
 
-    def getInstantaneousFlowData(): Any = {
-      service.getInstantaneousFlowData()
+    def getInstantaneousFlowData(): generated.GetInstantaneousFlowDataResponse = {
+      val data = service.getInstantaneousFlowData()
+      data.right.get
     }
 
   }
