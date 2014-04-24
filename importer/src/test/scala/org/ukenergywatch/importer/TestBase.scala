@@ -87,6 +87,14 @@ trait TestBase extends FlatSpec with Matchers {
       implicit class RichGenByFuelSeq(val vs: Seq[GenByFuel]) {
         def id0: Seq[GenByFuel] = vs.map(_.id0)
       }
+
+      implicit class RichGasImport(val v: GasImport) {
+        def id0: GasImport = v.copy(id = 0)
+      }
+
+      implicit class RichGasImportSeq(val vs: Seq[GasImport]) {
+        def id0: Seq[GasImport] = vs.map(_.id0)
+      }
     }
 
   }

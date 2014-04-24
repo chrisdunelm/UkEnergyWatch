@@ -10,7 +10,7 @@ class ImportGasFlowSpec extends TestBase {
   import TestImporter.dal.profile.simple._
   import TestImporter.Implicits._
 
-  "GetLatestTime" should "return the correct time" in prepare { implicit session =>
+  "ImportGas" should "import initial data correctly" in prepare { implicit session =>
     val s0 = """
 <?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -32,8 +32,20 @@ class ImportGasFlowSpec extends TestBase {
 
     TestImporter.run(Importer.ImportGas)
 
-    // Response from national grid is BST, so UTC is one hour earlier, and 15 minutes is assumed
-    Downloads.list.id0 shouldBe List(Download(Downloads.TYPE_GAS, t(2014, 4, 22, 21, 47-15), t(2014, 4, 22, 21, 47)))
+    // Response from national grid is BST, so UTC is one hour earlier, and 12 minutes is assumed
+    Downloads.list.id0.toSet shouldBe Set(
+      Download(Downloads.TYPE_GAS_PUBLISHED, t(2014, 4, 22, 21, 47-12), t(2014, 4, 22, 21, 47)),
+      Download(Downloads.TYPE_GAS_DATA, t(2014, 4, 23, 21, 22), t(2014, 4, 23, 21, 34))
+    )
+    GasImports.list.id0.filter(_.location == "PARTINGTON LNG").sortBy(_.fromTime) shouldBe List(
+      GasImport("Terminal Supply", "PARTINGTON LNG", t(2014, 4, 23, 21, 22), t(2014, 4, 23, 21, 34), 0)
+    )
+    GasImports.list.id0.filter(_.location == "THEDDLETHORPE TERMINAL").sortBy(_.fromTime) shouldBe List(
+      GasImport("Terminal Supply", "THEDDLETHORPE TERMINAL", t(2014, 4, 23, 21, 22), t(2014, 4, 23, 21, 28), 11.97107f),
+      GasImport("Terminal Supply", "THEDDLETHORPE TERMINAL", t(2014, 4, 23, 21, 28), t(2014, 4, 23, 21, 30), 11.8656f),
+      GasImport("Terminal Supply", "THEDDLETHORPE TERMINAL", t(2014, 4, 23, 21, 30), t(2014, 4, 23, 21, 32), 11.97898f),
+      GasImport("Terminal Supply", "THEDDLETHORPE TERMINAL", t(2014, 4, 23, 21, 32), t(2014, 4, 23, 21, 34), 11.88142f)
+    )
     /*BmUnitFpns.sortBy(_.id).list.id0 shouldBe List(
       BmUnitFpn("T_BARKB2", t(2014, 3, 3, 22, 30), 0, t(2014, 3, 3, 23, 0), 0),
       BmUnitFpn("E_BETHW-1", t(2014, 3, 3, 22, 30), 2, t(2014, 3, 3, 22, 31), 3),

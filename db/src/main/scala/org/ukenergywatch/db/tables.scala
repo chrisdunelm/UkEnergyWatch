@@ -91,7 +91,8 @@ trait DownloadTable extends MergeableTable {
   object Downloads extends TableQuery(new Downloads(_)) with Merger[Download, Unit] {
 
     val TYPE_BMRA = 1
-    val TYPE_GAS = 2
+    val TYPE_GAS_DATA = 2
+    val TYPE_GAS_PUBLISHED = 3
 
     def mergeInsert(item: Download)(implicit session: Session): Unit = {
       val q = Downloads

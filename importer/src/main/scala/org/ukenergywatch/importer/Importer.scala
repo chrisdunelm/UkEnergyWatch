@@ -124,18 +124,18 @@ trait RealImporter extends Slogger {
     database withSession { implicit session =>
       val availDt = gasDataDownloader.getLatestPublicationTime()
       log.info(s"Gas latest publication time: '$availDt'")
-      val dataStartTime = Downloads.getLatest(Downloads.TYPE_GAS) match {
-        case Some(gotDt) if gotDt > availDt - 1.minute => None // Don't even try to download if existing data very recent
-        case Some(gotDt) if gotDt < availDt - 1.hour => Some(availDt - 1.hour) // Allow missing data for up to 1 hour
-        case Some(gotDt) => Some(gotDt) // Normal behaviour - use previous time as time for start of this data
-        case None => Some(availDt - 15.minutes) // If no data, assume current data started 15 minutes ago
+      val lastPublishedTime = Downloads.getLatest(Downloads.TYPE_GAS_PUBLISHED) match {
+        case Some(gotDt) if availDt > gotDt => Some(gotDt)
+        case Some(gotDt) => None
+        case None => Some(availDt - 12.minutes)
       }
-      //println(s"dataStartTime = $dataStartTime")
-      for (dataStartTime <- dataStartTime) {
+      for (lastPublishedTime <- lastPublishedTime) {
         // Download data it new data available
         val data = gasDataDownloader.getInstantaneousFlowData()
-        // TODO: Process and store gas import data...
+        // Process and store gas import data
         import generated._
+        var lastTimeSeconds = 0
+        var firstTimeSeconds = Int.MaxValue
         for {
           supplyType: EDPEnergyGraphTableBE <- data.GetInstantaneousFlowDataResult.get.EDPReportPage.get.EDPEnergyGraphTableCollection.get.EDPEnergyGraphTableBE.map(_.get)
           obj: EDPObjectBE <- supplyType.EDPObjectCollection.get.EDPObjectBE.map(_.get)
@@ -145,12 +145,22 @@ trait RealImporter extends Slogger {
           val location: String = obj.EDPObjectName.get
           val flowRate: Double = item.FlowRate
           val toTime: DateTime = new DateTime(item.ApplicableAt.toGregorianCalendar.getTimeInMillis, DateTimeZone.UTC)
-println(s"desc:'$supplyTypeDescription' location:'$location' time:'$toTime' flowRate:$flowRate")
+          val toTimeSeconds = toTime.totalSeconds
+          val fromTime = toTime - 2.minutes
+          val fromTimeSeconds = fromTime.totalSeconds
+          // Insert into database
+          val gasImport = GasImport(supplyTypeDescription, location, fromTimeSeconds, toTimeSeconds, flowRate.toFloat)
+          GasImports.mergeInsert(gasImport)
+          // Keep track of times of data downloaded
+          lastTimeSeconds = math.max(lastTimeSeconds, toTimeSeconds)
+          firstTimeSeconds = math.min(firstTimeSeconds, fromTimeSeconds)
         }
         // Keep track of download
         log.info("Gas import processing complete")
-        val download = Download(Downloads.TYPE_GAS, dataStartTime.totalSeconds, availDt.totalSeconds)
-        Downloads.mergeInsert(download)
+        val downloadPublished = Download(Downloads.TYPE_GAS_PUBLISHED, lastPublishedTime.totalSeconds, availDt.totalSeconds)
+        Downloads.mergeInsert(downloadPublished)
+        val downloadData = Download(Downloads.TYPE_GAS_DATA, firstTimeSeconds, lastTimeSeconds)
+        Downloads.mergeInsert(downloadData)
         log.info("Merged download")
       }
     }
