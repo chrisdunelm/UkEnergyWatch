@@ -192,6 +192,7 @@ trait RealImporter extends Slogger {
         case None => Some(new DateTime(2000, 1, 1, 0, 0))
         case _ => None
       }
+      var importCount = 0
       for (downloadFrom <- downloadFrom) {
         val xml = bmReportsDownloader.getGenByFuelType()
         for {
@@ -203,8 +204,10 @@ trait RealImporter extends Slogger {
           val t0 = (at - 5.minutes).totalSeconds
           val t1 = at.totalSeconds
           GenByFuelsLive += GenByFuel((fuel \ "@TYPE").text, t0, t1, (fuel \ "@VAL").text.toFloat)
+          importCount += 1
         }
       }
+      log.info(s"Imported $importCount entries")
     }    
   }
 
@@ -220,6 +223,7 @@ trait RealImporter extends Slogger {
         case None => Some(new DateTime(2000, 1, 1, 0, 0))
         case _ => None
       }
+      var importCount = 0
       for (downloadFrom <- downloadFrom) {
         val xml = bmReportsDownloader.getGridFrequency()
         for {
@@ -228,8 +232,10 @@ trait RealImporter extends Slogger {
           if st > downloadFrom
         } {
           GridFrequenciesLive += GridFrequency(st.totalSeconds, (item \ "@VAL").text.toFloat)
+          importCount += 1
         }
       }
+      log.info(s"Imported $importCount entries")
     }
   }
 
