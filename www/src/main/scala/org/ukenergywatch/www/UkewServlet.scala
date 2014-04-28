@@ -13,12 +13,14 @@ object UkewServlet extends ScalatraServlet {
 
   PicklerRegistry.register[P1]
 
+  private val dal = Database.dal
+
   private def output(node: Node): ActionResult = {
     contentType = "text/html"
     Ok(s"<!DOCTYPE HTML>\n$node")
   }
 
-  val index = get("/") { output(Index.render()) }
+  val index = get("/") { output(Index.render(dal)) }
 
   get("/json1") {
     Ok {

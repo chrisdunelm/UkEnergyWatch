@@ -3,6 +3,9 @@ package org.ukenergywatch.www.views
 import scalatags._
 import scalatags.all._
 
+import org.ukenergywatch.db.DalComp
+import org.joda.time.DateTime
+
 case class Layout(title: String, content: Node)
 
 object Layout {
@@ -25,14 +28,21 @@ object Layout {
 
 object Index {
 
-  def render(): Node = {
-    view()
+  case class ViewData(gridFreq: Double, gridFreqUpdate: DateTime)
+
+  def render(dal: DalComp#Dal): Node = {
+    dal.database.withSession { implicit session =>
+      val freq = dal.getLatestGridFrequency()
+      val viewData = ViewData(freq.get.frequency, new DateTime(freq.get.endTime))
+      view(viewData)
+    }
   }
 
-  private def view(): Node = {
+  private def view(viewData: ViewData): Node = {
     val frag =
       div(
         p(id := "a", "Hello world!"),
+        p(s"Grid frequency: ${viewData.gridFreq}"),
         script("Index().main()")
       )
     Layout.view(Layout("Home", frag))

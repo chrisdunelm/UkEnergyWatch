@@ -7,4 +7,8 @@ object Flags extends Options {
 
   val port = opt(9001)
 
+  val mysqlHost = opt[String]("localhost")
+  val mysqlDatabase = opt[String]
+  val mysqlUser = opt[String]
+  val mysqlPassword = opt[String]
 }

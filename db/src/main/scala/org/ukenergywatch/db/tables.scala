@@ -333,7 +333,8 @@ trait DalComp {
       with GasImportTable
       with BmUnitFpnsTable
       with GenByFuelTable
-      with GridFrequencyTable {
+      with GridFrequencyTable
+      with DataMerger {
 
     val profile: JdbcProfile
     import profile.simple._
