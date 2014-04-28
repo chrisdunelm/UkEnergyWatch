@@ -129,6 +129,7 @@ trait RealImporter extends Slogger {
         case Some(gotDt) => None
         case None => Some(availDt - 12.minutes)
       }
+      log.info(s"Gas last published time: '$lastPublishedTime'")
       for (lastPublishedTime <- lastPublishedTime) {
         // Download data it new data available
         val data = gasDataDownloader.getInstantaneousFlowData()
