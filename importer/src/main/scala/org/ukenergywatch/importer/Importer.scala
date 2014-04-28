@@ -17,10 +17,10 @@ object Importer {
   sealed trait Mode
   case object CreateTables extends Mode
   case object DropTables extends Mode
-  case object ImportOld extends Mode
-  case object ImportCurrent extends Mode
-  case object ImportLiveGenByFuel extends Mode
-  case object ImportLiveGridFrequency extends Mode
+  case object ImportElecOld extends Mode
+  case object ImportElecCurrent extends Mode
+  case object ImportElecLiveGenByFuel extends Mode
+  case object ImportElecLiveGridFrequency extends Mode
   case object ImportGas extends Mode
 
   object Flags extends Options {
@@ -84,10 +84,10 @@ trait RealImporter extends Slogger {
     mode match {
       case CreateTables => createTables()
       case DropTables => dropTables()
-      case ImportOld => importOld()
-      case ImportCurrent => importCurrent()
-      case ImportLiveGenByFuel => importLiveGenByFuel()
-      case ImportLiveGridFrequency => importLiveGridFrequency()
+      case ImportElecOld => importElecOld()
+      case ImportElecCurrent => importElecCurrent()
+      case ImportElecLiveGenByFuel => importElecLiveGenByFuel()
+      case ImportElecLiveGridFrequency => importElecLiveGridFrequency()
       case ImportGas => importGas()
     }
   }
@@ -179,7 +179,7 @@ trait RealImporter extends Slogger {
       .toFormatter
       .withZone(DateTimeZone.UTC)
 
-  def importLiveGenByFuel() {
+  def importElecLiveGenByFuel() {
     database withSession { implicit session =>
       // Delete data older than 24 hours
       val expiry = (clock.nowUtc() - 24.hours).totalSeconds
@@ -207,7 +207,7 @@ trait RealImporter extends Slogger {
     }    
   }
 
-  def importLiveGridFrequency() {
+  def importElecLiveGridFrequency() {
     database withSession { implicit session =>
       // Delete data older than 24 hours
       var expiry = (clock.nowUtc() - 24.hours).totalSeconds
@@ -232,7 +232,7 @@ trait RealImporter extends Slogger {
     }
   }
 
-  def importOld() {
+  def importElecOld() {
     // Find most recent gap
     database withSession { implicit session =>
       for {
@@ -258,7 +258,7 @@ trait RealImporter extends Slogger {
     }
   }
 
-  def importCurrent() {
+  def importElecCurrent() {
     // Attempt to download latest half-hour file, if current time is greater than file endtime
     database withSession { implicit session =>
       val latest = Downloads.getLatest(Downloads.TYPE_BMRA)
