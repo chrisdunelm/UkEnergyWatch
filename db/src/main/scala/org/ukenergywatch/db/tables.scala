@@ -108,11 +108,11 @@ trait DownloadTable extends MergeableTable {
     }
 
     def getLatest(downloadType: Int)(implicit session: Session): Option[ReadableInstant] = {
-      Downloads.sortBy(_.toTime.desc).firstOption.map(_.toTime.toInstant)
+      Downloads.filter(_.downloadType === downloadType).sortBy(_.toTime.desc).firstOption.map(_.toTime.toInstant)
     }
 
     def getLastGap(downloadType: Int)(implicit session: Session): Option[ReadableInterval] = {
-      val q = Downloads.sortBy(_.toTime.desc).take(2)
+      val q = Downloads.filter(_.downloadType === downloadType).sortBy(_.toTime.desc).take(2)
       val res = q.list.reverse
       res match {
         case List() => None
