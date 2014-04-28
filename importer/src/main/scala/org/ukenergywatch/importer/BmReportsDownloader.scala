@@ -36,12 +36,12 @@ trait HttpBmReportsDownloaderComp extends BmReportsDownloaderComp {
     }
 
     def getGenByFuelType(): Elem = {
-      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=generationbyfueltypetable&output=XML"
+      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=generationbyfueltypetable"
       getXml(url)
     }
 
     def getGridFrequency(): Elem = {
-      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=rollingfrequency&output=XML"
+      val url = "http://www.bmreports.com/bsp/additional/saveoutput.php?element=rollingfrequency"
       getXml(url)
     }
 
