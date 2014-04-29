@@ -7,27 +7,25 @@ import org.scalajs.spickling._
 import org.scalajs.spickling.playjson._
 
 import org.ukenergywatch.www.views._
-import org.ukenergywatch.wwwcommon.P1
+import org.ukenergywatch.wwwcommon._
 
 object UkewServlet extends ScalatraServlet {
 
-  PicklerRegistry.register[P1]
-
-  private val dal = Database.dal
+  Pickling.register()
 
   private def output(node: Node): ActionResult = {
     contentType = "text/html"
     Ok(s"<!DOCTYPE HTML>\n$node")
   }
 
-  val index = get("/") { output(Index.render(dal)) }
-
-  get("/json1") {
-    Ok {
-      val pickle = PicklerRegistry.pickle(P1(1, "one"))
-      pickle
-    }
+  private def ajax[T](data: T): ActionResult = {
+    contentType = "application/json"
+    Ok(PicklerRegistry.pickle(data))
   }
+
+  val index = get("/") { output(Index.render()) }
+
+  get("/a/index") { ajax(Index.getUpdate()) }
 
   notFound {
     serveStaticResource() getOrElse resourceNotFound()

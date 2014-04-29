@@ -3,8 +3,10 @@ package org.ukenergywatch.www.views
 import scalatags._
 import scalatags.all._
 
-import org.ukenergywatch.db.DalComp
+import org.ukenergywatch.www.Database
+//import org.ukenergywatch.db.DalComp
 import org.joda.time.DateTime
+import org.ukenergywatch.wwwcommon._
 
 case class Layout(title: String, content: Node)
 
@@ -26,26 +28,44 @@ object Layout {
 
 }
 
+case class Index(
+  indexUpdate: IndexUpdate
+)
+
 object Index {
 
-  case class ViewData(gridFreq: Double, gridFreqUpdate: DateTime)
+  import Database.dal.profile.simple.Session
 
-  def render(dal: DalComp#Dal): Node = {
-    dal.database.withSession { implicit session =>
-      val freq = dal.getLatestGridFrequency()
-      val viewData = ViewData(freq.get.frequency, new DateTime(freq.get.endTime))
-      view(viewData)
+  def render(): Node = {
+    Database.dal.database.withSession { implicit session =>
+      val indexUpdate = getUpdateInternal()
+      val indexData = Index(indexUpdate)
+      view(indexData)
     }
   }
 
-  private def view(viewData: ViewData): Node = {
+  private def view(indexData: Index): Node = {
     val frag =
       div(
         p(id := "a", "Hello world!"),
-        p(s"Grid frequency: ${viewData.gridFreq}"),
+        div(id := "freq",
+          IndexUpdate.htmlGridFrequency(indexData.indexUpdate)
+        ),
         script("Index().main()")
       )
     Layout.view(Layout("Home", frag))
+  }
+
+  def getUpdate(): IndexUpdate = {
+    Database.dal.database.withSession { implicit session =>
+      getUpdateInternal()
+    }
+  }
+
+  private def getUpdateInternal()(implicit session: Session): IndexUpdate = {
+    val dal = Database.dal
+    val freq = dal.getLatestGridFrequency()
+    IndexUpdate(freq.get.frequency + util.Random.nextDouble() * 10.0, freq.get.endTime.toString)
   }
 
 }
