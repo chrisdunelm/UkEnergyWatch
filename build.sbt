@@ -35,7 +35,7 @@ lazy val www = project
   )
   .settings(
     Seq(packageExternalDepsJS, packageInternalDepsJS, packageExportedProductsJS, preoptimizeJS, optimizeJS) map { t =>
-      crossTarget in (wwwjs, Compile, t) := scalajsOutputDir.value / "webapp" / "js"
+      crossTarget in (wwwjs, Compile, t) := scalajsOutputDir.value / "classes" / "js"
     }: _*
   )
 
