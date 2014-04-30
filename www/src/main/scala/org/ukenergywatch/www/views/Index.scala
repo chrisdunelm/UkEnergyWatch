@@ -4,7 +4,6 @@ import scalatags._
 import scalatags.all._
 
 import org.ukenergywatch.www.Database
-//import org.ukenergywatch.db.DalComp
 import org.joda.time.DateTime
 import org.ukenergywatch.wwwcommon._
 
@@ -51,6 +50,9 @@ object Index {
         div(id := "freq",
           IndexUpdate.htmlGridFrequency(indexData.indexUpdate)
         ),
+        div(id := "genByFuel",
+          IndexUpdate.htmlGenByFuel(indexData.indexUpdate)
+        ),
         script("Index().main()")
       )
     Layout.view(Layout("Home", frag))
@@ -65,7 +67,12 @@ object Index {
   private def getUpdateInternal()(implicit session: Session): IndexUpdate = {
     val dal = Database.dal
     val freq = dal.getLatestGridFrequency()
-    IndexUpdate(freq.get.frequency + util.Random.nextDouble() * 10.0, freq.get.endTime.toString)
+
+    val genByFuel = dal.getLatestGenByFuel()
+    val genByFuelTime = genByFuel.get.map(_.toTime).max.toString
+    val genByFuelSeq = genByFuel.get.map(x => GenByFuelUpdate(x.fuel, x.mw + util.Random.nextDouble() * 10000))
+
+    IndexUpdate(freq.get.frequency + util.Random.nextDouble() * 10.0, freq.get.endTime.toString, genByFuelSeq, genByFuelTime)
   }
 
 }

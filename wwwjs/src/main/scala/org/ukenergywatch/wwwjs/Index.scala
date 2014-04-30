@@ -30,6 +30,9 @@ object Index {
         val html = IndexUpdate.htmlGridFrequency(indexUpdate)
         val d = dom.document.getElementById("freq")
         d.innerHTML = html.map(_.toString).mkString
+        val html2 = IndexUpdate.htmlGenByFuel(indexUpdate)
+        val d2 = dom.document.getElementById("genByFuel")
+        d2.innerHTML = html2.toString
         dom.window.setTimeout(updateInfo, 5000)
       }
     }
