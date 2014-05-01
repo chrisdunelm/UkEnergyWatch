@@ -1,0 +1,17 @@
+table {
+  border:1px solid #555;
+}
+td, th, tr {
+  padding:0;
+  border:0;
+  margin:0;
+}
+tr.genhead {
+  background-color:#ddf;
+}
+tr.gen:nth-child(odd) {
+  background-color:#ffa;
+}
+tr.gen:nth-child(even) {
+  background-color:white;
+}

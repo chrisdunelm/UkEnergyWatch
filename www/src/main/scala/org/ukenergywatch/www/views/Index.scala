@@ -16,7 +16,8 @@ object Layout {
       head(
         Tags2.title(s"UK Energy Watch - ${data.title}"),
         script(src := "/js/d3.v3.4.6.min.js"),
-        script(src := "/js/wwwjs-preopt.js")
+        script(src := "/js/wwwjs-preopt.js"),
+        link(rel := "stylesheet", `type` := "text/css", href := "/css/main.css")
       ),
       body(
         h1("UK Energy Watch"),
@@ -45,15 +46,18 @@ object Index {
 
   private def view(indexData: Index): Node = {
     val frag =
-      div(
-        p(id := "a", "Hello world!"),
-        div(id := "freq",
-          IndexUpdate.htmlGridFrequency(indexData.indexUpdate)
+      div(style := "max-width:900px;width:100%;border:1px solid black;",
+        table(width := "100%",
+          tr(
+            td(id := "freq", width := "50%",
+              IndexUpdate.htmlGridFrequency(indexData.indexUpdate)
+            ),
+            td(id := "genByFuel", width := "50%",
+              IndexUpdate.htmlGenByFuel(indexData.indexUpdate)
+            )
+          )
         ),
-        div(id := "genByFuel",
-          IndexUpdate.htmlGenByFuel(indexData.indexUpdate)
-        ),
-        script("Index().main()")
+        script("Index().main();")
       )
     Layout.view(Layout("Home", frag))
   }

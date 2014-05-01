@@ -18,9 +18,21 @@ object IndexUpdate {
     p(s"Grid frequency: ${data.gridFrequency} (updated: ${data.gridFrequencyTime})")
   )
 
-  def htmlGenByFuel(data: IndexUpdate): Node = div(
-    data.genByFuel.map(x => p(s"${x.fuel}: ${x.mw}")),
-    p(s"(updated: ${data.genByFuelTime}")
+  def htmlGenByFuel(data: IndexUpdate): Node = table("gen".cls)(
+    tr("genhead".cls)(
+      th("Fuel type"),
+      th("Power (mw)")
+    ),
+    data.genByFuel.map { x =>
+      tr("gen".cls)(
+        td(x.fuel),
+        td(x.mw)
+      )
+    },
+    tr("genhead".cls)(
+      th("Total"),
+      th(data.genByFuel.map(x => x.mw).sum)
+    )
   )
 
 }
