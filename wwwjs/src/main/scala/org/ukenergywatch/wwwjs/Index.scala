@@ -1,6 +1,7 @@
 package org.ukenergywatch.wwwjs
 
 import scala.scalajs.js
+import scala.scalajs.js._
 import js.JSON
 
 import js.annotation.JSExport
@@ -15,6 +16,7 @@ import org.ukenergywatch.wwwcommon._
 import java.util.Random
 
 import importedjs.d3
+import importedjs.D3
 
 @JSExport
 object Index {
@@ -37,8 +39,43 @@ object Index {
       }
     }
 
-    dom.window.setTimeout(updateInfo, 5000)
+    //dom.window.setTimeout(updateInfo, 5000)
 
+    val d = dom.document.getElementById("d")
+    d.innerHTML = "D3"
+    val svgEl = d3.select("#s")
+    val svgWidth = svgEl.style("width").dropRight(2).toInt
+    val svgHeight = svgEl.style("height").dropRight(2).toInt
+    println(s"SVG size: $svgWidth, $svgHeight")
+
+    case class Margins(top: Int, right: Int, bottom: Int, left: Int)
+    val margins = Margins(20, 20, 30, 50)
+    val width = svgWidth - margins.left - margins.right
+    val height = svgHeight - margins.top - margins.bottom
+
+    val svg = svgEl.append("g")
+      .attr("transform", s"translate(${margins.left},${margins.top})")
+
+    val x = d3.time.scale.range(Array(0, width))
+    val y = d3.scale.linear.range(Array(height, 0))
+    val xAxis = d3.svg.axis.scale(x).orient("bottom")
+    val yAxis = d3.svg.axis.scale(y).orient("left")
+
+    case class Pt2(t: js.Date, y: Double)
+    val data = Array(
+      Pt2(new js.Date(2014, 1, 1), 1.0),
+      Pt2(new js.Date(2014, 1, 2), 2.0),
+      Pt2(new js.Date(2014, 1, 3), 4.0),
+      Pt2(new js.Date(2014, 1, 4), 16.0)
+    )
+    x.domain(d3.extent(data, (d: Pt2) => d.t.asInstanceOf[js.Any]))
+    y.domain(d3.extent(data, (d: Pt2) => d.y.asInstanceOf[js.Any]))
+
+    svg.append("g")
+      .attr("transform", s"translate(0, $height)")
+      .call(xAxis)
+    svg.append("g")
+      .call(yAxis)
   }
 
 }

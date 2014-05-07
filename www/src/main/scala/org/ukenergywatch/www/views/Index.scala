@@ -15,7 +15,7 @@ object Layout {
     html(
       head(
         Tags2.title(s"UK Energy Watch - ${data.title}"),
-        script(src := "/js/d3.v3.4.6.min.js"),
+        script(src := "/js/d3.v3.4.6.js"),
         script(src := "/js/wwwjs-preopt.js"),
         link(rel := "stylesheet", `type` := "text/css", href := "/css/main.css")
       ),
@@ -50,7 +50,9 @@ object Index {
         table(width := "100%",
           tr(
             td(id := "freq", width := "50%",
-              IndexUpdate.htmlGridFrequency(indexData.indexUpdate)
+              IndexUpdate.htmlGridFrequency(indexData.indexUpdate),
+              div(id := "d"),
+              SvgTags.svg(id := "s", width := "100%", height := "200px")
             ),
             td(id := "genByFuel", width := "50%",
               IndexUpdate.htmlGenByFuel(indexData.indexUpdate)
