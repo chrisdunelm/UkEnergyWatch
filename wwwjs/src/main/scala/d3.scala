@@ -187,7 +187,8 @@ trait Selection extends Selectors { //with js.Array[js.Any] {
   def html(): js.String = ???
   def html(value: js.Any): Selection = ???
   def html(valueFunction: js.Function2[js.Any, js.Number, Any]): Selection = ???
-  var append: js.Function1[js.String, Selection] = ???
+  //var append: js.Function1[js.String, Selection] = ???
+  def append(value: js.String): Selection = ???
   var insert: js.Function2[js.String, js.String, Selection] = ???
   var remove: js.Function0[Selection] = ???
   var empty: js.Function0[js.Boolean] = ???
@@ -348,7 +349,8 @@ trait Time extends js.Object {
   var fridays: Range = ???
   var saturdays: Range = ???
   var format: js.Any = ???
-  var scale: js.Any = ???
+  //var scale: Scale.TimeScale = ???
+  def scale(): Scale.TimeScale = ???
 }
 
 @JSName("D3.Time.Range")
@@ -707,7 +709,7 @@ trait Brush extends js.Object {
 }
 
 @JSName("D3.Svg.Axis")
-trait Axis extends js.Object {
+trait Axis extends js.Function1[Selection, Unit] { //js.Object {
   def apply(selection: Selection): Unit = ???
   def scale(): js.Dynamic = ???
   def scale(scale: js.Any): Axis = ???
