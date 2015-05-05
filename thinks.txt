@@ -1,0 +1,36 @@
+Want to show:
+
+Raw:
+Generation unit per half-hour
+Fuel-type per half-hour
+
+Aggregates:
+Per generation-unit - location
+Per power-station - location
+County? - location
+
+Per fuel-type - fuel-type
+Green/dirty? - fuel-type
+
+
+All aggregates split by time:
+Half-hour
+Hour
+Day
+Week
+Month
+Quater
+Year
++ arbitrary
+
+
+Each data item has allAggregateIds = aggregateIds with colon separaters
+E.g. "genunit=drax-1:duration=1800" => aggregated by generation-unit & 30-minutes
+E.g. "powerstation=drax:duration=3600" => aggregated by power-station & 60 minutes
+
+Query for per-hour power-stations:
+select * from data where agg="powerstation:d3600" and when between(...)
+union
+select * from data where agg="powerstation:d1800" and when between(<start-fragment>) or when between(<end-fragment>)
+
+Before the above, a query will be needed to find the max(when) of each used aggregate
