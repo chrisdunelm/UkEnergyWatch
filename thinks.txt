@@ -23,6 +23,7 @@ Quater
 Year
 + arbitrary
 
+average + peak power aggregates
 
 Each data item has allAggregateIds = aggregateIds with colon separaters
 E.g. "genunit=drax-1:duration=1800" => aggregated by generation-unit & 30-minutes
