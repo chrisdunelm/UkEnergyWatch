@@ -1,6 +1,5 @@
 package org.ukenergywatch.db
 
-import com.softwaremill.macwire._
 import slick.driver.JdbcDriver
 
 class Tables(val driver: JdbcDriver) {

@@ -36,13 +36,13 @@ class TableTest extends FunSuite with Matchers {
   test("simple write+read 2") {
     val setup = DBIO.seq(
       (tables.aggregates.schema).create,
-      tables.aggregates += Aggregate(Interval.hour, AggregateFunction.average, Location.genUnit, m(60), m(120))
+      tables.aggregates += Aggregate(Interval.day, AggregateFunction.peak, Location.powerStation, m(60), m(120))
     )
     val query = tables.aggregates.result
     val actions = setup andThen query
     val r = await(db.run(actions.withPinnedSession))
     r.size shouldBe 1
-    r(0).id0 shouldBe Aggregate(Interval.hour, AggregateFunction.average, Location.genUnit, m(60), m(120))
+    r(0).id0 shouldBe Aggregate(Interval.day, AggregateFunction.peak, Location.powerStation, m(60), m(120))
   }
 
 }
