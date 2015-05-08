@@ -3,19 +3,49 @@ package org.ukenergywatch.db
 import com.softwaremill.macwire._
 import slick.driver.JdbcDriver
 
-trait DbModule {
-  // Provides
-  lazy val tables = wire[Tables]
-
-  // Dependencies
-  val driver: JdbcDriver
-  def db: driver.backend.Database
-}
-
 class Tables(val driver: JdbcDriver) {
   import driver.api._
 
-  case class Aggregate(aggregateId: String, fromTime: Int, toTime: Int, value: Double, id: Int = 0)
+  case class Interval(val value: Int)  extends MappedTo[Int]
+  object Interval {
+    val hour = Interval(1)
+    val day = Interval(2)
+    val week = Interval(3)
+    val month = Interval(4)
+    val year = Interval(5)
+  }
+
+  case class AggregateFunction(val value: Int) extends MappedTo[Int]
+  object AggregateFunction {
+    val average = AggregateFunction(1)
+    val peak = AggregateFunction(2)
+  }
+
+  case class Location(val value: Int) extends MappedTo[Int]
+  object Location {
+    val genUnit = Location(1)
+    val powerStation = Location(2)
+    val all = Location(3)
+  }
+
+  case class Aggregate(
+    interval: Interval,
+    aggregateFunction: AggregateFunction,
+    location: Location,
+    start: Int,
+    end: Int
+  )
+
+  class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregate") {
+    def interval = column[Interval]("interval")
+    def aggregateFunction = column[AggregateFunction]("aggregateFunction")
+    def location = column[Location]("location")
+    def start = column[Int]("start")
+    def end= column[Int]("end")
+    def * = (interval, aggregateFunction, location, start, end) <> (Aggregate.tupled, Aggregate.unapply)
+  }
+
+  /*case class Aggregate(aggregateId: String, fromTime: Int, toTime: Int, value: Double, id: Int = 0)
 
   class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregates") {
     def id = column[Int]("id", O.PrimaryKey)
@@ -26,6 +56,6 @@ class Tables(val driver: JdbcDriver) {
     def * = (aggregateId, fromTime, toTime, value, id) <> (Aggregate.tupled, Aggregate.unapply)
   }
 
-  val aggregates = TableQuery[Aggregates]
+  val aggregates = TableQuery[Aggregates]*/
 
 }

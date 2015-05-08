@@ -4,6 +4,8 @@ Raw:
 Generation unit per half-hour
 Fuel-type per half-hour
 
+
+
 Aggregates:
 Per generation-unit - location
 Per power-station - location
