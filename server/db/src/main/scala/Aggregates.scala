@@ -6,7 +6,7 @@ import slick.driver.JdbcDriver
 class Tables(val driver: JdbcDriver) {
   import driver.api._
 
-  case class Interval(val value: Int)  extends MappedTo[Int]
+  case class Interval(val value: Int) extends MappedTo[Int]
   object Interval {
     val hour = Interval(1)
     val day = Interval(2)
@@ -33,29 +33,20 @@ class Tables(val driver: JdbcDriver) {
     aggregateFunction: AggregateFunction,
     location: Location,
     start: Int,
-    end: Int
+    end: Int,
+    id: Int = 0
   )
 
   class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregate") {
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def interval = column[Interval]("interval")
     def aggregateFunction = column[AggregateFunction]("aggregateFunction")
     def location = column[Location]("location")
     def start = column[Int]("start")
     def end= column[Int]("end")
-    def * = (interval, aggregateFunction, location, start, end) <> (Aggregate.tupled, Aggregate.unapply)
+    def * = (interval, aggregateFunction, location, start, end, id) <> (Aggregate.tupled, Aggregate.unapply)
   }
 
-  /*case class Aggregate(aggregateId: String, fromTime: Int, toTime: Int, value: Double, id: Int = 0)
-
-  class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregates") {
-    def id = column[Int]("id", O.PrimaryKey)
-    def aggregateId = column[String]("aggregateId")
-    def fromTime = column[Int]("fromTime")
-    def toTime = column[Int]("toTime")
-    def value = column[Double]("value")
-    def * = (aggregateId, fromTime, toTime, value, id) <> (Aggregate.tupled, Aggregate.unapply)
-  }
-
-  val aggregates = TableQuery[Aggregates]*/
+  val aggregates = TableQuery[Aggregates]
 
 }

@@ -11,34 +11,38 @@ class TableTest extends FunSuite with Matchers {
       DbModuleMemory
 
   import Modules.{db, tables}
-  import Modules.tables.Aggregate
+  import Modules.tables._
   import Modules.tables.driver.api._
 
   def m(minute: Int): Int = minute * 60
   def await[T](f: Future[T]): T = Await.result(f, 1.second)
 
-  test("simple write+read") {
+  implicit class RichAggregate(v: Aggregate) {
+    def id0 = v.copy(id = 0)
+  }
+
+  test("simple write+read 1") {
     val setup = DBIO.seq(
       (tables.aggregates.schema).create,
-      tables.aggregates += Aggregate("g=DRAX1;d=1800", m(0), m(30), 100.0, 0)
+      tables.aggregates += Aggregate(Interval.hour, AggregateFunction.average, Location.genUnit, m(0), m(60))
     )
     val query = tables.aggregates.result
     val actions = setup andThen query
     val r = await(db.run(actions.withPinnedSession))
     r.size shouldBe 1
-    r(0) shouldBe Aggregate("g=DRAX1;d=1800", m(0), m(30), 100.0, 0)
+    r(0).id0 shouldBe Aggregate(Interval.hour, AggregateFunction.average, Location.genUnit, m(0), m(60))
   }
 
   test("simple write+read 2") {
     val setup = DBIO.seq(
       (tables.aggregates.schema).create,
-      tables.aggregates += Aggregate("g=DRAX1;d=1800", m(0), m(30), 100.0, 0)
+      tables.aggregates += Aggregate(Interval.hour, AggregateFunction.average, Location.genUnit, m(60), m(120))
     )
     val query = tables.aggregates.result
     val actions = setup andThen query
     val r = await(db.run(actions.withPinnedSession))
     r.size shouldBe 1
-    r(0) shouldBe Aggregate("g=DRAX1;d=1800", m(0), m(30), 100.0, 0)
+    r(0).id0 shouldBe Aggregate(Interval.hour, AggregateFunction.average, Location.genUnit, m(60), m(120))
   }
 
 }
