@@ -38,10 +38,12 @@ def toEntry(l: String): Entry = {
 val entries = l.map(x => toEntry(x))
 //println(entries)
 
-val tu = entries.groupBy(_.tradingUnitName)
-for (z <- tu.filter(_._2.size < 10)) {
+def g(e: Entry): String = if (e.tradingUnitName != "") e.tradingUnitName else e.partyName
+
+val tu = entries.groupBy(x => g(x))
+for (z <- tu.filter(_._2.size < 12)) {
   println(s"${z._1} : ${z._2.size}")
   for (zz <- z._2) {
-    println(s"  $zz")
+    //println(s"  $zz")
   }
 }
