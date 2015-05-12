@@ -38,11 +38,16 @@ object B1420 {
 
 val bmUnits = Source.fromFile("./reg_bm_units.csv").getLines.drop(3).map(x => BmUnit(x))
 
-val b1420Files = Seq(
+/*val b1420Files = Seq(
   "B1420-2015.csv",
   "B1420-2014.csv",
-  "B1420-2013.csv"
-)
+  "B1420-2013.csv",
+  "B1420-2012.csv",
+  "B1420-2011.csv",
+  "B1420-2010.csv",
+  "B1420-2009.csv"
+)*/
+val b1420Files = for (i <- 2005 to 2015) yield s"B1420-$i.csv"
 
 val b1420s = b1420Files.flatMap(x => Source.fromFile(x).getLines)
   .filterNot(_.startsWith("*")).filterNot(_ == "<EOF>")
@@ -55,7 +60,7 @@ for (bmu <- bmUnits) {
   val b1420 = b1420ByBmUnitId.get(bmu.bmUnitId)
   val desc = b1420 match {
     case None => None //"<unknown>"
-    case Some(b1420) => Some(s"'${b1420.resourceType}'")
+    case Some(b1420) => Some(s"'${b1420.resourceType}' (${bmu.bmUnitName}, ${bmu.partyName}, ${bmu.tradingUnitName}) : ${bmu.gc} MW (${bmu.dc} MW)")
   }
   desc.foreach { desc =>
     println(s"'${bmu.bmUnitId}' : $desc")
