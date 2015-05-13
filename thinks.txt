@@ -27,6 +27,10 @@ Year
 
 average + peak power aggregates
 
+And FPNs:
+For genunit and aggregated over time & to gen-unit & power-station
+(FPNs are more accurate than half-hour, so will require aggregating to half-hour; or just do this at import, throwing away the raw data?)
+
 Each data item has allAggregateIds = aggregateIds with colon separaters
 E.g. "genunit=drax-1:duration=1800" => aggregated by generation-unit & 30-minutes
 E.g. "powerstation=drax:duration=3600" => aggregated by power-station & 60 minutes
@@ -37,3 +41,11 @@ union
 select * from data where agg="powerstation:d1800" and when between(<start-fragment>) or when between(<end-fragment>)
 
 Before the above, a query will be needed to find the max(when) of each used aggregate
+
+
+T_ = Directly connected to transmission system
+E_ = Embedded generation
+I_ = interconnector
+
+Interconnectors will probably require special handling, as there are many (>50) BMU-ids per interconnect.
+I don't understand quite why this is at the moment. Different operators that may use the interconnect?
