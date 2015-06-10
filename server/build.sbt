@@ -14,9 +14,6 @@ lazy val commonSettings = Seq(
     "-feature"
   ),
   libraryDependencies ++= Seq(
-    "com.softwaremill.macwire" %% "macros" % "1.0.1",
-    "com.softwaremill.macwire" %% "runtime" % "1.0.1",
-    "org.scala-lang.modules" %% "scala-async" % "0.9.2",
     "joda-time" % "joda-time" % "2.7",
     "org.joda" % "joda-convert" % "1.7",
     "com.typesafe.slick" %% "slick" % "3.0.0",

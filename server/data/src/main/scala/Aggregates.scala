@@ -1,8 +1,21 @@
 package org.ukenergywatch.data
 
-import com.softwaremill.macwire._
-import org.ukenergywatch.db.Tables
+import org.ukenergywatch.db.DbComponent
 
+trait DataComponent {
+  this: DbComponent =>
+
+  lazy val data = new Data
+
+  class Data {
+
+    
+
+  }
+
+}
+
+/*
 trait DataModule {
   // Provides
   val dataReader = wire[DataReader]
@@ -22,3 +35,4 @@ class DataWriter(tables: Tables) {
   }
 
 }
+ */
