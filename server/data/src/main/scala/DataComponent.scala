@@ -1,6 +1,7 @@
 package org.ukenergywatch.data
 
 import org.ukenergywatch.db.DbComponent
+import org.ukenergywatch.db.RawData
 
 trait DataComponent {
   this: DbComponent =>
@@ -9,7 +10,9 @@ trait DataComponent {
 
   class Data {
 
-    
+    def write(rawData: Seq[RawData]): Unit = {
+      
+    }
 
   }
 

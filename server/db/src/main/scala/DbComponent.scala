@@ -4,10 +4,11 @@ import slick.driver.{JdbcDriver, H2Driver}
 
 trait DbComponent {
 
-  def db: Db
+  val db: Db
 
-  trait Db extends DataTypes
-      with AggregateTable
+  trait Db
+      extends AggregateTable
+      with RawDataTable
   {
     val driver: JdbcDriver
   }

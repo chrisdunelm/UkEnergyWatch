@@ -19,6 +19,7 @@ object JodaExtensions {
 
   implicit class RichReadableInstant(val i: ReadableInstant) extends AnyVal {
     def millis: Long = i.getMillis
+    def seconds: Int = (i.getMillis / 1000L).toInt
     def + (d: ReadableDuration): Instant = i.toInstant.plus(d)
     def - (j: ReadableInstant): Duration = new Duration(j, i)
     def < (j: ReadableInstant): Boolean = i.isBefore(j)

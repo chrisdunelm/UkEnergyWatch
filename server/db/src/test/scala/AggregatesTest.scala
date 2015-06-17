@@ -17,13 +17,12 @@ class AggregatesTest extends FunSuite with Matchers {
     import Components.db._
 
     val value = Aggregate(
-      AggregationInterval.hour,
-      AggregationFunction.average,
-      LocationType.generationUnit,
+      AggregationInterval.Hour,
+      AggregationType.GenerationUnit,
       "genunit1",
       DbTime(new DateTime(2015, 1, 1, 0, 0, 0)),
       DbTime(new DateTime(2015, 1, 1, 0, 1, 0)),
-      11.0
+      Map(AggregationFunction.Average -> 11.0)
     )
 
     val setup = DBIO.seq(
@@ -35,6 +34,14 @@ class AggregatesTest extends FunSuite with Matchers {
     val r = await(db.run((setup andThen query).withPinnedSession))
     r.size shouldBe 1
     r(0).copy(id = 0) shouldBe value
+
+    // Check pattern-matching works
+    r(0).aggregationInterval should matchPattern {
+      case AggregationInterval.Hour =>
+    }
+    r(0).aggregationInterval should not matchPattern {
+      case AggregationInterval.Day =>
+    }
   }
 
 }

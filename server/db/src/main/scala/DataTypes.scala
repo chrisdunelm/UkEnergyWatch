@@ -1,40 +1,37 @@
 package org.ukenergywatch.db
 
 import org.joda.time.{ReadableInstant, Instant}
+import slick.driver.JdbcDriver.api.MappedTo
+
 import org.ukenergywatch.utils.JodaExtensions._
 
-trait DataTypes {
-  val driver: slick.driver.JdbcDriver
-  import driver.api._
+case class AggregationInterval(val value: Byte) extends MappedTo[Byte]
+object AggregationInterval {
+  object Hour extends AggregationInterval(1)
+  object Day extends AggregationInterval(2)
+  object Week extends AggregationInterval(3)
+  object Month extends AggregationInterval(4)
+  object Year extends AggregationInterval(5)
+}
 
-  case class AggregationInterval(val value: Int) extends MappedTo[Int]
-  object AggregationInterval {
-    val hour = AggregationInterval(1)
-    val day = AggregationInterval(2)
-    val week = AggregationInterval(3)
-    val month = AggregationInterval(4)
-    val year = AggregationInterval(5)
-  }
+case class AggregationFunction(val value: Byte) extends MappedTo[Byte]
+object AggregationFunction {
+  object Average extends AggregationFunction(1)
+  object Maximum extends AggregationFunction(2)
+  object Minimum extends AggregationFunction(3)
+}
 
-  case class AggregationFunction(val value: Int) extends MappedTo[Int]
-  object AggregationFunction {
-    val average = AggregationFunction(1)
-    val maximum = AggregationFunction(2)
-    val minimum = AggregationFunction(3)
-  }
+case class AggregationType(val value: Byte) extends MappedTo[Byte]
+object AggregationType {
+  object GenerationUnit extends AggregationType(1)
+  object TradingUnit extends AggregationType(2)
+  object Uk extends AggregationType(3)
+  object FuelType extends AggregationType(4)
+}
 
-  case class LocationType(val value: Int) extends MappedTo[Int]
-  object LocationType {
-    val generationUnit = LocationType(1)
-    val tradingUnit = LocationType(2)
-    val uk = LocationType(3)
-  }
-
-  case class DbTime(val value: Int) extends MappedTo[Int] {
-    def toInstant: Instant = new Instant(value.toLong * 1000L)
-  }
-  object DbTime {
-    def apply(dt: ReadableInstant): DbTime = DbTime((dt.millis / 1000L).toInt)
-  }
-  
+case class DbTime(val value: Int) extends MappedTo[Int] {
+  def toInstant: Instant = new Instant(value.toLong * 1000L)
+}
+object DbTime {
+  def apply(dt: ReadableInstant): DbTime = DbTime((dt.millis / 1000L).toInt)
 }
