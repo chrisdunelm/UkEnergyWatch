@@ -1,8 +1,5 @@
 package org.ukenergywatch.db
 
-import slick.driver.JdbcDriver.api.MappedTo
-import org.joda.time.ReadableInstant
-
 case class RawData(
   dataType: AggregationType,
   name: String,

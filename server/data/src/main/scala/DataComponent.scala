@@ -3,6 +3,14 @@ package org.ukenergywatch.data
 import org.ukenergywatch.db.DbComponent
 import org.ukenergywatch.db.RawData
 
+object TimeMerge {
+
+  //def merge(table: TableQuery[Progresses], item: Progress): Unit = {
+  //  val q = table.result
+  //}
+
+}
+
 trait DataComponent {
   this: DbComponent =>
 

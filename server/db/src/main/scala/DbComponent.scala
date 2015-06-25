@@ -9,6 +9,7 @@ trait DbComponent {
   trait Db
       extends AggregateTable
       with RawDataTable
+      with ProgressTable
   {
     val driver: JdbcDriver
   }
