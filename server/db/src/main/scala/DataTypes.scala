@@ -5,6 +5,13 @@ import slick.driver.JdbcDriver.api.MappedTo
 
 import org.ukenergywatch.utils.JodaExtensions._
 
+case class RawDataType(val value: Byte) extends MappedTo[Byte]
+object RawDataType {
+  object ActualGeneration extends RawDataType(1)
+  object PredictedGeneration extends RawDataType(2)
+  object GenerationByFuelType extends RawDataType(3)
+}
+
 case class AggregationInterval(val value: Byte) extends MappedTo[Byte]
 object AggregationInterval {
   object Hour extends AggregationInterval(1)

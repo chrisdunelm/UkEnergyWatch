@@ -13,8 +13,8 @@ class ProgressTableTest extends FunSuite with Matchers {
   import Components.db.driver.api._
   import Components.db._
 
-  def p(start: Int, length: Int = 1, pType: ProgressType = ProgressType.ActualGeneration): Progress = Progress(
-    pType,
+  def p(start: Int, length: Int = 1, rawDataType: RawDataType = RawDataType.ActualGeneration): Progress = Progress(
+    rawDataType,
     DbTime(new DateTime(2015, 1, 1, 0, start)),
     DbTime(new DateTime(2015, 1, 1, 0, start + length))
   )
@@ -31,7 +31,7 @@ class ProgressTableTest extends FunSuite with Matchers {
     val result = run(progresses.merge(p(0)))
 
     result.size shouldBe 1
-    result(0).copy(id = 0) shouldBe p(0)
+    result(0).id0 shouldBe p(0)
   }
 
   test("Mergeable item inserted after") {
@@ -41,7 +41,7 @@ class ProgressTableTest extends FunSuite with Matchers {
     )
 
     result.size shouldBe 1
-    result(0).copy(id = 0) shouldBe p(0, 2)
+    result(0).id0 shouldBe p(0, 2)
   }
 
   test("Mergeable item inserted after, but with a gap") {
@@ -51,18 +51,18 @@ class ProgressTableTest extends FunSuite with Matchers {
     )
 
     result.size shouldBe 2
-    result(0).copy(id = 0) shouldBe p(0)
-    result(1).copy(id = 0) shouldBe p(2)
+    result(0).id0 shouldBe p(0)
+    result(1).id0 shouldBe p(2)
   }
 
   test("Non-mergeable item inserter after") {
     val result = run(
       progresses += p(0),
-      progresses.merge(p(1, pType = ProgressType.PredictedGeneration))
+      progresses.merge(p(1, rawDataType = RawDataType.PredictedGeneration))
     )
     result.size shouldBe 2
-    result(0).copy(id = 0) shouldBe p(0)
-    result(1).copy(id = 0) shouldBe p(1, pType = ProgressType.PredictedGeneration)
+    result(0).id0 shouldBe p(0)
+    result(1).id0 shouldBe p(1, rawDataType = RawDataType.PredictedGeneration)
   }
 
   test("Mergeable item inserted before") {
@@ -72,7 +72,7 @@ class ProgressTableTest extends FunSuite with Matchers {
     )
 
     result.size shouldBe 1
-    result(0).copy(id = 0) shouldBe p(0, 2)
+    result(0).id0 shouldBe p(0, 2)
   }
 
   test("Mergeable item inserted before, but with a gap") {
@@ -82,18 +82,18 @@ class ProgressTableTest extends FunSuite with Matchers {
     )
 
     result.size shouldBe 2
-    result(0).copy(id = 0) shouldBe p(0)
-    result(1).copy(id = 0) shouldBe p(2)
+    result(0).id0 shouldBe p(0)
+    result(1).id0 shouldBe p(2)
   }
 
   test("Non-mergeable item inserter before") {
     val result = run(
       progresses += p(1),
-      progresses.merge(p(0, pType = ProgressType.PredictedGeneration))
+      progresses.merge(p(0, rawDataType = RawDataType.PredictedGeneration))
     )
     result.size shouldBe 2
-    result(0).copy(id = 0) shouldBe p(0, pType = ProgressType.PredictedGeneration)
-    result(1).copy(id = 0) shouldBe p(1)
+    result(0).id0 shouldBe p(0, rawDataType = RawDataType.PredictedGeneration)
+    result(1).id0 shouldBe p(1)
   }
 
   test("Mergeable item inserted between") {
@@ -103,19 +103,19 @@ class ProgressTableTest extends FunSuite with Matchers {
       progresses.merge(p(1))
     )
     result.size shouldBe 1
-    result(0).copy(id = 0) shouldBe p(0, 3)
+    result(0).id0 shouldBe p(0, 3)
   }
 
   test("Non-mergeable item inserted between") {
     val result = run(
       progresses += p(2),
       progresses += p(0),
-      progresses.merge(p(1, pType = ProgressType.PredictedGeneration))
+      progresses.merge(p(1, rawDataType = RawDataType.PredictedGeneration))
     )
     result.size shouldBe 3
-    result(0).copy(id = 0) shouldBe p(0)
-    result(1).copy(id = 0) shouldBe p(1, pType = ProgressType.PredictedGeneration)
-    result(2).copy(id = 0) shouldBe p(2)
+    result(0).id0 shouldBe p(0)
+    result(1).id0 shouldBe p(1, rawDataType = RawDataType.PredictedGeneration)
+    result(2).id0 shouldBe p(2)
   }
 
 }

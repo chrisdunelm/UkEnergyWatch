@@ -1,30 +1,38 @@
 package org.ukenergywatch.db
 
 case class RawData(
-  dataType: AggregationType,
+  rawDataType: RawDataType,
   name: String,
   fromTime: DbTime,
   toTime: DbTime,
   fromValue: Double,
   toValue: Double,
   id: Int = 0
-)
+) extends MergeableValue {
+  def id0: RawData = copy(id = 0)
+}
 
-trait RawDataTable {
+trait RawDataTable extends Mergeable{
   val driver: slick.driver.JdbcDriver
   import driver.api._
 
-  class RawDatas(tag: Tag) extends Table[RawData](tag, "rawdata") {
+  class RawDatas(tag: Tag) extends Table[RawData](tag, "rawdata") with MergeableTable {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-    def dataType = column[AggregationType]("dataType")
+    def rawDataType = column[RawDataType]("rawDataType")
     def name = column[String]("name")
     def fromTime = column[DbTime]("fromTime")
     def toTime = column[DbTime]("toTime")
     def fromValue = column[Double]("fromValue")
     def toValue = column[Double]("toValue")
-    def * = (dataType, name, fromTime, toTime, fromValue, toValue, id) <> (RawData.tupled, RawData.unapply)
+    def * = (rawDataType, name, fromTime, toTime, fromValue, toValue, id) <> (RawData.tupled, RawData.unapply)
   }
 
-  val rawDatas = TableQuery[RawDatas]
+  object rawDatas extends TableQuery[RawDatas](new RawDatas(_)) with MergeQuery[RawData, RawDatas] {
+    protected def mergeFilter(item: RawData) = { x =>
+      x.rawDataType === item.rawDataType && x.name === item.name &&
+      x.fromValue === item.fromValue && x.toValue === item.toValue &&
+      item.toValue == item.fromValue
+    }
+  }
 
 }

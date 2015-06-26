@@ -1,20 +1,13 @@
 package org.ukenergywatch.db
 
-import slick.driver.JdbcDriver.api.MappedTo
-
-case class ProgressType(val value: Byte) extends MappedTo[Byte]
-object ProgressType {
-  object ActualGeneration extends ProgressType(1)
-  object PredictedGeneration extends ProgressType(2)
-  object GenerationByFuelType extends ProgressType(3)
-}
-
 case class Progress(
-  progressType: ProgressType,
+  rawDataType: RawDataType,
   fromTime: DbTime,
   toTime: DbTime,
   id: Int = 0
-) extends MergeableValue
+) extends MergeableValue {
+  def id0: Progress = copy(id = 0)
+}
 
 trait ProgressTable extends Mergeable {
   val driver: slick.driver.JdbcDriver
@@ -22,14 +15,14 @@ trait ProgressTable extends Mergeable {
 
   class Progresses(tag: Tag) extends Table[Progress](tag, "progress") with MergeableTable {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-    def progressType = column[ProgressType]("progressType")
+    def rawDataType = column[RawDataType]("rawDataType")
     def fromTime = column[DbTime]("fromTime")
     def toTime = column[DbTime]("toTime")
-    def * = (progressType, fromTime, toTime, id) <> (Progress.tupled, Progress.unapply)
+    def * = (rawDataType, fromTime, toTime, id) <> (Progress.tupled, Progress.unapply)
   }
 
   object progresses extends TableQuery[Progresses](new Progresses(_)) with MergeQuery[Progress, Progresses] {
-    protected def filter(item: Progress) = x => x.progressType === item.progressType
+    protected def mergeFilter(item: Progress) = x => x.rawDataType === item.rawDataType
   }
 
 }

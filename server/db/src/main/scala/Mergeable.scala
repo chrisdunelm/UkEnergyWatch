@@ -21,15 +21,15 @@ trait Mergeable {
   trait MergeQuery[TValue <: MergeableValue, TTable <: Table[TValue] with MergeableTable] {
     this: TableQuery[TTable] =>
 
-    protected def filter(item: TValue): TTable => Rep[Boolean]
+    protected def mergeFilter(item: TValue): TTable => Rep[Boolean]
 
     def merge(item: TValue): DBIOAction[scala.util.Try[Unit], NoStream, _] = {
       val qExisting = this
         .filter(e => e.toTime >= item.fromTime && e.fromTime <= item.toTime)
-        .filter(filter(item))
+        .filter(mergeFilter(item))
         .sortBy(_.fromTime)
         .take(3)
-      //println(qExisting.result.statements)
+      println(qExisting.result.statements)
       val qUpdate = qExisting.result.flatMap { existings =>
         existings.toList match {
           case Nil =>
