@@ -8,10 +8,12 @@ trait DbComponent {
 
   trait Db
       extends AggregateTable
+      with AggregateProgressTable
       with RawDataTable
-      with ProgressTable
+      with RawProgressTable
   {
     val driver: JdbcDriver
+    def db: driver.api.Database
   }
 
 }

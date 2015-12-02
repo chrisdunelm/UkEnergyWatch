@@ -2,14 +2,15 @@ package org.ukenergywatch.db
 
 import org.scalatest._
 
-import scala.concurrent.duration._
+import scala.concurrent.duration
 import scala.concurrent._
 
-import org.joda.time.DateTime
+import java.time.Instant
+import org.ukenergywatch.utils.JavaTimeExtensions._
 
 class AggregatesTest extends FunSuite with Matchers {
 
-  def await[T](f: Future[T]): T = Await.result(f, 1.second)
+  def await[T](f: Future[T]): T = Await.result(f, duration.Duration(1, duration.SECONDS))
 
   test("write-read") {
     object Components extends DbMemoryComponent
@@ -17,12 +18,12 @@ class AggregatesTest extends FunSuite with Matchers {
     import Components.db._
 
     val value = Aggregate(
-      AggregationInterval.Hour,
-      AggregationType.GenerationUnit,
+      AggregationInterval.hour,
+      AggregationType.generationUnit,
       "genunit1",
-      DbTime(new DateTime(2015, 1, 1, 0, 0, 0)),
-      DbTime(new DateTime(2015, 1, 1, 0, 1, 0)),
-      Map(AggregationFunction.Average -> 11.0)
+      DbTime(0.secondsToInstant),
+      DbTime(1.secondsToInstant),
+      Map(AggregationFunction.average -> 11.0)
     )
 
     val setup = DBIO.seq(
@@ -37,10 +38,10 @@ class AggregatesTest extends FunSuite with Matchers {
 
     // Check pattern-matching works
     r(0).aggregationInterval should matchPattern {
-      case AggregationInterval.Hour =>
+      case AggregationInterval.hour =>
     }
     r(0).aggregationInterval should not matchPattern {
-      case AggregationInterval.Day =>
+      case AggregationInterval.day =>
     }
   }
 

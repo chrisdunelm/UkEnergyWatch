@@ -24,7 +24,7 @@ trait AggregateTable extends Mergeable {
     }.toMap
   )
 
-  class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregate") with MergeableTable {
+  class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregates") with MergeableTable {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def aggregationInterval = column[AggregationInterval]("aggregationInterval")
     def aggregationType = column[AggregationType]("aggregationType")

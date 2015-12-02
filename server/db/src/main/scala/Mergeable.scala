@@ -1,11 +1,16 @@
 package org.ukenergywatch.db
 
+import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
+import org.ukenergywatch.utils.RangeOf
 
-trait MergeableValue {
+trait MergeableValue extends RangeOf[Instant] {
   def id: Int
   def fromTime: DbTime
   def toTime: DbTime
+
+  override def from: Instant = fromTime.toInstant
+  override def to: Instant = toTime.toInstant
 }
 
 trait Mergeable {
@@ -29,7 +34,7 @@ trait Mergeable {
         .filter(mergeFilter(item))
         .sortBy(_.fromTime)
         .take(3)
-      println(qExisting.result.statements)
+      //println(qExisting.result.statements)
       val qUpdate = qExisting.result.flatMap { existings =>
         existings.toList match {
           case Nil =>

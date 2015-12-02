@@ -1,18 +1,17 @@
 package org.ukenergywatch.utils
 
 import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit, Callable}
-import org.joda.time.{ReadableDuration, Duration, DateTime, Instant, ReadableInstant}
+import org.ukenergywatch.utils.JavaTimeExtensions._
+import java.time.{ Duration, Instant }
 
 import scala.annotation.tailrec
-
-import org.ukenergywatch.utils.JodaExtensions._
 
 sealed trait ReAction
 object ReAction {
   case object Success extends ReAction // Successful, don't retry
   case object Failure extends ReAction // Failure, don't retry
   // Retry 'offset' after start of previous action. Retry immediately if this time has already passed
-  case class Retry(offset: ReadableDuration) extends ReAction
+  case class Retry(offset: Duration) extends ReAction
 }
 
 trait SchedulerComponent {
@@ -21,32 +20,32 @@ trait SchedulerComponent {
 
   trait Scheduler {
     // fn Int parameter is the retry count
-    def run(period: ReadableDuration, offset: ReadableDuration)(fn: Int => ReAction): Unit
-    def schedule(when: ReadableInstant)(fn: () => Unit): Unit
+    def run(period: Duration, offset: Duration)(fn: Int => ReAction): Unit
+    def schedule(when: Instant)(fn: () => Unit): Unit
   }
 
 }
 
 trait SchedulerLogic {
 
-  protected def nowUtc(): DateTime
-  def schedule(when: ReadableInstant)(fn: () => Unit): Unit
+  protected def nowUtc(): Instant
+  def schedule(when: Instant)(fn: () => Unit): Unit
 
-  def run(period: ReadableDuration, offset: ReadableDuration)(fn: Int => ReAction): Unit = {
+  def run(period: Duration, offset: Duration)(fn: Int => ReAction): Unit = {
     def periodLoop(nextTime: Instant): Unit = {
       def retryLoop(when: Instant, iteration: Int): Unit = {
         schedule(when) { () =>
           fn(iteration) match {
-            case ReAction.Success | ReAction.Failure => periodLoop(nextTime + period)
-            case ReAction.Retry(after) => retryLoop(when + after, iteration + 1)
+            case ReAction.Success | ReAction.Failure => periodLoop(nextTime plus period)
+            case ReAction.Retry(after) => retryLoop(when plus after, iteration + 1)
           }
         }
       }
       retryLoop(nextTime, 0)
     }
 
-    val now = nowUtc()
-    val firstTime = (((now - offset).millis / period.millis) * period.millis).toInstant + period + offset
+    val now: Instant = nowUtc()
+    val firstTime = (((now - offset).millis / period.millis) * period.millis).millisToInstant + offset
     periodLoop(firstTime)
   }
 
@@ -59,8 +58,8 @@ trait SchedulerRealtimeComponent extends SchedulerComponent {
 
   class SchedulerRealtime extends Scheduler with SchedulerLogic {
     val executor = Executors.newSingleThreadScheduledExecutor()
-    protected def nowUtc(): DateTime = clock.nowUtc()
-    def schedule(when: ReadableInstant)(fn: () => Unit): Unit = {
+    protected def nowUtc(): Instant = clock.nowUtc()
+    def schedule(when: Instant)(fn: () => Unit): Unit = {
       val now = clock.nowUtc()
       val runnable = new Runnable {
         def run(): Unit = fn()
@@ -90,10 +89,10 @@ trait SchedulerFakeComponent extends SchedulerComponent {
       }
     }
 
-    protected def nowUtc(): DateTime = clock.nowUtc()
+    protected def nowUtc(): Instant = clock.nowUtc()
 
-    var all = List[(ReadableInstant, () => Unit)]()
-    def schedule(when: ReadableInstant)(fn: () => Unit): Unit = {
+    var all = List[(Instant, () => Unit)]()
+    def schedule(when: Instant)(fn: () => Unit): Unit = {
       val now = clock.nowUtc()
       if (when <= now) {
         fn()

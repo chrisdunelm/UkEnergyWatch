@@ -6,19 +6,22 @@ case class BmuId(id: String) extends AnyVal
 
 case class TradingUnit(
   name: String,
-  bmuIds: Seq[BmuId],
-  location: Location
+  location: Location,
+  bmuIds: Seq[BmuId]
 )
 
 // Data available via APIs:
 // * BMU details (name, maximum power output, is-interconnector)
 
 object StaticData {
-  // Static data that is not available via any APIs
+  // Static data.
+  // Actually, this data can and does change.
+  // Later get this from an API.
 
   val tradingUnits = Seq(
     TradingUnit(
       name = "Drax Power Station",
+      location = Location(0, 0),
       bmuIds = Seq(
         BmuId("T_DRAXX-1"),
         BmuId("T_DRAXX-2"),
@@ -29,19 +32,18 @@ object StaticData {
         BmuId("T_DRAXX-9G"),
         BmuId("T_DRAXX-10G"),
         BmuId("T_DRAXX-12G")
-      ),
-      Location(0, 0)
+      )
     ),
 
     TradingUnit(
       name = "London Array Offshore Windfarm",
+      location = Location(0, 0),
       bmuIds = Seq(
         BmuId("T_LARYW-1"),
         BmuId("T_LARYW-2"),
         BmuId("T_LARYW-3"),
         BmuId("T_LARYW-4")
-      ),
-      Location(0, 0)
+      )
     )
   )
 

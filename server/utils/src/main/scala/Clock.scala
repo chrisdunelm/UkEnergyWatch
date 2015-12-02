@@ -1,13 +1,16 @@
 package org.ukenergywatch.utils
 
-import org.joda.time.{DateTime, DateTimeZone}
+import org.ukenergywatch.utils.JavaTimeExtensions._
+import java.time.{ LocalDateTime, Instant, ZoneOffset }
 
 trait ClockComponent {
 
   def clock: Clock
 
   trait Clock {
-    def nowUtc(): DateTime
+    def utcClock: java.time.Clock
+
+    def nowUtc(): Instant = Instant.now(utcClock)
   }
 
 }
@@ -17,7 +20,7 @@ trait ClockRealtimeComponent extends ClockComponent {
   lazy val clock = new ClockRealtime
 
   class ClockRealtime extends Clock {
-    def nowUtc(): DateTime = DateTime.now(DateTimeZone.UTC)
+    val utcClock: java.time.Clock = Clock.utc
   }
 
 }
@@ -27,17 +30,24 @@ trait ClockFakeComponent extends ClockComponent {
   lazy val clock = new ClockFake
 
   class ClockFake extends Clock {
-    var listeners = List[DateTime => Unit]()
-    def addListener(fn: DateTime => Unit): Unit = listeners ::= fn
+    private var listeners = List[Instant => Unit]()
+    def addListener(fn: Instant => Unit): Unit = listeners ::= fn
 
-    var now = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeZone.UTC)
-    def nowUtc: DateTime = now
-    def nowUtc2: DateTime = now
-    def nowUtc2_=(newNow: DateTime): Unit = {
-      now = newNow
+    private var fakeUtcClock: java.time.Clock = java.time.Clock.fixed(Instant.ofEpochSecond(0L), ZoneOffset.UTC)
+
+    def utcClock: java.time.Clock = fakeUtcClock
+
+    def setUtcClock(clock: java.time.Clock): Unit = {
+      fakeUtcClock = clock
+      val now = nowUtc()
       for (listener <- listeners) {
         listener(now)
       }
+    }
+
+    def fakeInstant: Instant = nowUtc()
+    def fakeInstant_=(instant: Instant): Unit = {
+      setUtcClock(java.time.Clock.fixed(instant, ZoneOffset.UTC))
     }
   }
 

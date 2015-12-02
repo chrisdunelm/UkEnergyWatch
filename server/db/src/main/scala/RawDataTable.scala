@@ -1,5 +1,8 @@
 package org.ukenergywatch.db
 
+import java.time.Instant
+import org.ukenergywatch.utils.RangeOfValue
+
 case class RawData(
   rawDataType: RawDataType,
   name: String,
@@ -8,8 +11,10 @@ case class RawData(
   fromValue: Double,
   toValue: Double,
   id: Int = 0
-) extends MergeableValue {
+) extends MergeableValue with RangeOfValue[Instant, Double] {
   def id0: RawData = copy(id = 0)
+  def value0: Double = fromValue
+  def value1: Double = toValue
 }
 
 trait RawDataTable extends Mergeable{

@@ -3,9 +3,8 @@ package org.ukenergywatch.utils
 import org.scalatest._
 
 import java.util.concurrent.ScheduledExecutorService
-import org.joda.time.ReadableDuration
 
-import org.ukenergywatch.utils.JodaExtensions._
+import org.ukenergywatch.utils.JavaTimeExtensions._
 
 class SchedulerTest extends FunSuite with Matchers {
 
@@ -13,7 +12,7 @@ class SchedulerTest extends FunSuite with Matchers {
     object Sch extends SchedulerFakeComponent with ClockFakeComponent
 
     var test = -1
-    Sch.scheduler.run(1.minute, 10.seconds) { iteration =>
+    Sch.scheduler.run(period = 1.minute, offset = 10.seconds) { iteration =>
       test = iteration
       if (iteration == 0) {
         ReAction.Retry(10.seconds)
@@ -23,17 +22,17 @@ class SchedulerTest extends FunSuite with Matchers {
       }
     }
 
-    Sch.clock.nowUtc2 += 5.seconds
+    Sch.clock.fakeInstant += 5.seconds
     test shouldBe -1
-    Sch.clock.nowUtc2 += 10.seconds
+    Sch.clock.fakeInstant += 10.seconds
     test shouldBe 0
-    Sch.clock.nowUtc2 += 10.seconds
+    Sch.clock.fakeInstant += 10.seconds
     test shouldBe 1
-    Sch.clock.nowUtc2 += 10.seconds
+    Sch.clock.fakeInstant += 10.seconds
     test shouldBe 1
-    Sch.clock.nowUtc2 += 30.seconds
+    Sch.clock.fakeInstant += 30.seconds
     test shouldBe 1
-    Sch.clock.nowUtc2 += 10.seconds
+    Sch.clock.fakeInstant += 10.seconds
     test shouldBe 0
   }
 

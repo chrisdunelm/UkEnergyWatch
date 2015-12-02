@@ -1,44 +1,46 @@
 package org.ukenergywatch.db
 
-import org.joda.time.{ReadableInstant, Instant}
-import slick.driver.JdbcDriver.api.MappedTo
-
-import org.ukenergywatch.utils.JodaExtensions._
+import java.time.{ Instant }
+import org.ukenergywatch.utils.JavaTimeExtensions._
+import slick.lifted.MappedTo
 
 case class RawDataType(val value: Byte) extends MappedTo[Byte]
 object RawDataType {
-  object ActualGeneration extends RawDataType(1)
-  object PredictedGeneration extends RawDataType(2)
-  object GenerationByFuelType extends RawDataType(3)
+  val actualGeneration = RawDataType(1)
+  val PredictedGeneration = RawDataType(2)
+  val GenerationByFuelType = RawDataType(3)
 }
 
 case class AggregationInterval(val value: Byte) extends MappedTo[Byte]
 object AggregationInterval {
-  object Hour extends AggregationInterval(1)
-  object Day extends AggregationInterval(2)
-  object Week extends AggregationInterval(3)
-  object Month extends AggregationInterval(4)
-  object Year extends AggregationInterval(5)
-}
-
-case class AggregationFunction(val value: Byte) extends MappedTo[Byte]
-object AggregationFunction {
-  object Average extends AggregationFunction(1)
-  object Maximum extends AggregationFunction(2)
-  object Minimum extends AggregationFunction(3)
+  val hour = AggregationInterval(1)
+  val day = AggregationInterval(2)
+  val week = AggregationInterval(3)
+  val month = AggregationInterval(4)
+  val year = AggregationInterval(5)
 }
 
 case class AggregationType(val value: Byte) extends MappedTo[Byte]
 object AggregationType {
-  object GenerationUnit extends AggregationType(1)
-  object TradingUnit extends AggregationType(2)
-  object Uk extends AggregationType(3)
-  object FuelType extends AggregationType(4)
+  // For RawDataType.actionGeneration
+  val generationUnit = AggregationType(1)
+  val tradingUnit = AggregationType(2)
+  val uk = AggregationType(3)
+  // For RawDataType.GenerationByFuelType
+  val fuelType = AggregationType(4)
+}
+
+case class AggregationFunction(val value: Byte) extends MappedTo[Byte]
+object AggregationFunction {
+  val mean = AggregationFunction(1)
+  val maximum = AggregationFunction(2)
+  val minimum = AggregationFunction(3)
+  // TODO: Percentiles
 }
 
 case class DbTime(val value: Int) extends MappedTo[Int] {
-  def toInstant: Instant = new Instant(value.toLong * 1000L)
+  def toInstant: Instant = (value.toLong * 1000L).millisToInstant
 }
 object DbTime {
-  def apply(dt: ReadableInstant): DbTime = DbTime((dt.millis / 1000L).toInt)
+  def apply(instant: Instant): DbTime = DbTime((instant.millis / 1000L).toInt)
 }
