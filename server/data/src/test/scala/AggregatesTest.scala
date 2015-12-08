@@ -83,7 +83,9 @@ class AggregatesTest extends FunSuite with Matchers {
       AggregationFunction.mean -> mean,
       AggregationFunction.minimum -> minimum,
       AggregationFunction.maximum -> maximum
-    )
+    ) ++ (0 to 100).map { i =>
+      AggregationFunction.percentile(i) -> (minimum + (maximum - minimum) * i.toDouble / 100.0)
+    }
 
     val insertHourAggs = Comps.db.aggregates ++= (0.until(24)).flatMap { hourOffset =>
       val from = m(hourOffset * 60)
@@ -105,8 +107,25 @@ class AggregatesTest extends FunSuite with Matchers {
     val fActionResult = Comps.db.db.run(actions.withPinnedSession)
     val (aggs, prog) = Await.result(fActionResult, duration.Duration(1, duration.SECONDS))
 
-    val z = aggs.find(x => x.name == "a" && x.aggregationInterval == AggregationInterval.day)
-    println(z)
+    val aDay: Aggregate = aggs.find(x => x.name == "a" && x.aggregationInterval == AggregationInterval.day).get
+    aDay.fromTime shouldBe DbTime(0)
+    aDay.toTime shouldBe DbTime(86400)
+    aDay.value(AggregationFunction.mean) shouldBe 2.0 +- 1e-10
+    aDay.value(AggregationFunction.minimum) shouldBe 1.0 +- 1e-10
+    aDay.value(AggregationFunction.maximum) shouldBe 3.0 +- 1e-10
+    aDay.value(AggregationFunction.percentile(0)) shouldBe 1.0 +- 1e-10
+    aDay.value(AggregationFunction.percentile(100)) shouldBe 3.0 +- 1e-10
+    aDay.value(AggregationFunction.percentile(25)) shouldBe 1.5 +- 1e-10
+
+    val abDay: Aggregate = aggs.find(x => x.name == "a+b" && x.aggregationInterval == AggregationInterval.day).get
+    abDay.fromTime shouldBe DbTime(0)
+    abDay.toTime shouldBe DbTime(86400)
+    abDay.value(AggregationFunction.mean) shouldBe 22.0 +- 1e-10
+    abDay.value(AggregationFunction.minimum) shouldBe 11.0 +- 1e-10
+    abDay.value(AggregationFunction.maximum) shouldBe 33.0 +- 1e-10
+    abDay.value(AggregationFunction.percentile(0)) shouldBe 11.0 +- 1e-10
+    abDay.value(AggregationFunction.percentile(100)) shouldBe 33.0 +- 1e-10
+    abDay.value(AggregationFunction.percentile(25)) shouldBe 16.5 +- 1e-10
   }
 
 }

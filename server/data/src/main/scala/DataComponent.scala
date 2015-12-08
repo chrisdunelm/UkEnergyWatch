@@ -170,10 +170,10 @@ trait DataComponent {
                 val sourcePercentiles: IndexedSeq[Power] = sourceDatas.flatMap { d =>
                   (0 to 100).map { i => Power.watts(d.value(AggregationFunction.percentile(i))) }
                 }.sorted.toIndexedSeq
-                  (0 to 100).map { i =>
-                    ???
-                  }
-                // TODO: Percentiles
+                val percentiles = (0 to 100).map { i =>
+                  val idx = math.round((i.toDouble * (sourcePercentiles.length - 1).toDouble) / 100.0).toInt
+                  AggregationFunction.percentile(i) -> sourcePercentiles(idx).watts
+                }.toMap
                 Aggregate(
                   destinationInterval,
                   nameType.aggregationType,
