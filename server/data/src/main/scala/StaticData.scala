@@ -2,13 +2,28 @@ package org.ukenergywatch.data
 
 case class Location(lng: Double, lat: Double)
 
-case class BmuId(id: String) extends AnyVal
+trait Name extends Any {
+  def name: String
+}
+
+case class BmuId(name: String) extends AnyVal with Name
+
+case class TradingUnitName(name: String) extends AnyVal with Name
+object TradingUnitName {
+  val empty = TradingUnitName("")
+}
 
 case class TradingUnit(
-  name: String,
+  name: TradingUnitName,
   location: Location,
   bmuIds: Seq[BmuId]
 )
+
+// TODO: This should probably be defined somewhere else
+case class Region(name: String) extends AnyVal with Name
+object Region {
+  val uk = Region("uk")
+}
 
 // Data available via APIs:
 // * BMU details (name, maximum power output, is-interconnector)
@@ -18,9 +33,14 @@ object StaticData {
   // Actually, this data can and does change.
   // Later get this from an API.
 
-  val tradingUnits = Seq(
+  object TradingUnits {
+    val drax = TradingUnitName("Drax Power Station")
+    val londonArray = TradingUnitName("London Array Offshore Windfarm")
+  }
+
+  val tradingUnits: Seq[TradingUnit] = Seq(
     TradingUnit(
-      name = "Drax Power Station",
+      name = TradingUnits.drax,
       location = Location(0, 0),
       bmuIds = Seq(
         BmuId("T_DRAXX-1"),
@@ -36,7 +56,7 @@ object StaticData {
     ),
 
     TradingUnit(
-      name = "London Array Offshore Windfarm",
+      name = TradingUnits.londonArray,
       location = Location(0, 0),
       bmuIds = Seq(
         BmuId("T_LARYW-1"),
@@ -46,5 +66,10 @@ object StaticData {
       )
     )
   )
+
+  val tradingUnitsByTradingUnitName: Map[TradingUnitName, TradingUnit] =
+    tradingUnits.map(x => (x.name, x)).toMap
+  val tradingUnitsByBmuId: Map[BmuId, TradingUnit] =
+    tradingUnits.flatMap(x => x.bmuIds.map(_ -> x)).toMap
 
 }

@@ -36,8 +36,8 @@ trait SchedulerLogic {
       def retryLoop(when: Instant, iteration: Int): Unit = {
         schedule(when) { () =>
           fn(iteration) match {
-            case ReAction.Success | ReAction.Failure => periodLoop(nextTime plus period)
-            case ReAction.Retry(after) => retryLoop(when plus after, iteration + 1)
+            case ReAction.Success | ReAction.Failure => periodLoop(nextTime + period)
+            case ReAction.Retry(after) => retryLoop(when + after, iteration + 1)
           }
         }
       }
@@ -45,7 +45,10 @@ trait SchedulerLogic {
     }
 
     val now: Instant = nowUtc()
-    val firstTime = (((now - offset).millis / period.millis) * period.millis).millisToInstant + offset
+    val firstTime = {
+      val base = now.alignTo(period) + offset
+      if (base >= now) base else base + period
+    }
     periodLoop(firstTime)
   }
 

@@ -3,6 +3,7 @@ package org.ukenergywatch.utils
 import java.time.{ Clock => JavaClock }
 import java.time.{ ZoneOffset, LocalDateTime, Duration, Instant, LocalDate }
 import java.time.temporal.{ ChronoField, ChronoUnit }
+import scala.concurrent.duration.{ Duration => ScalaDuration }
 
 object JavaTimeExtensions {
 
@@ -24,6 +25,13 @@ object JavaTimeExtensions {
 
     def <(other: Instant): Boolean = i.isBefore(other)
     def <=(other: Instant): Boolean = !i.isAfter(other)
+    def >(other: Instant): Boolean = i.isAfter(other)
+    def >=(other: Instant): Boolean = !i.isBefore(other)
+
+    def alignTo(duration: Duration): Instant = {
+      val m = i.millis
+      (m - m % duration.millis).millisToInstant
+    }
   }
 
   implicit class RichLocalDate(val ld: LocalDate) extends AnyVal {
@@ -36,6 +44,8 @@ object JavaTimeExtensions {
 
     def *(scale: Double): Duration = (d.secondsDouble * scale).seconds
     def /(other: Duration): Double = d.secondsDouble / other.secondsDouble
+
+    def toConcurrent: ScalaDuration = ScalaDuration.fromNanos(d.toNanos)
   }
 
   implicit class RichInt(val i: Int) extends AnyVal {

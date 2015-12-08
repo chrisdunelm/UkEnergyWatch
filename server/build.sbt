@@ -61,3 +61,14 @@ lazy val importer = (project in file("importer"))
   )
   .dependsOn(db)
   .dependsOn(utils)
+
+lazy val oldfueltype = (project in file("oldfueltype"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "oldfueltype",
+    libraryDependencies ++= Seq(
+      "mysql" % "mysql-connector-java" % "5.1.37"
+    )
+  )
+  .enablePlugins(JavaAppPackaging)
+  .dependsOn(utils)

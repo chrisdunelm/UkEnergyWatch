@@ -1,12 +1,18 @@
 package org.ukenergywatch.utils
 
 import scala.annotation.tailrec
+import org.ukenergywatch.utils.maths._
+import org.ukenergywatch.utils.maths.Implicits._
 
 trait RangeOf[T] {
   def from: T
   def to: T
 
   def toSimple: SimpleRangeOf[T] = SimpleRangeOf(from, to)
+
+  def atFraction[M](f: Double)(implicit a: Plus[T, M], b: Minus[T, M], c: Scale[M]): T = {
+    from + ((to - from) scale f)
+  }
 
   def overlaps(that: RangeOf[T])(implicit o: Ordering[T]): Boolean = {
     o.lt(this.from, that.to) && o.lt(that.from, this.to)
@@ -21,27 +27,17 @@ trait RangeOf[T] {
       None
     }
   }
-
 }
 
 trait RangeOfValue[T, Value] extends RangeOf[T] {
   def value0: Value
   def value1: Value
 
-  import org.ukenergywatch.utils.maths._
-  import org.ukenergywatch.utils.maths.Implicits._
-
   def interpolatedValue[M, N](tValue: T)(
     implicit a: Minus[T, M], b: Minus[Value, N], c: Plus[Value, N], d: Scale[M], e: Scale[N]
   ): Value = {
     val p = (tValue - from) ratio (to - from)
     value0 + ((value1 - value0) scale p)
-  }
-
-  def interpolatedValueClamped[M, N](tValue: T)(
-    implicit a: Minus[T, M], b: Minus[Value, N], c: Plus[Value, N], d: Scale[M], e: Scale[N], f: Ordering[T]
-  ): Value = {
-    ???
   }
 }
 

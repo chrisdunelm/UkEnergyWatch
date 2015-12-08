@@ -29,27 +29,84 @@ class AggregatesTest extends FunSuite with Matchers {
 
   def m(minute: Int): DbTime = DbTime(minute.minutesToInstant)
 
-  test("mean-only single simple aggregation") {
+  test("single simple raw aggregation") {
     object Comps extends Components
     import Comps.db.driver.api._
+
+    val draxTradingUnit = StaticData.TradingUnits.drax.name
+    val drax0 = StaticData.tradingUnitsByTradingUnitName(StaticData.TradingUnits.drax).bmuIds(0).name
+    val drax1 = StaticData.tradingUnitsByTradingUnitName(StaticData.TradingUnits.drax).bmuIds(1).name
 
     val insertRawProgress = Comps.db.rawProgresses ++= Seq(
       RawProgress(RawDataType.actualGeneration, m(0), m(60))
     )
     val insertRawData = Comps.db.rawDatas ++= Seq(
-      RawData(RawDataType.actualGeneration, "a", m(0), m(60), 1.0, 1.0),
-      RawData(RawDataType.actualGeneration, "b", m(0), m(30), 1.0, 3.0),
-      RawData(RawDataType.actualGeneration, "b", m(30), m(60), 3.0, 5.0)
+      RawData(RawDataType.actualGeneration, drax0, m(0), m(60), 1.0, 1.0),
+      RawData(RawDataType.actualGeneration, drax1, m(0), m(30), 1.0, 3.0),
+      RawData(RawDataType.actualGeneration, drax1, m(30), m(60), 3.0, 5.0)
     )
 
     val actions = Comps.createTables() >>
       insertRawProgress >> insertRawData >>
-      Comps.data.createAggregates() >>
-      Comps.db.aggregates.result
-    val fAggs = Comps.db.db.run(actions.withPinnedSession)
-    val aggs: Seq[Aggregate] = Await.result(fAggs, duration.Duration(1, duration.SECONDS))
-    aggs.find(_.name == "a").get.value(AggregationFunction.mean) shouldBe 1.0 +- 1e-10
-    aggs.find(_.name == "b").get.value(AggregationFunction.mean) shouldBe 3.0 +- 1e-10
+      Comps.data.createAggregatesFromRaw() >>
+      (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
+    val fActionResult = Comps.db.db.run(actions.withPinnedSession)
+    val (aggs, prog) = Await.result(fActionResult, duration.Duration(1, duration.SECONDS))
+
+    aggs.find(_.name == drax0).get.value(AggregationFunction.mean) shouldBe 1.0 +- 1e-10
+    aggs.find(_.name == drax1).get.value(AggregationFunction.mean) shouldBe 3.0 +- 1e-10
+    aggs.find(_.name == drax1).get.value(AggregationFunction.minimum) shouldBe 1.0 +- 1e-10
+    aggs.find(_.name == drax1).get.value(AggregationFunction.maximum) shouldBe 5.0 +- 1e-10
+    aggs.find(_.name == drax1).get.value(AggregationFunction.percentile(25)) shouldBe 2.0 +- 1e-10
+
+    aggs.find(_.name == draxTradingUnit).get.value(AggregationFunction.mean) shouldBe 4.0 +- 1e-10
+    aggs.find(_.name == draxTradingUnit).get.value(AggregationFunction.minimum) shouldBe 2.0 +- 1e-10
+    aggs.find(_.name == draxTradingUnit).get.value(AggregationFunction.maximum) shouldBe 6.0 +- 1e-10
+
+    aggs.find(_.name == Region.uk.name).get.value(AggregationFunction.mean) shouldBe 4.0 +- 1e-10
+    aggs.find(_.name == Region.uk.name).get.value(AggregationFunction.percentile(25)) shouldBe 3.0 +- 1e-10
+
+    prog.map(_.id0) shouldBe Seq(AggregateProgress(
+      AggregationInterval.hour, AggregationType.generationUnit, m(0), m(60)
+    ))
+  }
+
+  test("simple aggregation aggregation") {
+    object Comps extends Components
+    import Comps.db.driver.api._
+
+    val hour = AggregationInterval.hour
+    val generationUnit = AggregationType.generationUnit
+    val tradingUnit = AggregationType.tradingUnit
+    def aggValue(mean: Double, minimum: Double, maximum: Double): Map[AggregationFunction, Double] = Map(
+      // TODO: Percentiles
+      AggregationFunction.mean -> mean,
+      AggregationFunction.minimum -> minimum,
+      AggregationFunction.maximum -> maximum
+    )
+
+    val insertHourAggs = Comps.db.aggregates ++= (0.until(24)).flatMap { hourOffset =>
+      val from = m(hourOffset * 60)
+      val to = m((hourOffset + 1) * 60)
+      Seq(
+        Aggregate(hour, generationUnit, "a", from, to, aggValue(2.0, 1.0, 3.0)),
+        Aggregate(hour, generationUnit, "b", from, to, aggValue(20.0, 10.0, 30.0)),
+        Aggregate(hour, tradingUnit, "a+b", from, to, aggValue(22.0, 11.0, 33.0))
+      )
+    }
+    val insertAggProgress = Comps.db.aggregateProgresses ++= Seq(
+      AggregateProgress(hour, generationUnit, m(0), m(24 * 60))
+    )
+
+    val actions = Comps.createTables() >>
+      insertHourAggs >> insertAggProgress >>
+      Comps.data.createSubAggregates(AggregationInterval.hour, AggregationInterval.day) >>
+      (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
+    val fActionResult = Comps.db.db.run(actions.withPinnedSession)
+    val (aggs, prog) = Await.result(fActionResult, duration.Duration(1, duration.SECONDS))
+
+    val z = aggs.find(x => x.name == "a" && x.aggregationInterval == AggregationInterval.day)
+    println(z)
   }
 
 }

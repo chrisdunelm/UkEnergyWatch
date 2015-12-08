@@ -25,17 +25,20 @@ object AggregationType {
   // For RawDataType.actionGeneration
   val generationUnit = AggregationType(1)
   val tradingUnit = AggregationType(2)
-  val uk = AggregationType(3)
+  val region = AggregationType(3) // E.g. country
   // For RawDataType.GenerationByFuelType
   val fuelType = AggregationType(4)
 }
 
 case class AggregationFunction(val value: Byte) extends MappedTo[Byte]
 object AggregationFunction {
-  val mean = AggregationFunction(1)
-  val maximum = AggregationFunction(2)
-  val minimum = AggregationFunction(3)
-  // TODO: Percentiles
+  def percentile(percent: Int) = {
+    assert(percent >= 0 && percent <= 100)
+    AggregationFunction(percent.toByte)
+  }
+  val mean = AggregationFunction(101)
+  val maximum = AggregationFunction(102)
+  val minimum = AggregationFunction(103)
 }
 
 case class DbTime(val value: Int) extends MappedTo[Int] {
