@@ -11,7 +11,7 @@
     </cappingApplied>
     <cappingLimit>1000
     </cappingLimit>
-    <queryString>SettlementDate=2015-12-01,Period=1,NGCBMUnitID=null
+    <queryString>SettlementDate=2015-12-01,Period=2,NGCBMUnitID=null
     </queryString>
   </responseMetadata>
   <responseBody>
@@ -25,9 +25,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-232
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-454
 	</timeSeriesID>
-	<quantity>277.8
+	<quantity>9.432
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -35,7 +35,47 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
+	</settlementPeriod>
+	<powerSystemResourceType>Generation
+	</powerSystemResourceType>
+	<registeredResourceEICCode>48W00000GRIFW-2Y
+	</registeredResourceEICCode>
+	<marketGenerationUnitEICCode>48W00000GRIFW-2Y
+	</marketGenerationUnitEICCode>
+	<marketGenerationBMUId>T_GRIFW-2
+	</marketGenerationBMUId>
+	<marketGenerationNGCBMUId>GRIFW-2
+	</marketGenerationNGCBMUId>
+	<bMUnitID>T_GRIFW-2
+	</bMUnitID>
+	<nGCBMUnitID>GRIFW-2
+	</nGCBMUnitID>
+	<activeFlag>Y
+	</activeFlag>
+	<documentID>ELX-EMFIP-AGOG-6962471
+	</documentID>
+	<documentRevNum>1
+	</documentRevNum>
+      </item>
+      <item>
+	<documentType>Actual generation
+	</documentType>
+	<businessType>Production
+	</businessType>
+	<processType>Realised
+	</processType>
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-487
+	</timeSeriesID>
+	<quantity>395.3
+	</quantity>
+	<curveType>Sequential fixed size block
+	</curveType>
+	<resolution>PT30M
+	</resolution>
+	<settlementDate>2015-12-01
+	</settlementDate>
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -65,9 +105,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-187
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-444
 	</timeSeriesID>
-	<quantity>467.694
+	<quantity>466.944
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -75,7 +115,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -105,9 +145,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-172
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-428
 	</timeSeriesID>
-	<quantity>540.654
+	<quantity>542.336
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -115,7 +155,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -145,9 +185,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-247
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-500
 	</timeSeriesID>
-	<quantity>208.6
+	<quantity>203.6
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -155,7 +195,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -185,9 +225,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-260
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-517
 	</timeSeriesID>
-	<quantity>28.504
+	<quantity>24.876
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -195,7 +235,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -225,9 +265,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-208
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-464
 	</timeSeriesID>
-	<quantity>499.428
+	<quantity>499.108
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -235,7 +275,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -265,9 +305,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-230
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-485
 	</timeSeriesID>
-	<quantity>14.68
+	<quantity>14.236
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -275,7 +315,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -305,9 +345,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-168
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-492
 	</timeSeriesID>
-	<quantity>1.106
+	<quantity>360.9
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -315,47 +355,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000CRGHW-1X
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000CRGHW-1X
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_CRGHW-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>CRGHW-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_CRGHW-1
-	</bMUnitID>
-	<nGCBMUnitID>CRGHW-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-239
-	</timeSeriesID>
-	<quantity>360.8
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -385,9 +385,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-103
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-362
 	</timeSeriesID>
-	<quantity>0.78
+	<quantity>1.312
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -395,7 +395,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -425,9 +425,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-223
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-478
 	</timeSeriesID>
-	<quantity>525.06
+	<quantity>525.33
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -435,7 +435,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -465,9 +465,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-158
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-416
 	</timeSeriesID>
-	<quantity>374.124
+	<quantity>366.092
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -475,7 +475,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -505,9 +505,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-92
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-352
 	</timeSeriesID>
-	<quantity>6.472
+	<quantity>0.594
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -515,7 +515,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -545,9 +545,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-161
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-420
 	</timeSeriesID>
-	<quantity>2.434
+	<quantity>1.438
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -555,7 +555,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -585,9 +585,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-112
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-370
 	</timeSeriesID>
-	<quantity>54.442
+	<quantity>53.08
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -595,7 +595,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -625,9 +625,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-233
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-488
 	</timeSeriesID>
-	<quantity>436.7
+	<quantity>435.6
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -635,7 +635,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -665,9 +665,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-188
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-445
 	</timeSeriesID>
-	<quantity>460.29
+	<quantity>460.02
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -675,7 +675,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -705,9 +705,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-180
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-437
 	</timeSeriesID>
-	<quantity>1.706
+	<quantity>1.332
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -715,7 +715,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -745,9 +745,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-88
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-348
 	</timeSeriesID>
-	<quantity>16.244
+	<quantity>30.658
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -755,7 +755,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -785,9 +785,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-244
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-497
 	</timeSeriesID>
-	<quantity>603.86
+	<quantity>603.44
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -795,7 +795,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -825,9 +825,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-253
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-506
 	</timeSeriesID>
-	<quantity>623.356
+	<quantity>623.892
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -835,7 +835,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -865,9 +865,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-240
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-493
 	</timeSeriesID>
-	<quantity>123.2
+	<quantity>123.4
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -875,7 +875,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -905,9 +905,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-94
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-354
 	</timeSeriesID>
-	<quantity>2.952
+	<quantity>5.444
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -915,7 +915,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -945,9 +945,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-173
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-429
 	</timeSeriesID>
-	<quantity>554.56
+	<quantity>555.586
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -955,7 +955,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -985,9 +985,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-225
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-480
 	</timeSeriesID>
-	<quantity>466.24
+	<quantity>460.46
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -995,7 +995,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1025,9 +1025,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-211
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-427
 	</timeSeriesID>
-	<quantity>0.022
+	<quantity>724.2
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1035,47 +1035,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000HRSTW-19
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000HRSTW-19
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_HRSTW-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>HRSTW-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_HRSTW-1
-	</bMUnitID>
-	<nGCBMUnitID>HRSTW-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-171
-	</timeSeriesID>
-	<quantity>724.4
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1105,7 +1065,7 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-175
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-431
 	</timeSeriesID>
 	<quantity>645.136
 	</quantity>
@@ -1115,7 +1075,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1145,9 +1105,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-234
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-489
 	</timeSeriesID>
-	<quantity>274.2
+	<quantity>233.3
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1155,7 +1115,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1185,9 +1145,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-189
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-446
 	</timeSeriesID>
-	<quantity>338.37
+	<quantity>337.59
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1195,7 +1155,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1225,9 +1185,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-160
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-419
 	</timeSeriesID>
-	<quantity>1.968
+	<quantity>0.504
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1235,7 +1195,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1265,9 +1225,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-249
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-502
 	</timeSeriesID>
-	<quantity>4.354
+	<quantity>4.488
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1275,7 +1235,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1305,9 +1265,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-245
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-498
 	</timeSeriesID>
-	<quantity>599.87
+	<quantity>599.37
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1315,7 +1275,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1345,9 +1305,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-104
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-363
 	</timeSeriesID>
-	<quantity>15.338
+	<quantity>10.368
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1355,7 +1315,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1385,9 +1345,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-90
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-350
 	</timeSeriesID>
-	<quantity>33.18
+	<quantity>37.644
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1395,7 +1355,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1425,9 +1385,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-241
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-494
 	</timeSeriesID>
-	<quantity>377.0
+	<quantity>375.9
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1435,7 +1395,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1465,9 +1425,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-220
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-475
 	</timeSeriesID>
-	<quantity>21.914
+	<quantity>12.826
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1475,7 +1435,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1505,9 +1465,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-252
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-505
 	</timeSeriesID>
-	<quantity>633.14
+	<quantity>634.644
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1515,7 +1475,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1545,7 +1505,7 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-221
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-476
 	</timeSeriesID>
 	<quantity>3.894
 	</quantity>
@@ -1555,7 +1515,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1585,9 +1545,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-258
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-513
 	</timeSeriesID>
-	<quantity>3.09
+	<quantity>3.62
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1595,7 +1555,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1625,9 +1585,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-212
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-467
 	</timeSeriesID>
-	<quantity>553.512
+	<quantity>553.324
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1635,7 +1595,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1665,9 +1625,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-255
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-508
 	</timeSeriesID>
-	<quantity>406.02
+	<quantity>406.14
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1675,7 +1635,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1705,9 +1665,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-190
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-447
 	</timeSeriesID>
-	<quantity>461.13
+	<quantity>474.6
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1715,7 +1675,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1745,9 +1705,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-166
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-424
 	</timeSeriesID>
-	<quantity>498.368
+	<quantity>498.866
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1755,7 +1715,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1785,9 +1745,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-170
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-426
 	</timeSeriesID>
-	<quantity>49.12
+	<quantity>36.36
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1795,7 +1755,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1825,9 +1785,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-165
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-423
 	</timeSeriesID>
-	<quantity>366.8
+	<quantity>366.7
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1835,7 +1795,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1865,9 +1825,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-176
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-432
 	</timeSeriesID>
-	<quantity>645.072
+	<quantity>644.908
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1875,7 +1835,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1905,9 +1865,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-116
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-374
 	</timeSeriesID>
-	<quantity>256.798
+	<quantity>251.098
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1915,7 +1875,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1945,9 +1905,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-93
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-353
 	</timeSeriesID>
-	<quantity>40.698
+	<quantity>32.572
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1955,7 +1915,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -1985,9 +1945,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-159
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-418
 	</timeSeriesID>
-	<quantity>2.77
+	<quantity>2.76
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -1995,7 +1955,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2025,9 +1985,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-222
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-477
 	</timeSeriesID>
-	<quantity>9.58
+	<quantity>7.578
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2035,7 +1995,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2065,9 +2025,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-186
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-443
 	</timeSeriesID>
-	<quantity>7.222
+	<quantity>7.216
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2075,7 +2035,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2105,9 +2065,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-218
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-473
 	</timeSeriesID>
-	<quantity>1.716
+	<quantity>10.006
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2115,7 +2075,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2145,9 +2105,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-215
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-470
 	</timeSeriesID>
-	<quantity>12.68
+	<quantity>22.96
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2155,7 +2115,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2185,9 +2145,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-203
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-459
 	</timeSeriesID>
-	<quantity>321.94
+	<quantity>322.868
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2195,7 +2155,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2225,9 +2185,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-256
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-509
 	</timeSeriesID>
-	<quantity>427.28
+	<quantity>426.44
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2235,7 +2195,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2265,9 +2225,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-191
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-448
 	</timeSeriesID>
-	<quantity>466.14
+	<quantity>465.226
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2275,7 +2235,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2305,9 +2265,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-195
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-452
 	</timeSeriesID>
-	<quantity>56.742
+	<quantity>55.42
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2315,7 +2275,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2345,9 +2305,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-167
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-456
 	</timeSeriesID>
-	<quantity>224.714
+	<quantity>3.4
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2355,7 +2315,47 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
+	</settlementPeriod>
+	<powerSystemResourceType>Generation
+	</powerSystemResourceType>
+	<registeredResourceEICCode>48W0000GYMRO-15O
+	</registeredResourceEICCode>
+	<marketGenerationUnitEICCode>48W0000GYMRO-15O
+	</marketGenerationUnitEICCode>
+	<marketGenerationBMUId>T_GYMR-15
+	</marketGenerationBMUId>
+	<marketGenerationNGCBMUId>GYMRO-15
+	</marketGenerationNGCBMUId>
+	<bMUnitID>T_GYMR-15
+	</bMUnitID>
+	<nGCBMUnitID>GYMRO-15
+	</nGCBMUnitID>
+	<activeFlag>Y
+	</activeFlag>
+	<documentID>ELX-EMFIP-AGOG-6962471
+	</documentID>
+	<documentRevNum>1
+	</documentRevNum>
+      </item>
+      <item>
+	<documentType>Actual generation
+	</documentType>
+	<businessType>Production
+	</businessType>
+	<processType>Realised
+	</processType>
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-425
+	</timeSeriesID>
+	<quantity>253.32
+	</quantity>
+	<curveType>Sequential fixed size block
+	</curveType>
+	<resolution>PT30M
+	</resolution>
+	<settlementDate>2015-12-01
+	</settlementDate>
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2385,9 +2385,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-196
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-359
 	</timeSeriesID>
-	<quantity>1.092
+	<quantity>125.154
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2395,47 +2395,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000GRGBW-1V
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000GRGBW-1V
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_GRGBW-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>GRGBW-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_GRGBW-1
-	</bMUnitID>
-	<nGCBMUnitID>GRGBW-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-100
-	</timeSeriesID>
-	<quantity>125.294
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2465,9 +2425,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-183
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-440
 	</timeSeriesID>
-	<quantity>14.07
+	<quantity>8.49
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2475,7 +2435,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2505,9 +2465,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-219
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-474
 	</timeSeriesID>
-	<quantity>1.774
+	<quantity>10.504
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2515,7 +2475,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2545,9 +2505,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-177
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-433
 	</timeSeriesID>
-	<quantity>645.644
+	<quantity>642.448
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2555,7 +2515,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2585,9 +2545,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-238
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-491
 	</timeSeriesID>
-	<quantity>421.328
+	<quantity>418.128
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2595,7 +2555,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2625,9 +2585,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-227
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-482
 	</timeSeriesID>
-	<quantity>6.2
+	<quantity>5.12
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2635,7 +2595,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2665,9 +2625,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-117
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-375
 	</timeSeriesID>
-	<quantity>1.488
+	<quantity>4.646
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2675,7 +2635,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2705,9 +2665,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-204
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-460
 	</timeSeriesID>
-	<quantity>537.18
+	<quantity>537.192
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2715,7 +2675,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2745,9 +2705,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-185
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-442
 	</timeSeriesID>
-	<quantity>7.168
+	<quantity>7.164
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2755,7 +2715,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2785,9 +2745,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-257
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-514
 	</timeSeriesID>
-	<quantity>432.64
+	<quantity>0.52
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2795,7 +2755,127 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
+	</settlementPeriod>
+	<powerSystemResourceType>Generation
+	</powerSystemResourceType>
+	<registeredResourceEICCode>48W00000WHILW-2K
+	</registeredResourceEICCode>
+	<marketGenerationUnitEICCode>48W00000WHILW-2K
+	</marketGenerationUnitEICCode>
+	<marketGenerationBMUId>T_WHILW-2
+	</marketGenerationBMUId>
+	<marketGenerationNGCBMUId>WHILW-2
+	</marketGenerationNGCBMUId>
+	<bMUnitID>T_WHILW-2
+	</bMUnitID>
+	<nGCBMUnitID>WHILW-2
+	</nGCBMUnitID>
+	<activeFlag>Y
+	</activeFlag>
+	<documentID>ELX-EMFIP-AGOG-6962471
+	</documentID>
+	<documentRevNum>1
+	</documentRevNum>
+      </item>
+      <item>
+	<documentType>Actual generation
+	</documentType>
+	<businessType>Production
+	</businessType>
+	<processType>Realised
+	</processType>
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-516
+	</timeSeriesID>
+	<quantity>1.604
+	</quantity>
+	<curveType>Sequential fixed size block
+	</curveType>
+	<resolution>PT30M
+	</resolution>
+	<settlementDate>2015-12-01
+	</settlementDate>
+	<settlementPeriod>2
+	</settlementPeriod>
+	<powerSystemResourceType>Generation
+	</powerSystemResourceType>
+	<registeredResourceEICCode>48W00000WLNYW-1A
+	</registeredResourceEICCode>
+	<marketGenerationUnitEICCode>48W00000WLNYW-1A
+	</marketGenerationUnitEICCode>
+	<marketGenerationBMUId>T_WLNYW-1
+	</marketGenerationBMUId>
+	<marketGenerationNGCBMUId>WLNYW-1
+	</marketGenerationNGCBMUId>
+	<bMUnitID>T_WLNYW-1
+	</bMUnitID>
+	<nGCBMUnitID>WLNYW-1
+	</nGCBMUnitID>
+	<activeFlag>Y
+	</activeFlag>
+	<documentID>ELX-EMFIP-AGOG-6962471
+	</documentID>
+	<documentRevNum>1
+	</documentRevNum>
+      </item>
+      <item>
+	<documentType>Actual generation
+	</documentType>
+	<businessType>Production
+	</businessType>
+	<processType>Realised
+	</processType>
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-457
+	</timeSeriesID>
+	<quantity>6.42
+	</quantity>
+	<curveType>Sequential fixed size block
+	</curveType>
+	<resolution>PT30M
+	</resolution>
+	<settlementDate>2015-12-01
+	</settlementDate>
+	<settlementPeriod>2
+	</settlementPeriod>
+	<powerSystemResourceType>Generation
+	</powerSystemResourceType>
+	<registeredResourceEICCode>48W0000GYMRO-17K
+	</registeredResourceEICCode>
+	<marketGenerationUnitEICCode>48W0000GYMRO-17K
+	</marketGenerationUnitEICCode>
+	<marketGenerationBMUId>T_GYMR-17
+	</marketGenerationBMUId>
+	<marketGenerationNGCBMUId>GYMRO-17
+	</marketGenerationNGCBMUId>
+	<bMUnitID>T_GYMR-17
+	</bMUnitID>
+	<nGCBMUnitID>GYMRO-17
+	</nGCBMUnitID>
+	<activeFlag>Y
+	</activeFlag>
+	<documentID>ELX-EMFIP-AGOG-6962471
+	</documentID>
+	<documentRevNum>1
+	</documentRevNum>
+      </item>
+      <item>
+	<documentType>Actual generation
+	</documentType>
+	<businessType>Production
+	</businessType>
+	<processType>Realised
+	</processType>
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-510
+	</timeSeriesID>
+	<quantity>432.66
+	</quantity>
+	<curveType>Sequential fixed size block
+	</curveType>
+	<resolution>PT30M
+	</resolution>
+	<settlementDate>2015-12-01
+	</settlementDate>
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2825,9 +2905,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-181
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-438
 	</timeSeriesID>
-	<quantity>291.75
+	<quantity>329.82
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2835,7 +2915,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2865,9 +2945,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-182
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-439
 	</timeSeriesID>
-	<quantity>54.6
+	<quantity>58.96
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2875,7 +2955,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2905,9 +2985,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-213
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-468
 	</timeSeriesID>
-	<quantity>1147.0
+	<quantity>1109.2
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2915,7 +2995,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2945,9 +3025,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-113
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-371
 	</timeSeriesID>
-	<quantity>1.546
+	<quantity>1.408
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2955,7 +3035,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -2985,9 +3065,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-205
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-461
 	</timeSeriesID>
-	<quantity>658.856
+	<quantity>660.26
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -2995,7 +3075,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3025,9 +3105,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-192
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-449
 	</timeSeriesID>
-	<quantity>16.122
+	<quantity>16.104
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3035,7 +3115,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3065,9 +3145,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-216
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-471
 	</timeSeriesID>
-	<quantity>0.84
+	<quantity>8.682
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3075,7 +3155,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3105,9 +3185,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-261
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-518
 	</timeSeriesID>
-	<quantity>228.106
+	<quantity>228.172
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3115,7 +3195,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3145,9 +3225,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-162
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-421
 	</timeSeriesID>
-	<quantity>1.06
+	<quantity>339.066
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3155,47 +3235,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000CLDSW-11
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000CLDSW-11
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_CLDSW-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>CLDSW-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_CLDSW-1
-	</bMUnitID>
-	<nGCBMUnitID>CLDSW-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-163
-	</timeSeriesID>
-	<quantity>338.94
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3225,9 +3265,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-184
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-441
 	</timeSeriesID>
-	<quantity>15.04
+	<quantity>9.59
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3235,7 +3275,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3265,9 +3305,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-178
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-434
 	</timeSeriesID>
-	<quantity>645.096
+	<quantity>645.22
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3275,7 +3315,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3305,9 +3345,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-236
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-347
 	</timeSeriesID>
-	<quantity>0.46
+	<quantity>16.816
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3315,47 +3355,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W000000RREW-14
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W000000RREW-14
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_RREW-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>RREW-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_RREW-1
-	</bMUnitID>
-	<nGCBMUnitID>RREW-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-87
-	</timeSeriesID>
-	<quantity>5.136
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3385,9 +3385,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-108
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-417
 	</timeSeriesID>
-	<quantity>129.976
+	<quantity>1.062
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3395,7 +3395,47 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
+	</settlementPeriod>
+	<powerSystemResourceType>Generation
+	</powerSystemResourceType>
+	<registeredResourceEICCode>48W10000ARCHW-1N
+	</registeredResourceEICCode>
+	<marketGenerationUnitEICCode>48W10000ARCHW-1N
+	</marketGenerationUnitEICCode>
+	<marketGenerationBMUId>T_ARCHW-1
+	</marketGenerationBMUId>
+	<marketGenerationNGCBMUId>ARCHW-1
+	</marketGenerationNGCBMUId>
+	<bMUnitID>T_ARCHW-1
+	</bMUnitID>
+	<nGCBMUnitID>ARCHW-1
+	</nGCBMUnitID>
+	<activeFlag>Y
+	</activeFlag>
+	<documentID>ELX-EMFIP-AGOG-6962471
+	</documentID>
+	<documentRevNum>1
+	</documentRevNum>
+      </item>
+      <item>
+	<documentType>Actual generation
+	</documentType>
+	<businessType>Production
+	</businessType>
+	<processType>Realised
+	</processType>
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-366
+	</timeSeriesID>
+	<quantity>129.22
+	</quantity>
+	<curveType>Sequential fixed size block
+	</curveType>
+	<resolution>PT30M
+	</resolution>
+	<settlementDate>2015-12-01
+	</settlementDate>
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3425,9 +3465,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-101
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-360
 	</timeSeriesID>
-	<quantity>40.636
+	<quantity>41.492
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3435,7 +3475,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3465,9 +3505,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-254
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-507
 	</timeSeriesID>
-	<quantity>71.4
+	<quantity>73.6
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3475,7 +3515,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3505,9 +3545,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-237
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-462
 	</timeSeriesID>
-	<quantity>1.44
+	<quantity>652.08
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3515,47 +3555,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W000000RRWW-1P
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W000000RRWW-1P
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_RRWW-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>RRWW-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_RRWW-1
-	</bMUnitID>
-	<nGCBMUnitID>RRWW-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-206
-	</timeSeriesID>
-	<quantity>651.96
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3585,9 +3585,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-201
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-455
 	</timeSeriesID>
-	<quantity>141.86
+	<quantity>141.94
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3595,7 +3595,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3625,9 +3625,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-217
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-472
 	</timeSeriesID>
-	<quantity>0.658
+	<quantity>8.308
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3635,7 +3635,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3665,9 +3665,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-262
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-519
 	</timeSeriesID>
-	<quantity>208.752
+	<quantity>208.786
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3675,7 +3675,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3705,9 +3705,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-202
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-458
 	</timeSeriesID>
-	<quantity>1.94
+	<quantity>3.54
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3715,7 +3715,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3745,9 +3745,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-242
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-495
 	</timeSeriesID>
-	<quantity>15.136
+	<quantity>12.628
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3755,7 +3755,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3785,9 +3785,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-96
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-422
 	</timeSeriesID>
-	<quantity>0.01
+	<quantity>339.948
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3795,47 +3795,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000DALSW-1M
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000DALSW-1M
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>E_DALSW-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>DALSW-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>E_DALSW-1
-	</bMUnitID>
-	<nGCBMUnitID>DALSW-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-164
-	</timeSeriesID>
-	<quantity>340.326
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3865,9 +3825,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-179
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-435
 	</timeSeriesID>
-	<quantity>645.072
+	<quantity>644.192
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3875,7 +3835,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3905,9 +3865,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-199
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-453
 	</timeSeriesID>
-	<quantity>6.654
+	<quantity>7.45
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3915,7 +3875,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3945,9 +3905,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-102
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-361
 	</timeSeriesID>
-	<quantity>0.734
+	<quantity>3.86
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3955,7 +3915,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -3985,9 +3945,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-231
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-486
 	</timeSeriesID>
-	<quantity>391.8
+	<quantity>411.0
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -3995,7 +3955,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4025,7 +3985,7 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-109
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-367
 	</timeSeriesID>
 	<quantity>128.484
 	</quantity>
@@ -4035,7 +3995,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4065,9 +4025,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-169
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-364
 	</timeSeriesID>
-	<quantity>26.44
+	<quantity>373.052
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4075,47 +4035,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W000000CRUA-16
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W000000CRUA-16
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_CRUA-1
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>CRUA-1
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_CRUA-1
-	</bMUnitID>
-	<nGCBMUnitID>CRUA-1
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-106
-	</timeSeriesID>
-	<quantity>373.152
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4145,9 +4065,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-229
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-484
 	</timeSeriesID>
-	<quantity>876.6
+	<quantity>876.8
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4155,7 +4075,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4185,9 +4105,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-207
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-463
 	</timeSeriesID>
-	<quantity>504.868
+	<quantity>504.236
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4195,7 +4115,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4225,9 +4145,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-224
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-479
 	</timeSeriesID>
-	<quantity>500.07
+	<quantity>500.99
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4235,7 +4155,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4265,9 +4185,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-197
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-490
 	</timeSeriesID>
-	<quantity>2.8
+	<quantity>423.866
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4275,47 +4195,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000GRGBW-2T
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000GRGBW-2T
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_GRGBW-2
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>GRGBW-2
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_GRGBW-2
-	</bMUnitID>
-	<nGCBMUnitID>GRGBW-2
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-235
-	</timeSeriesID>
-	<quantity>430.526
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4345,9 +4225,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-99
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-358
 	</timeSeriesID>
-	<quantity>7.528
+	<quantity>7.512
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4355,7 +4235,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4385,9 +4265,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-243
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-496
 	</timeSeriesID>
-	<quantity>14.298
+	<quantity>11.658
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4395,7 +4275,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4425,9 +4305,9 @@
 	</businessType>
 	<processType>Realised
 	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-214
+	<timeSeriesID>ELX-EMFIP-AGOG-TS-469
 	</timeSeriesID>
-	<quantity>507.94
+	<quantity>507.716
 	</quantity>
 	<curveType>Sequential fixed size block
 	</curveType>
@@ -4435,7 +4315,7 @@
 	</resolution>
 	<settlementDate>2015-12-01
 	</settlementDate>
-	<settlementPeriod>1
+	<settlementPeriod>2
 	</settlementPeriod>
 	<powerSystemResourceType>Generation
 	</powerSystemResourceType>
@@ -4450,86 +4330,6 @@
 	<bMUnitID>T_HUNB-8
 	</bMUnitID>
 	<nGCBMUnitID>HUNB-8
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-198
-	</timeSeriesID>
-	<quantity>0.54
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000GRGBW-3R
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000GRGBW-3R
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_GRGBW-3
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>GRGBW-3
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_GRGBW-3
-	</bMUnitID>
-	<nGCBMUnitID>GRGBW-3
-	</nGCBMUnitID>
-	<activeFlag>Y
-	</activeFlag>
-	<documentID>ELX-EMFIP-AGOG-6962471
-	</documentID>
-	<documentRevNum>1
-	</documentRevNum>
-      </item>
-      <item>
-	<documentType>Actual generation
-	</documentType>
-	<businessType>Production
-	</businessType>
-	<processType>Realised
-	</processType>
-	<timeSeriesID>ELX-EMFIP-AGOG-TS-200
-	</timeSeriesID>
-	<quantity>15.798
-	</quantity>
-	<curveType>Sequential fixed size block
-	</curveType>
-	<resolution>PT30M
-	</resolution>
-	<settlementDate>2015-12-01
-	</settlementDate>
-	<settlementPeriod>1
-	</settlementPeriod>
-	<powerSystemResourceType>Generation
-	</powerSystemResourceType>
-	<registeredResourceEICCode>48W00000GRIFW-2Y
-	</registeredResourceEICCode>
-	<marketGenerationUnitEICCode>48W00000GRIFW-2Y
-	</marketGenerationUnitEICCode>
-	<marketGenerationBMUId>T_GRIFW-2
-	</marketGenerationBMUId>
-	<marketGenerationNGCBMUId>GRIFW-2
-	</marketGenerationNGCBMUId>
-	<bMUnitID>T_GRIFW-2
-	</bMUnitID>
-	<nGCBMUnitID>GRIFW-2
 	</nGCBMUnitID>
 	<activeFlag>Y
 	</activeFlag>

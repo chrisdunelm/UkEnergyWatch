@@ -83,4 +83,53 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
     data("T_FERR-3").toValue shouldBe Power.megaWatts(467.694).watts +- 1e-10
   }
 
+  test("multiple file good import") {
+    trait InlineElexonParamsComponent extends ElexonParamsComponent {
+      def elexonParams = InlineElexonParams
+      object InlineElexonParams extends ElexonParams {
+        def key = "elexonkey"
+      }
+    }
+    object App extends ImportersComponent
+        with DbMemoryComponent
+        with DownloaderFakeComponent
+        with InlineElexonParamsComponent
+
+    import App.db.driver.api._
+    val createTablesAction = App.db.createTables
+
+    App.downloader.content = Map(
+      "https://api.bmreports.com/BMRS/B1610/v1?APIKey=elexonkey&serviceType=xml&SettlementDate=2015-12-01&Period=1"
+        -> b1610Ok_20151201_1,
+      "https://api.bmreports.com/BMRS/B1610/v1?APIKey=elexonkey&serviceType=xml&SettlementDate=2015-12-01&Period=2"
+        -> b1610Ok_20151201_2
+    )
+
+    val importAction1 = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
+    val importAction2 = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 2)
+
+    val getDataAction = App.db.rawDatas.result
+
+    val actions = createTablesAction >> importAction1 >> importAction2 >> getDataAction
+    val f = App.db.db.run(actions.transactionally)
+    val data: Map[String, Seq[RawData]] = Await.result(f, 10.second.toConcurrent).groupBy(_.name)
+
+    data("T_PEMB-21").sortBy(_.fromTime.value).map(x => Power.watts(x.fromValue)) shouldBe Seq(
+      Power.megaWatts(277.8),
+      Power.megaWatts(395.3)
+    )
+    data("T_FERR-3").sortBy(_.fromTime.value).map(x => Power.watts(x.fromValue)) shouldBe Seq(
+      Power.megaWatts(467.694),
+      Power.megaWatts(466.944)
+    )
+    data("T_DRAXX-1").size shouldBe 1
+    data("T_DRAXX-1").head.fromTime shouldBe
+      DbTime(LocalDate.of(2015, 12, 1).atStartOfSettlementPeriod(1).toInstant)
+    data("T_DRAXX-1").head.toTime shouldBe
+      DbTime(LocalDate.of(2015, 12, 1).atStartOfSettlementPeriod(3).toInstant)
+    data("T_DRAXX-1").head.fromValue shouldBe Power.megaWatts(645.136).watts
+    data("T_DRAXX-1").head.toValue shouldBe Power.megaWatts(645.136).watts
+
+  }
+
 }

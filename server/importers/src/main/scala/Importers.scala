@@ -34,14 +34,14 @@ trait ImportersComponent {
       dbioGet.flatMap { bytes =>
         val xml = XML.loadString(bytes.toStringUtf8)
         val responseMetadata = xml \ "responseMetadata"
-        val httpCode = (responseMetadata \ "httpCode").text.toInt
+        val httpCode = (responseMetadata \ "httpCode").text.trim.toInt
         if (httpCode == 200) {
           val items = xml \ "responseBody" \ "responseList" \ "item"
           val rawDataDBIOs: Seq[DBIO[_]] = for (item <- items) yield {
-            val bmuId = BmuId((item \ "bMUnitID").text)
-            val power = Power.megaWatts((item \ "quantity").text.toDouble)
-            val settlementDate = (item \ "settlementDate").text.toLocalDate
-            val settlementPeriod = (item \ "settlementPeriod").text.toInt
+            val bmuId = BmuId((item \ "bMUnitID").text.trim)
+            val power = Power.megaWatts((item \ "quantity").text.trim.toDouble)
+            val settlementDate = (item \ "settlementDate").text.trim.toLocalDate
+            val settlementPeriod = (item \ "settlementPeriod").text.trim.toInt
             val settlementInstant = settlementDate.atStartOfSettlementPeriod(settlementPeriod).toInstant
             val rawData = RawData(
               rawDataType = RawDataType.actualGeneration,
