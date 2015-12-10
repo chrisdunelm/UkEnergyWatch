@@ -14,6 +14,13 @@ trait DbComponent {
   {
     val driver: JdbcDriver
     def db: driver.api.Database
+
+    import driver.api._
+
+    def createTables: DBIO[Unit] = {
+      rawDatas.schema.create
+      // TODO: All tables
+    }
   }
 
 }

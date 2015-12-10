@@ -3,6 +3,7 @@ package org.ukenergywatch.db
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 import org.ukenergywatch.utils.RangeOf
+import scala.util.Try
 
 trait MergeableValue extends RangeOf[Instant] {
   def id: Int
@@ -28,7 +29,7 @@ trait Mergeable {
 
     protected def mergeFilter(item: TValue): TTable => Rep[Boolean]
 
-    def merge(item: TValue): DBIOAction[scala.util.Try[Unit], NoStream, _] = {
+    def merge(item: TValue): DBIO[Try[Unit]] = {
       val qExisting = this
         .filter(e => e.toTime >= item.fromTime && e.fromTime <= item.toTime)
         .filter(mergeFilter(item))
@@ -61,7 +62,7 @@ trait Mergeable {
             throw new Exception("Failed. Too many neighbours")
         }
       }
-      val qTry = qUpdate.andThen(DBIO.successful(())).asTry
+      val qTry = qUpdate >> DBIO.successful(()).asTry
       qTry.transactionally
     }
   }

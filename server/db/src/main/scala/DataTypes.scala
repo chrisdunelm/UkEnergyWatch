@@ -7,8 +7,8 @@ import slick.lifted.MappedTo
 case class RawDataType(val value: Byte) extends MappedTo[Byte]
 object RawDataType {
   val actualGeneration = RawDataType(1)
-  val PredictedGeneration = RawDataType(2)
-  val GenerationByFuelType = RawDataType(3)
+  val predictedGeneration = RawDataType(2)
+  val generationByFuelType = RawDataType(3)
 }
 
 case class AggregationInterval(val value: Byte) extends MappedTo[Byte]

@@ -7,7 +7,6 @@ import org.ukenergywatch.data._
 import org.ukenergywatch.utils.JavaTimeExtensions._
 
 import scala.concurrent._
-import scala.concurrent.duration
 import slick.dbio._
 
 class AggregatesTest extends FunSuite with Matchers {
@@ -28,6 +27,7 @@ class AggregatesTest extends FunSuite with Matchers {
   }
 
   def m(minute: Int): DbTime = DbTime(minute.minutesToInstant)
+  def d(day: Int): DbTime = DbTime(day.daysToInstant)
 
   test("single simple raw aggregation") {
     object Comps extends Components
@@ -48,10 +48,10 @@ class AggregatesTest extends FunSuite with Matchers {
 
     val actions = Comps.createTables() >>
       insertRawProgress >> insertRawData >>
-      Comps.data.createAggregatesFromRaw() >>
+      Comps.data.createHourAggregatesFromRaw() >>
       (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
     val fActionResult = Comps.db.db.run(actions.withPinnedSession)
-    val (aggs, prog) = Await.result(fActionResult, duration.Duration(1, duration.SECONDS))
+    val (aggs, prog) = Await.result(fActionResult, 1.second.toConcurrent)
 
     aggs.find(_.name == drax0).get.value(AggregationFunction.mean) shouldBe 1.0 +- 1e-10
     aggs.find(_.name == drax1).get.value(AggregationFunction.mean) shouldBe 3.0 +- 1e-10
@@ -105,7 +105,7 @@ class AggregatesTest extends FunSuite with Matchers {
       Comps.data.createSubAggregates(AggregationInterval.hour, AggregationInterval.day) >>
       (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
     val fActionResult = Comps.db.db.run(actions.withPinnedSession)
-    val (aggs, prog) = Await.result(fActionResult, duration.Duration(1, duration.SECONDS))
+    val (aggs, prog) = Await.result(fActionResult, 1.second.toConcurrent)
 
     val aDay: Aggregate = aggs.find(x => x.name == "a" && x.aggregationInterval == AggregationInterval.day).get
     aDay.fromTime shouldBe DbTime(0)
@@ -127,5 +127,37 @@ class AggregatesTest extends FunSuite with Matchers {
     abDay.value(AggregationFunction.percentile(100)) shouldBe 33.0 +- 1e-10
     abDay.value(AggregationFunction.percentile(25)) shouldBe 16.5 +- 1e-10
   }
+/*
+  // This test takes a long time ~30 seconds
+  test("Multi-level aggregations (limit = 10000)") {
+    object Comps extends Components
+    import Comps.db.driver.api._
 
+    val draxTradingUnit = StaticData.TradingUnits.drax.name
+    val drax0 = StaticData.tradingUnitsByTradingUnitName(StaticData.TradingUnits.drax).bmuIds(0).name
+    val drax1 = StaticData.tradingUnitsByTradingUnitName(StaticData.TradingUnits.drax).bmuIds(1).name
+
+    val insertRawProgress = Comps.db.rawProgresses ++= Seq(
+      RawProgress(RawDataType.actualGeneration, d(0), d(1000))
+    )
+    val insertRawData = Comps.db.rawDatas ++= Seq(
+      RawData(RawDataType.actualGeneration, drax0, d(0), d(1000), 1.0, 1.0),
+      RawData(RawDataType.actualGeneration, drax1, d(0), d(100), 0.0, 0.0),
+      RawData(RawDataType.actualGeneration, drax1, d(100), d(1000), 2.0, 2.0)
+    )
+
+    val actions = Comps.createTables() >>
+      insertRawProgress >> insertRawData >>
+      Comps.data.createHourAggregatesFromRaw(limit = 24 * 400) >>
+      Comps.data.createSubAggregatesDay(limit = 1000) >>
+      Comps.data.createSubAggregatesWeek(limit = 1000) >>
+      Comps.data.createSubAggregatesMonth(limit = 1000) >>
+      Comps.data.createSubAggregatesYear(limit = 1000) >>
+      (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
+    val fActionResult = Comps.db.db.run(actions.withPinnedSession)
+    val (aggs, prog) = Await.result(fActionResult, 60.seconds.toConcurrent)
+
+
+  }
+*/
 }

@@ -8,6 +8,7 @@ object StringExtensions {
 
   implicit class RichString(val s: String) extends AnyVal {
     def toBytesUtf8: Array[Byte] = s.getBytes(utf8)
+    def toByteArrayUtf8: Array[Byte] = s.getBytes(utf8)
   }
 
   implicit class RichByteArray(val b: Array[Byte]) extends AnyVal {

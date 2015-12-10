@@ -3,7 +3,7 @@ lazy val root = (project in file("."))
   .aggregate(utils)
   .aggregate(db)
   .aggregate(data)
-  .aggregate(importer)
+  .aggregate(importers)
 
 lazy val commonSettings = Seq(
   organization := "org.ukenergywatch",
@@ -15,9 +15,6 @@ lazy val commonSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    //"joda-time" % "joda-time" % "2.7",
-    //"org.joda" % "joda-convert" % "1.7",
-    //"codes.reactive" %% "scala-time" % "0.3.0-SNAPSHOT",
     "com.typesafe.slick" %% "slick" % "3.1.0",
     "org.slf4j" % "slf4j-nop" % "1.6.4"
   ),
@@ -51,7 +48,7 @@ lazy val data = (project in file("data"))
   .dependsOn(db)
   .dependsOn(utils)
 
-lazy val importer = (project in file("importer"))
+/*lazy val importer = (project in file("importer"))
   .settings(commonSettings: _*)
   .settings(
     name := "importer",
@@ -59,6 +56,15 @@ lazy val importer = (project in file("importer"))
       "com.github.scopt" %% "scopt" % "3.3.0"
     )
   )
+  .dependsOn(db)
+  .dependsOn(utils)
+ */
+lazy val importers = (project in file("importers"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "importers"
+  )
+  .dependsOn(data)
   .dependsOn(db)
   .dependsOn(utils)
 

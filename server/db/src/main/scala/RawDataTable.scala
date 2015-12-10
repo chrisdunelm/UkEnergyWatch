@@ -34,9 +34,10 @@ trait RawDataTable extends Mergeable{
 
   object rawDatas extends TableQuery[RawDatas](new RawDatas(_)) with MergeQuery[RawData, RawDatas] {
     protected def mergeFilter(item: RawData) = { x =>
+      // TODO: Use a time-index here
       x.rawDataType === item.rawDataType && x.name === item.name &&
       x.fromValue === item.fromValue && x.toValue === item.toValue &&
-      item.toValue == item.fromValue
+      item.toValue == item.fromValue // Really is meant to be '==', not '==='
     }
   }
 
