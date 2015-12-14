@@ -7,6 +7,34 @@ import scala.util.Try
 import scala.annotation.tailrec
 import java.time.Duration
 
+// searchIndex is a special int value that allows fast retreival of data
+// within a specified time-range.
+// A tree-structure is used.
+// The first level has each time-period being 2 hours, overlapping by half (ie 1 hour)
+// Each level multiplies the time-period by 8
+// level 0 = 2 hours
+// level 1 = 16 hours
+// level 2 = 128 hours = ~5 days
+// level 3 = 1024 hours = ~42 days
+// level 4 = 8192 hours = ~1 year
+// level 5 = 65536 hours = ~7.5 years
+// level 6 = 524288 hours = ~59 years (so this will definitely last until 2030, can add another level then))
+//
+// Each level starts at a fixed offset = level << 24
+// This allow ~16 million hours at level 0 = ~1900 years = plenty
+//
+// All values based on the unix epoch, so time from 1970
+//
+// Writes use a searchIndex value that completely covers the range of the value, in the lowest level possible.
+// Reads must do a range lookup in every level that selects all ranges that may contain the required data
+// E.g.
+// select * from rawdata where (
+//   (searchIndex >= 0 && searchIndex <= 1) OR
+//   (searchIndex >= 10000000 && searchIndex <= 10000001) OR
+//   (searchIndex >= 11000000 && searchIndex <= 11000001) OR
+//   ...
+// )
+
 trait SearchableValue extends MergeableValue {
   def searchIndex: Int
   def withSearchIndex(searchIndex: Int): this.type
