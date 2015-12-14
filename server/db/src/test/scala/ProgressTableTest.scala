@@ -60,11 +60,11 @@ class RawProgressTableTest extends FunSuite with Matchers {
   test("Non-mergeable item inserter after") {
     val result = run(
       rawProgresses += p(0),
-      rawProgresses.merge(p(1, rawDataType = RawDataType.PredictedGeneration))
+      rawProgresses.merge(p(1, rawDataType = RawDataType.predictedGeneration))
     )
     result.size shouldBe 2
     result(0).id0 shouldBe p(0)
-    result(1).id0 shouldBe p(1, rawDataType = RawDataType.PredictedGeneration)
+    result(1).id0 shouldBe p(1, rawDataType = RawDataType.predictedGeneration)
   }
 
   test("Mergeable item inserted before") {
@@ -91,10 +91,10 @@ class RawProgressTableTest extends FunSuite with Matchers {
   test("Non-mergeable item inserter before") {
     val result = run(
       rawProgresses += p(1),
-      rawProgresses.merge(p(0, rawDataType = RawDataType.PredictedGeneration))
+      rawProgresses.merge(p(0, rawDataType = RawDataType.predictedGeneration))
     )
     result.size shouldBe 2
-    result(0).id0 shouldBe p(0, rawDataType = RawDataType.PredictedGeneration)
+    result(0).id0 shouldBe p(0, rawDataType = RawDataType.predictedGeneration)
     result(1).id0 shouldBe p(1)
   }
 
@@ -112,11 +112,11 @@ class RawProgressTableTest extends FunSuite with Matchers {
     val result = run(
       rawProgresses += p(2),
       rawProgresses += p(0),
-      rawProgresses.merge(p(1, rawDataType = RawDataType.PredictedGeneration))
+      rawProgresses.merge(p(1, rawDataType = RawDataType.predictedGeneration))
     )
     result.size shouldBe 3
     result(0).id0 shouldBe p(0)
-    result(1).id0 shouldBe p(1, rawDataType = RawDataType.PredictedGeneration)
+    result(1).id0 shouldBe p(1, rawDataType = RawDataType.predictedGeneration)
     result(2).id0 shouldBe p(2)
   }
 

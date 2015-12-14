@@ -8,7 +8,7 @@ import java.time.LocalDate
 import org.ukenergywatch.utils.StringExtensions._
 import scala.concurrent.Await
 import org.ukenergywatch.utils.JavaTimeExtensions._
-import org.ukenergywatch.db.{ RawData, DbTime }
+import org.ukenergywatch.db.{ RawData, DbTime, RawProgress, RawDataType }
 import org.ukenergywatch.utils.units._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -108,11 +108,11 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
     val importAction1 = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
     val importAction2 = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 2)
 
-    val getDataAction = App.db.rawDatas.result
-
-    val actions = createTablesAction >> importAction1 >> importAction2 >> getDataAction
+    val actions = createTablesAction >> importAction1 >> importAction2 >>
+      (App.db.rawDatas.result zip App.db.rawProgresses.result)
     val f = App.db.db.run(actions.transactionally)
-    val data: Map[String, Seq[RawData]] = Await.result(f, 10.second.toConcurrent).groupBy(_.name)
+    val (rawDatas, rawProgresses) = Await.result(f, 10.second.toConcurrent)
+    val data: Map[String, Seq[RawData]] = rawDatas.groupBy(_.name)
 
     data("T_PEMB-21").sortBy(_.fromTime.value).map(x => Power.watts(x.fromValue)) shouldBe Seq(
       Power.megaWatts(277.8),
@@ -130,6 +130,13 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
     data("T_DRAXX-1").head.fromValue shouldBe Power.megaWatts(645.136).watts
     data("T_DRAXX-1").head.toValue shouldBe Power.megaWatts(645.136).watts
 
+    rawProgresses.map(_.id0) shouldBe Seq(
+      RawProgress(
+        RawDataType.actualGeneration,
+        DbTime(LocalDate.of(2015, 12, 1).atStartOfSettlementPeriod(1).toInstant),
+        DbTime(LocalDate.of(2015, 12, 1).atEndOfSettlementPeriod(2).toInstant)
+      )
+    )
   }
 
 }

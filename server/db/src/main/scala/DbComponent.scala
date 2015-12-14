@@ -18,7 +18,8 @@ trait DbComponent {
     import driver.api._
 
     def createTables: DBIO[Unit] = {
-      rawDatas.schema.create
+      rawDatas.schema.create >>
+      rawProgresses.schema.create
       // TODO: All tables
     }
   }

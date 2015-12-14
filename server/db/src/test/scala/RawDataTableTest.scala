@@ -1,9 +1,9 @@
 package org.ukenergywatch.db
 
 import org.scalatest.{FunSuite, Matchers}
-import scala.concurrent.duration
 import scala.concurrent._
 import org.ukenergywatch.utils.JavaTimeExtensions._
+import org.ukenergywatch.utils.SimpleRangeOf
 
 class RawDataTableTest extends FunSuite with Matchers {
 
@@ -12,13 +12,16 @@ class RawDataTableTest extends FunSuite with Matchers {
   import Components.db._
 
   def v(start: Int, startValue: Double, length: Int = 1, deltaValue: Double = 0.0, name: String = "a"): RawData = {
+    val startInstant = start.minutesToInstant
+    val endInstant = (start + length).minutesToInstant
     RawData(
       rawDataType = RawDataType.actualGeneration,
       name = name,
-      fromTime = DbTime(start.minutesToInstant),
-      toTime = DbTime((start + length).minutesToInstant),
+      fromTime = DbTime(startInstant),
+      toTime = DbTime(endInstant),
       fromValue = startValue,
-      toValue = startValue + deltaValue
+      toValue = startValue + deltaValue,
+      searchIndex = SearchableValue.searchIndex(SimpleRangeOf(startInstant, endInstant))
     )
   }
 
@@ -27,7 +30,7 @@ class RawDataTableTest extends FunSuite with Matchers {
       DBIO.seq(actions: _*) andThen
       rawDatas.sortBy(_.fromTime).result
     val fResult = db.run(allActions.withPinnedSession)
-    Await.result(fResult, duration.Duration(1, duration.SECONDS))
+    Await.result(fResult, 1.second.toConcurrent)
   }
 
   test("write-read") {

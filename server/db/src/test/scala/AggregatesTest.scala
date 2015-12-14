@@ -23,7 +23,7 @@ class AggregatesTest extends FunSuite with Matchers {
       "genunit1",
       DbTime(0.secondsToInstant),
       DbTime(1.secondsToInstant),
-      Map(AggregationFunction.average -> 11.0)
+      Map(AggregationFunction.mean -> 11.0)
     )
 
     val setup = DBIO.seq(

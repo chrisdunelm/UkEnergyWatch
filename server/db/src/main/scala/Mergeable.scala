@@ -2,7 +2,7 @@ package org.ukenergywatch.db
 
 import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.ukenergywatch.utils.RangeOf
+import org.ukenergywatch.utils.{ RangeOf, SimpleRangeOf }
 import scala.util.Try
 
 trait MergeableValue extends RangeOf[Instant] {
@@ -29,8 +29,23 @@ trait Mergeable {
 
     protected def mergeFilter(item: TValue): TTable => Rep[Boolean]
 
+    protected def preSearch(fromTime: DbTime, toTime: DbTime): Query[TTable, TValue, Seq] = {
+      this
+    }
+
+    protected def addItem(item: TValue): DBIO[_] = {
+      this += item
+    }
+
+    protected def updateItem(id: Int, range: RangeOf[DbTime]): DBIO[_] = {
+      this
+        .filter(_.id === id)
+        .map(x => (x.fromTime, x.toTime))
+        .update((range.from, range.to))
+    }
+
     def merge(item: TValue): DBIO[Try[Unit]] = {
-      val qExisting = this
+      val qExisting = preSearch(item.fromTime, item.toTime)
         .filter(e => e.toTime >= item.fromTime && e.fromTime <= item.toTime)
         .filter(mergeFilter(item))
         .sortBy(_.fromTime)
@@ -40,21 +55,25 @@ trait Mergeable {
         existings.toList match {
           case Nil =>
             // Nothing to merge with, just add
-            this += item
+            //this += item
+            addItem(item)
           case a :: Nil =>
             // Single mergeable neighbour, either before or after item
             if (a.toTime == item.fromTime) {
-              this.filter(_.id === a.id).map(_.toTime).update(item.toTime)
+              //this.filter(_.id === a.id).map(_.toTime).update(item.toTime)
+              updateItem(a.id, SimpleRangeOf(a.fromTime, item.toTime))
             } else if (a.fromTime == item.toTime) {
-              this.filter(_.id === a.id).map(_.fromTime).update(item.fromTime)
+              //this.filter(_.id === a.id).map(_.fromTime).update(item.fromTime)
+              updateItem(a.id, SimpleRangeOf(item.fromTime, a.toTime))
             } else {
               throw new Exception("Failed. Overlapping times")
             }
           case a :: b :: Nil =>
             if (a.toTime == item.fromTime && item.toTime == b.fromTime) {
-              val update = this.filter(_.id === a.id).map(_.toTime).update(b.toTime)
+              //val update = this.filter(_.id === a.id).map(_.toTime).update(b.toTime)
+              val update = updateItem(a.id, SimpleRangeOf(a.fromTime, b.toTime))
               val delete = this.filter(_.id === b.id).delete
-              update andThen delete
+              update >> delete
             } else {
               throw new Exception("Failed. Overlapping times")
             }

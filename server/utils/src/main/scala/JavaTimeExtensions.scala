@@ -41,6 +41,8 @@ object JavaTimeExtensions {
       val zonedDt = ld.atStartOfDay(ZoneId.of("Europe/London"))
       zonedDt.plusMinutes((settlementPeriod - 1) * 30).toOffsetDateTime
     }
+    def atEndOfSettlementPeriod(settlementPeriod: Int): OffsetDateTime =
+      atStartOfSettlementPeriod(settlementPeriod + 1)
   }
 
   implicit class RichDuration(val d: Duration) extends AnyVal {
@@ -66,6 +68,8 @@ object JavaTimeExtensions {
     def second: Duration = seconds
     def minutes: Duration = Duration.ofMinutes(i)
     def minute: Duration = minutes
+    def hour: Duration = Duration.ofHours(i)
+    def hours: Duration = hours
   }
 
   implicit class RichLong(val l: Long) extends AnyVal {
