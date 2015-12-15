@@ -63,11 +63,12 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
 
     val importAction = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
 
-    val getDataAction = App.db.rawDatas.result
+    val getDataAction = App.db.rawDatas.result zip App.db.rawProgresses.result
 
     val actions = createTablesAction >> importAction >> getDataAction
     val f = App.db.db.run(actions.transactionally)
-    val data: Map[String, RawData] = Await.result(f, 10.second.toConcurrent).map(x => x.name -> x).toMap
+    val (dataResult, progress) = Await.result(f, 10.seconds.toConcurrent)
+    val data: Map[String, RawData] = dataResult.map(x => x.name -> x).toMap
 
     val fromTime = DbTime(LocalDate.of(2015, 12, 1).atStartOfSettlementPeriod(1).toInstant)
     val toTime = DbTime(LocalDate.of(2015, 12, 1).atStartOfSettlementPeriod(1).toInstant + 30.minutes)
@@ -81,6 +82,10 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
     data("T_FERR-3").fromValue shouldBe Power.megaWatts(467.694).watts +- 1e-10
     data("T_FERR-3").toTime shouldBe toTime
     data("T_FERR-3").toValue shouldBe Power.megaWatts(467.694).watts +- 1e-10
+
+    progress.map(_.id0) shouldBe Seq(
+      RawProgress(RawDataType.actualGeneration, fromTime, toTime)
+    )
   }
 
   test("multiple file good import") {
