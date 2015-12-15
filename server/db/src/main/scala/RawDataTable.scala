@@ -36,10 +36,8 @@ trait RawDataTable extends Mergeable with Searchable {
     def * = (rawDataType, name, fromTime, toTime, fromValue, toValue, searchIndex, id) <> (
       RawData.tupled, RawData.unapply)
 
-    // For general searches (might not be required)
-    def indexSearch = index("idx_search", searchIndex)
-    // For merges
-    def indexMerge = index("idx_merge", (rawDataType, name, searchIndex))
+    def indexSearch = index("idx_rawdatas_search", searchIndex)
+    def indexMerge = index("idx_rawdatas_merge", (rawDataType, name, searchIndex))
   }
 
   object rawDatas extends TableQuery[RawDatas](new RawDatas(_))

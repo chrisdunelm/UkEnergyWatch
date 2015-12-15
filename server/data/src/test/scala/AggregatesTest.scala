@@ -17,9 +17,9 @@ class AggregatesTest extends FunSuite with Matchers {
 
     def createTables(): DBIO[_] = {
       import db.driver.api._
-      val actions = db.rawDatas.schema.create andThen
-        db.rawProgresses.schema.create andThen
-        db.aggregateProgresses.schema.create andThen
+      val actions = db.rawDatas.schema.create >>
+        db.rawProgresses.schema.create >>
+        db.aggregateProgresses.schema.create >>
         db.aggregates.schema.create
       actions
     }

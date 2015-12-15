@@ -27,7 +27,7 @@ trait AggregateTable extends Mergeable with Searchable {
     }.toMap
   )
 
-  class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregates") with MergeableTable {
+  class Aggregates(tag: Tag) extends Table[Aggregate](tag, "aggregates") with MergeableTable with SearchableTable {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def aggregationInterval = column[AggregationInterval]("aggregationInterval")
     def aggregationType = column[AggregationType]("aggregationType")
@@ -39,8 +39,8 @@ trait AggregateTable extends Mergeable with Searchable {
     def * = (aggregationInterval, aggregationType,
       name, fromTime, toTime, value, searchIndex, id) <> (Aggregate.tupled, Aggregate.unapply)
 
-    def indexSearch = index("idx_search", searchIndex)
-    def indexMerge = index("idx_merge", (aggregationInterval, aggregationType, name, searchIndex))
+    def indexSearch = index("idx_aggregates_search", searchIndex)
+    def indexMerge = index("idx_aggregates_merge", (aggregationInterval, aggregationType, name, searchIndex))
   }
 
   object aggregates extends TableQuery[Aggregates](new Aggregates(_)) with MergeQuery[Aggregate, Aggregates] {
