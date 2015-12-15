@@ -93,7 +93,17 @@ trait ImportersComponent {
       val fGet = downloader.get(url)
       val dbioGet: DBIO[Array[Byte]] = DBIOAction.from(fGet)
       dbioGet.flatMap { bytes =>
-        ???
+        val xml = XML.loadString(bytes.toStringUtf8)
+        val responseMetadata = xml \ "responseMetadata"
+        val httpCode = (responseMetadata \ "httpCode").text.trim.toInt
+        if (httpCode == 200) {
+          // TODO!
+          ???
+        } else {
+          val errorType = (responseMetadata \ "errorType").text
+          val description = (responseMetadata \ "description").text
+          DBIOAction.failed(new ImportException(s"Download failed: '$httpCode - $errorType: $description'"))
+        }
       }
     }
 
