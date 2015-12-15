@@ -125,7 +125,6 @@ trait Searchable extends Mergeable {
           SimpleRangeOf(range.from.toInstant, range.to.toInstant))))
     }
 
-    // TODO: Should this return a Query instead of a DBIO[Seq]? Yes, change this
     def search(from: Instant, to: Instant): Query[TTable, TValue, Seq] = {
       val fromDbTime = DbTime(from)
       val toDbTime = DbTime(to)
