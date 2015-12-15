@@ -13,9 +13,7 @@ import org.ukenergywatch.utils.units._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ImporterActualGenerationsTest extends FunSuite with Matchers {
-
-  import B1610Responses._
+class ImportersActualGenerationTest extends FunSuite with Matchers {
 
   test("bad key") {
     trait InlineElexonParamsComponent extends ElexonParamsComponent {
@@ -33,7 +31,7 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
 
     App.downloader.content = Map(
       "https://api.bmreports.com/BMRS/B1610/v1?APIKey=elexonkey&serviceType=xml&SettlementDate=2015-12-01&Period=1"
-        -> b1610Error_BadKey
+        -> ElexonResponses.b1610Error_BadKey
     )
 
     val dbioAction = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
@@ -58,7 +56,7 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
 
     App.downloader.content = Map(
       "https://api.bmreports.com/BMRS/B1610/v1?APIKey=elexonkey&serviceType=xml&SettlementDate=2015-12-01&Period=1"
-        -> b1610Ok_20151201_1
+        -> ElexonResponses.b1610Ok_20151201_1
     )
 
     val importAction = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
@@ -105,9 +103,9 @@ class ImporterActualGenerationsTest extends FunSuite with Matchers {
 
     App.downloader.content = Map(
       "https://api.bmreports.com/BMRS/B1610/v1?APIKey=elexonkey&serviceType=xml&SettlementDate=2015-12-01&Period=1"
-        -> b1610Ok_20151201_1,
+        -> ElexonResponses.b1610Ok_20151201_1,
       "https://api.bmreports.com/BMRS/B1610/v1?APIKey=elexonkey&serviceType=xml&SettlementDate=2015-12-01&Period=2"
-        -> b1610Ok_20151201_2
+        -> ElexonResponses.b1610Ok_20151201_2
     )
 
     val importAction1 = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)

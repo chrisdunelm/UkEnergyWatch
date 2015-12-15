@@ -3,7 +3,7 @@ package org.ukenergywatch.importers
 import org.ukenergywatch.db.{ DbComponent, RawData, RawDataType, DbTime, RawProgress }
 import org.ukenergywatch.utils.DownloaderComponent
 import org.ukenergywatch.utils.ElexonParamsComponent
-import java.time.LocalDate
+import java.time.{ LocalDate, LocalDateTime }
 import scala.concurrent.ExecutionContext
 import slick.dbio.{ DBIOAction }
 import scala.xml.XML
@@ -21,16 +21,22 @@ trait ImportersComponent {
 
   class Importers {
 
-    def makeUrl(report: String): String = {
+    // B1610 - actual generation of all generating units
+    // B1620 - actual per fuel type, no interconnects
+    // B1630 - actual (or predicted?) solar/wind - subset of B1620
+    // FUELINST - actual per fuel type, old-style, 5-min resolution and publishing
+    //     Doesn't split on/off-shore - can get this from B1620 (or B1610 if I categorise all gen-units)
+
+    def makeElexonApiUrl(report: String): String = {
       s"https://api.bmreports.com/BMRS/$report/v1?APIKey=${elexonParams.key}&serviceType=xml"
     }
 
     // settlementPeriod 1 to 50, as defined by Elexon
+    // Half-hour resolution
     def importActualGeneration(settlementDate: LocalDate, settlementPeriod: Int)(
       implicit ec: ExecutionContext): DBIO[_] = {
       val sd = settlementDate.toString
-      val url = makeUrl("B1610") + s"&SettlementDate=$sd&Period=$settlementPeriod"
-      println(url)
+      val url = makeElexonApiUrl("B1610") + s"&SettlementDate=$sd&Period=$settlementPeriod"
       val fGet = downloader.get(url)
       val dbioGet: DBIO[Array[Byte]] = DBIOAction.from(fGet)
       dbioGet.flatMap { bytes =>
@@ -71,6 +77,23 @@ trait ImportersComponent {
           val description = (responseMetadata \ "description").text
           DBIOAction.failed(new ImportException(s"Download failed: '$httpCode - $errorType: $description'"))
         }
+      }
+    }
+
+    // 5-minute resolution
+    // Parameters are inclusive, and the times coming back are the end of each 5-minute period
+    // New data appears to be available within seconds of the time passing.
+    def importFuelInst(fromTime: LocalDateTime, toTime: LocalDateTime)(implicit ec: ExecutionContext): DBIO[_] = {
+      def fmt(dt: LocalDateTime): String =
+        f"${dt.getYear}%04d-${dt.getMonthValue}%02d-${dt.getDayOfMonth}%02d%%20" +
+          f"${dt.getHour}%02d:${dt.getMinute}%02d:${dt.getSecond}%02d"
+      val fromFmt = fromTime.toString
+      val url = makeElexonApiUrl("FUELINST") + s"&FromDateTime=${fmt(fromTime)}&ToDateTime=${fmt(toTime)}"
+      println(url)
+      val fGet = downloader.get(url)
+      val dbioGet: DBIO[Array[Byte]] = DBIOAction.from(fGet)
+      dbioGet.flatMap { bytes =>
+        ???
       }
     }
 
