@@ -14,7 +14,7 @@ case class RawData(
   id: Int = 0
 ) extends MergeableValue with SearchableValue with RangeOfValue[Instant, Double] {
   def id0: RawData = copy(id = 0)
-  def searchIndex0 = copy(searchIndex = -1)
+  def searchIndex0: RawData = copy(searchIndex = -1)
   def value0: Double = fromValue
   def value1: Double = toValue
   def withSearchIndex(searchIndex: Int): this.type = copy(searchIndex = searchIndex).asInstanceOf[this.type]
@@ -37,9 +37,9 @@ trait RawDataTable extends Mergeable with Searchable {
       RawData.tupled, RawData.unapply)
 
     // For general searches (might not be required)
-    def searchIndexIndex = index("idx_searchIndex", searchIndex)
+    def indexSearch = index("idx_search", searchIndex)
     // For merges
-    def mergeIndex = index("idx_mergeIndex", (rawDataType, name, searchIndex))
+    def indexMerge = index("idx_merge", (rawDataType, name, searchIndex))
   }
 
   object rawDatas extends TableQuery[RawDatas](new RawDatas(_))

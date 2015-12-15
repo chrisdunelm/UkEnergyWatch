@@ -7,12 +7,15 @@ case class Aggregate(
   fromTime: DbTime,
   toTime: DbTime,
   value: Map[AggregationFunction, Double],
+  searchIndex: Int = -1,
   id: Int = 0
-) extends MergeableValue {
+) extends MergeableValue with SearchableValue {
   def id0: Aggregate = copy(id = 0)
+  def searchIndex0: Aggregate = copy(searchIndex = -1)
+  def withSearchIndex(searchIndex: Int): this.type = copy(searchIndex = searchIndex).asInstanceOf[this.type]
 }
 
-trait AggregateTable extends Mergeable {
+trait AggregateTable extends Mergeable with Searchable {
   val driver: slick.driver.JdbcDriver
   import driver.api._
 
@@ -32,8 +35,12 @@ trait AggregateTable extends Mergeable {
     def fromTime = column[DbTime]("fromTime")
     def toTime = column[DbTime]("toTime")
     def value = column[Map[AggregationFunction, Double]]("value")
+    def searchIndex = column[Int]("searchIndex")
     def * = (aggregationInterval, aggregationType,
-      name, fromTime, toTime, value, id) <> (Aggregate.tupled, Aggregate.unapply)
+      name, fromTime, toTime, value, searchIndex, id) <> (Aggregate.tupled, Aggregate.unapply)
+
+    def indexSearch = index("idx_search", searchIndex)
+    def indexMerge = index("idx_merge", (aggregationInterval, aggregationType, name, searchIndex))
   }
 
   object aggregates extends TableQuery[Aggregates](new Aggregates(_)) with MergeQuery[Aggregate, Aggregates] {
