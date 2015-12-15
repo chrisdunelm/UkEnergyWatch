@@ -99,7 +99,7 @@ class SearchableTest extends FunSuite with Matchers {
     val fResult = db.run(
       (rawDatas.schema.create >>
         DBIO.seq(actions: _*) >>
-        rawDatas.search(from, to)
+        rawDatas.search(from, to).result
       ).withPinnedSession
     )
     Await.result(fResult, 1.second.toConcurrent).sortBy(_.fromTime.toInstant).map(_.id0.searchIndex0)
@@ -135,7 +135,7 @@ class SearchableTest extends FunSuite with Matchers {
     data shouldBe Seq(v0, v1)
   }
 
-  test("Hugh in tiny range") {
+  test("Huge in tiny range") {
     val v0 = v(0, 0.0, 10 * 365 * 24 * 60)
     val data = runSearch(
       rawDatas.merge(v0)

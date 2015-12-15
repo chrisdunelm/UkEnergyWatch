@@ -18,7 +18,7 @@ import java.time.Duration
 // level 3 = 1024 hours = ~42 days
 // level 4 = 8192 hours = ~1 year
 // level 5 = 65536 hours = ~7.5 years
-// level 6 = 524288 hours = ~59 years (so this will definitely last until 2030, can add another level then))
+// level 6 = 524288 hours = ~59 years (so this will definitely last until 2029, can add another level then))
 //
 // Each level starts at a fixed offset = level << 24
 // This allow ~16 million hours at level 0 = ~1900 years = plenty
@@ -126,12 +126,12 @@ trait Searchable extends Mergeable {
     }
 
     // TODO: Should this return a Query instead of a DBIO[Seq]? Yes, change this
-    def search(from: Instant, to: Instant): DBIO[Seq[TValue]] = {
+    def search(from: Instant, to: Instant): Query[TTable, TValue, Seq] = {
       val fromDbTime = DbTime(from)
       val toDbTime = DbTime(to)
       preSearch(fromDbTime, toDbTime).filter { x =>
         x.fromTime < toDbTime && x.toTime > fromDbTime
-      }.result
+      }
     }
 
   }
