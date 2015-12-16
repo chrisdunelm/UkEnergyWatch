@@ -31,7 +31,23 @@ object Region {
 object StaticData {
   // Static data.
   // Actually, this data can and does change.
-  // Later get this from an API.
+  // Later get as much of this as possible from API(s).
+
+  val fuelTypes = Seq(
+    "ccgt",
+    "oil",
+    "coal",
+    "nuclear",
+    "wind",
+    "ps",
+    "npshyd",
+    "ocgt",
+    "other",
+    "intfr",
+    "intirl",
+    "intned",
+    "intew"
+  )
 
   object TradingUnits {
     val drax = TradingUnitName("Drax Power Station")

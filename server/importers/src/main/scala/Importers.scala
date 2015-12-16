@@ -8,7 +8,7 @@ import scala.concurrent.ExecutionContext
 import slick.dbio.{ DBIOAction }
 import scala.xml.XML
 import org.ukenergywatch.utils.StringExtensions._
-import org.ukenergywatch.data.BmuId
+import org.ukenergywatch.data.{ BmuId, StaticData }
 import org.ukenergywatch.utils.units._
 import org.ukenergywatch.utils.JavaTimeExtensions._
 
@@ -97,8 +97,30 @@ trait ImportersComponent {
         val responseMetadata = xml \ "responseMetadata"
         val httpCode = (responseMetadata \ "httpCode").text.trim.toInt
         if (httpCode == 200) {
-          // TODO!
-          ???
+          val items = xml \ "responseBody" \ "responseList" \ "item"
+          val actions: Seq[DBIO[_]] = for (item <- items) yield {
+            val toTime = (item \ "publishingPeriodCommencingTime").text.trim.toLocalDateTime.toInstantUtc
+            val fromTime = toTime - 5.minutes
+            val fuelActions: Seq[DBIO[_]] = for (fuelType <- StaticData.fuelTypes) yield {
+              val fuelPower = Power.megaWatts((item \ fuelType).text.trim.toInt)
+              val rawData = RawData(
+                rawDataType = RawDataType.generationByFuelType,
+                name = fuelType,
+                fromTime = DbTime(fromTime),
+                toTime = DbTime(toTime),
+                fromValue = fuelPower.watts,
+                toValue = fuelPower.watts
+              )
+              db.rawDatas.merge(rawData)
+            }
+            val progressAction = db.rawProgresses.merge(RawProgress(
+              rawDataType = RawDataType.generationByFuelType,
+              fromTime = DbTime(fromTime),
+              toTime = DbTime(toTime)
+            ))
+            (DBIOAction.seq(fuelActions: _*) >> progressAction).transactionally
+          }
+          DBIOAction.seq(actions: _*)
         } else {
           val errorType = (responseMetadata \ "errorType").text
           val description = (responseMetadata \ "description").text

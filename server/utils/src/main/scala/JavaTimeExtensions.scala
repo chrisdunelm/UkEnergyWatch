@@ -45,6 +45,10 @@ object JavaTimeExtensions {
       atStartOfSettlementPeriod(settlementPeriod + 1)
   }
 
+  implicit class RichLocalDateTime(val ldt: LocalDateTime) extends AnyVal {
+    def toInstantUtc: Instant = ldt.atOffset(ZoneOffset.UTC).toInstant
+  }
+
   implicit class RichDuration(val d: Duration) extends AnyVal {
     def millis: Long = d.getSeconds * 1000L + d.getNano / 1000000L
     def secondsDouble: Double = d.getSeconds.toDouble + d.getNano.toDouble * 1e-9
@@ -84,12 +88,20 @@ object JavaTimeExtensions {
     def seconds: Duration = Duration.ofNanos((d * 1e9).toLong)
   }
 
+  // 2015-12-01
   val localDateRx = """(\d{4})-(\d{2})-(\d{2})""".r
+  // 2015-12-01 00:05:00
+  val localDateTimeRx = """(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})""".r
   // Slightly strange name required for some reason
   implicit class RichStringForTimes(val s: String) extends AnyVal {
     def toLocalDate: LocalDate = s match {
       case localDateRx(year, month, day) => LocalDate.of(year.toInt, month.toInt, day.toInt)
       case _ => throw new Exception(s"Invalid LocalDate string: '$s'")
+    }
+    def toLocalDateTime: LocalDateTime = s match {
+      case localDateTimeRx(year, month, day, hour, minute, second) =>
+        LocalDateTime.of(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt, second.toInt)
+      case _ => throw new Exception(s"Invalid LocalDateTime string: '$s'")
     }
   }
 
