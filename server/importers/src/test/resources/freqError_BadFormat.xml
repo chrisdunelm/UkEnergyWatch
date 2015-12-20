@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>400
+    </httpCode>
+    <errorType>Bad request
+    </errorType>
+    <description>ToDateTime Parameter should be in proper format (yyyy-MM-dd HH:mm:ss)
+    </description>
+    <queryString>FromDateTime=2015-12-01 00:00:00,ToDateTime=2015-12-01 00:05:00bad
+    </queryString>
+  </responseMetadata>
+</response>
