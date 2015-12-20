@@ -70,19 +70,19 @@ class ImportersFuelInstTest extends FunSuite with Matchers {
     val (rawDatas, rawProgresses) = Await.result(f, 5.second.toConcurrent)
 
     rawProgresses.map(_.id0) shouldBe Seq(
-      RawProgress(RawDataType.generationByFuelType,
+      RawProgress(RawDataType.Electric.generationByFuelType,
         DbTime(fromDateTime.toInstantUtc), DbTime(toDateTime.toInstantUtc))
     )
 
     rawDatas.filter(_.name == "oil").map(_.id0.searchIndex0) shouldBe Seq(
       RawData(
-        RawDataType.generationByFuelType, "oil",
+        RawDataType.Electric.generationByFuelType, "oil",
         DbTime(fromDateTime.toInstantUtc), DbTime(toDateTime.toInstantUtc),
         0.0, 0.0
       )
     )
     def windy(minOfs: Int, value: Double): RawData = RawData(
-      RawDataType.generationByFuelType, "wind",
+      RawDataType.Electric.generationByFuelType, "wind",
       DbTime(fromDateTime.toInstantUtc + (minOfs - 5).minutes),
       DbTime(fromDateTime.toInstantUtc + minOfs.minutes),
       value, value

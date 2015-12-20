@@ -39,12 +39,12 @@ class AggregatesTest extends FunSuite with Matchers {
     val drax1 = StaticData.tradingUnitsByTradingUnitName(StaticData.TradingUnits.drax).bmuIds(1).name
 
     val insertRawProgress = Comps.db.rawProgresses ++= Seq(
-      RawProgress(RawDataType.actualGeneration, m(0), m(60))
+      RawProgress(RawDataType.Electric.actualGeneration, m(0), m(60))
     )
     val insertRawData = Comps.db.rawDatas ++= Seq(
-      RawData(RawDataType.actualGeneration, drax0, m(0), m(60), 1.0, 1.0).autoSearchIndex,
-      RawData(RawDataType.actualGeneration, drax1, m(0), m(30), 1.0, 3.0).autoSearchIndex,
-      RawData(RawDataType.actualGeneration, drax1, m(30), m(60), 3.0, 5.0).autoSearchIndex
+      RawData(RawDataType.Electric.actualGeneration, drax0, m(0), m(60), 1.0, 1.0).autoSearchIndex,
+      RawData(RawDataType.Electric.actualGeneration, drax1, m(0), m(30), 1.0, 3.0).autoSearchIndex,
+      RawData(RawDataType.Electric.actualGeneration, drax1, m(30), m(60), 3.0, 5.0).autoSearchIndex
     )
 
     val actions = Comps.createTables() >>
@@ -68,9 +68,9 @@ class AggregatesTest extends FunSuite with Matchers {
     aggs.find(_.name == Region.uk.name).get.value(AggregationFunction.percentile(25)) shouldBe 3.0 +- 1e-10
 
     prog.map(_.id0).toSet shouldBe Set(
-      AggregateProgress(AggregationInterval.hour, AggregationType.generationUnit, m(0), m(60)),
-      AggregateProgress(AggregationInterval.hour, AggregationType.tradingUnit, m(0), m(60)),
-      AggregateProgress(AggregationInterval.hour, AggregationType.region, m(0), m(60))
+      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.generationUnit, m(0), m(60)),
+      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.tradingUnit, m(0), m(60)),
+      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.region, m(0), m(60))
     )
   }
 
@@ -79,8 +79,8 @@ class AggregatesTest extends FunSuite with Matchers {
     import Comps.db.driver.api._
 
     val hour = AggregationInterval.hour
-    val generationUnit = AggregationType.generationUnit
-    val tradingUnit = AggregationType.tradingUnit
+    val generationUnit = AggregationType.Electric.generationUnit
+    val tradingUnit = AggregationType.Electric.tradingUnit
     def aggValue(mean: Double, minimum: Double, maximum: Double): Map[AggregationFunction, Double] = Map(
       AggregationFunction.mean -> mean,
       AggregationFunction.minimum -> minimum,

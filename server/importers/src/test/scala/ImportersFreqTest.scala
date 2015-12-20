@@ -71,11 +71,11 @@ class ImportersFreqTest extends FunSuite with Matchers {
     val (rawDatas, rawProgresses) = Await.result(f, 5.second.toConcurrent)
 
     rawProgresses.map(_.id0) shouldBe Seq(
-      RawProgress(RawDataType.frequency, DbTime(fromDateTime.toInstantUtc), DbTime(toDateTime.toInstantUtc))
+      RawProgress(RawDataType.Electric.frequency, DbTime(fromDateTime.toInstantUtc), DbTime(toDateTime.toInstantUtc))
     )
 
     def freq(secOfs: Int, from: Double, to: Double): RawData = RawData(
-      RawDataType.frequency, "",
+      RawDataType.Electric.frequency, "",
       DbTime(fromDateTime.toInstantUtc + secOfs.seconds),
       DbTime(fromDateTime.toInstantUtc + (secOfs + 15).seconds),
       from, to

@@ -19,7 +19,7 @@ class AggregatesTest extends FunSuite with Matchers {
 
     val value = Aggregate(
       AggregationInterval.hour,
-      AggregationType.generationUnit,
+      AggregationType.Electric.generationUnit,
       "genunit1",
       DbTime(0.secondsToInstant),
       DbTime(1.secondsToInstant),

@@ -82,7 +82,7 @@ class ImportersActualGenerationTest extends FunSuite with Matchers {
     data("T_FERR-3").toValue shouldBe Power.megaWatts(467.694).watts +- 1e-10
 
     progress.map(_.id0) shouldBe Seq(
-      RawProgress(RawDataType.actualGeneration, fromTime, toTime)
+      RawProgress(RawDataType.Electric.actualGeneration, fromTime, toTime)
     )
   }
 
@@ -135,7 +135,7 @@ class ImportersActualGenerationTest extends FunSuite with Matchers {
 
     rawProgresses.map(_.id0) shouldBe Seq(
       RawProgress(
-        RawDataType.actualGeneration,
+        RawDataType.Electric.actualGeneration,
         DbTime(LocalDate.of(2015, 12, 1).atStartOfSettlementPeriod(1).toInstant),
         DbTime(LocalDate.of(2015, 12, 1).atEndOfSettlementPeriod(2).toInstant)
       )

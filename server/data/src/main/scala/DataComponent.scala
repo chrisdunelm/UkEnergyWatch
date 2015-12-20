@@ -106,13 +106,13 @@ trait DataComponent {
     def actualGenerationHourAggregatesFromRaw(limit: Int = 1): DBIO[Unit] = {
       // Creates all hourly aggregations from actual-generation
       val generationUnit = hourlyAggregateFromRaw(
-        RawDataType.actualGeneration,
-        AggregationType.generationUnit,
+        RawDataType.Electric.actualGeneration,
+        AggregationType.Electric.generationUnit,
         data => data.groupBy(x => BmuId(x.name))
       )
       val tradingUnit = hourlyAggregateFromRaw(
-        RawDataType.actualGeneration,
-        AggregationType.tradingUnit,
+        RawDataType.Electric.actualGeneration,
+        AggregationType.Electric.tradingUnit,
         data => data.groupBy { x =>
           StaticData.tradingUnitsByBmuId.get(BmuId(x.name))
             .map(_.name)
@@ -121,8 +121,8 @@ trait DataComponent {
         } - TradingUnitName.empty
       )
       val uk = hourlyAggregateFromRaw(
-        RawDataType.actualGeneration,
-        AggregationType.region,
+        RawDataType.Electric.actualGeneration,
+        AggregationType.Electric.region,
         data => Map(Region.uk -> data)
       )
       generationUnit >> tradingUnit >> uk
@@ -154,19 +154,13 @@ trait DataComponent {
         val unaggregatedRanges = sources - destinations
         val alignedRanges: Seq[RangeOf[Instant]] =
           alignedRangeFn(destinationInterval)(unaggregatedRanges).take(limit)
-        //println("alignedRanges:")
-        //println(alignedRanges)
         val actions: Seq[DBIO[_]] = alignedRanges.map { alignedRange: RangeOf[Instant] =>
           val alignedRangeFrom = DbTime(alignedRange.from)
           val alignedRangeTo = DbTime(alignedRange.to)
           val qSourceData = db.aggregates.search(alignedRange.from, alignedRange.to).filter { x =>
             x.aggregationInterval === sourceInterval && x.aggregationType === aggregationType
           }
-          //println("qSourceData.result.statements:")
-          //println(qSourceData.result.statements)
           val insertAggregates: DBIO[_] = qSourceData.result.flatMap { sourceDatas: Seq[Aggregate] =>
-            //println("sourceDatas:")
-            //println(sourceDatas)
             case class NameType(name: String, aggregationType: AggregationType)
             val sourceDataByNameType = sourceDatas.groupBy(x => NameType(x.name, x.aggregationType))
             val destAggs: Seq[Aggregate] = sourceDataByNameType.toSeq.map {
@@ -213,12 +207,13 @@ trait DataComponent {
       }
     }
 
+    // TODO: Move all the following elsewhere, so nothing here is datatype-specific
     private def actualGenerationSubAggregates(
       sourceInterval: AggregationInterval, destinationInterval: AggregationInterval, limit: Int
     ): DBIO[Unit] = {
-      calculateSubAggregates(AggregationType.generationUnit, sourceInterval, destinationInterval, limit) >>
-        calculateSubAggregates(AggregationType.tradingUnit, sourceInterval, destinationInterval, limit) >>
-        calculateSubAggregates(AggregationType.region, sourceInterval, destinationInterval, limit)
+      calculateSubAggregates(AggregationType.Electric.generationUnit, sourceInterval, destinationInterval, limit) >>
+        calculateSubAggregates(AggregationType.Electric.tradingUnit, sourceInterval, destinationInterval, limit) >>
+        calculateSubAggregates(AggregationType.Electric.region, sourceInterval, destinationInterval, limit)
     }
 
     def actualGenerationSubAggregatesDay(limit: Int = 1): DBIO[Unit] = {

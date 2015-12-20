@@ -4,6 +4,7 @@ lazy val root = (project in file("."))
   .aggregate(db)
   .aggregate(data)
   .aggregate(importers)
+  .aggregate(oldfueltype)
 
 lazy val commonSettings = Seq(
   organization := "org.ukenergywatch",

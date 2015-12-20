@@ -15,7 +15,7 @@ class RawDataTableTest extends FunSuite with Matchers {
     val startInstant = start.minutesToInstant
     val endInstant = (start + length).minutesToInstant
     RawData(
-      rawDataType = RawDataType.actualGeneration,
+      rawDataType = RawDataType.Electric.actualGeneration,
       name = name,
       fromTime = DbTime(startInstant),
       toTime = DbTime(endInstant),

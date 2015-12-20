@@ -68,7 +68,7 @@ trait ImportersComponent {
             throw new Exception("Invalid settlement time")
           }
           val rawData = RawData(
-            rawDataType = RawDataType.actualGeneration,
+            rawDataType = RawDataType.Electric.actualGeneration,
             name = bmuId.name,
             fromTime = DbTime(settlementInstant),
             toTime = DbTime(settlementInstant + 30.minutes),
@@ -78,7 +78,7 @@ trait ImportersComponent {
           db.rawDatas.merge(rawData)
         }
         val progressAction = db.rawProgresses.merge(RawProgress(
-          rawDataType = RawDataType.actualGeneration,
+          rawDataType = RawDataType.Electric.actualGeneration,
           fromTime = DbTime(settlementInstant),
           toTime = DbTime(settlementInstant + 30.minutes)
         ))
@@ -99,7 +99,7 @@ trait ImportersComponent {
           val fuelActions: Seq[DBIO[_]] = for (fuelType <- StaticData.fuelTypes) yield {
             val fuelPower = Power.megaWatts((item \ fuelType).text.trim.toInt)
             val rawData = RawData(
-              rawDataType = RawDataType.generationByFuelType,
+              rawDataType = RawDataType.Electric.generationByFuelType,
               name = fuelType,
               fromTime = DbTime(fromTime),
               toTime = DbTime(toTime),
@@ -109,7 +109,7 @@ trait ImportersComponent {
             db.rawDatas.merge(rawData)
           }
           val progressAction = db.rawProgresses.merge(RawProgress(
-            rawDataType = RawDataType.generationByFuelType,
+            rawDataType = RawDataType.Electric.generationByFuelType,
             fromTime = DbTime(fromTime),
             toTime = DbTime(toTime)
           ))
@@ -145,7 +145,7 @@ trait ImportersComponent {
               throw new ImportException("Time between frequencies is not 15 seconds")
             }
             RawData(
-              rawDataType = RawDataType.frequency,
+              rawDataType = RawDataType.Electric.frequency,
               name = "", // Name not required, there is only one system frequency
               fromTime = DbTime(fromTime),
               toTime = DbTime(toTime),
@@ -158,7 +158,7 @@ trait ImportersComponent {
         val maxTime = mappedItems.map(_._1).max
         val rawDataAction = db.rawDatas ++= rawDatas
         val progressAction = db.rawProgresses.merge(RawProgress(
-          rawDataType = RawDataType.frequency,
+          rawDataType = RawDataType.Electric.frequency,
           fromTime = DbTime(minTime),
           toTime = DbTime(maxTime)
         ))
