@@ -1,5 +1,8 @@
 package org.ukenergywatch.db
 
+import java.time.Instant
+import org.ukenergywatch.utils.RangeOf
+
 case class Aggregate(
   aggregationInterval: AggregationInterval,
   aggregationType: AggregationType,
@@ -9,7 +12,7 @@ case class Aggregate(
   value: Map[AggregationFunction, Double],
   searchIndex: Int = -1,
   id: Int = 0
-) extends MergeableValue with SearchableValue {
+) extends MergeableValue with SearchableValue with RangeOf[Instant] {
   def id0: Aggregate = copy(id = 0)
   def searchIndex0: Aggregate = copy(searchIndex = -1)
   def withSearchIndex(searchIndex: Int): this.type = copy(searchIndex = searchIndex).asInstanceOf[this.type]

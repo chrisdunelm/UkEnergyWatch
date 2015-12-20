@@ -42,9 +42,9 @@ class AggregatesTest extends FunSuite with Matchers {
       RawProgress(RawDataType.actualGeneration, m(0), m(60))
     )
     val insertRawData = Comps.db.rawDatas ++= Seq(
-      RawData(RawDataType.actualGeneration, drax0, m(0), m(60), 1.0, 1.0).withSearchIndex,
-      RawData(RawDataType.actualGeneration, drax1, m(0), m(30), 1.0, 3.0).withSearchIndex,
-      RawData(RawDataType.actualGeneration, drax1, m(30), m(60), 3.0, 5.0).withSearchIndex
+      RawData(RawDataType.actualGeneration, drax0, m(0), m(60), 1.0, 1.0).autoSearchIndex,
+      RawData(RawDataType.actualGeneration, drax1, m(0), m(30), 1.0, 3.0).autoSearchIndex,
+      RawData(RawDataType.actualGeneration, drax1, m(30), m(60), 3.0, 5.0).autoSearchIndex
     )
 
     val actions = Comps.createTables() >>
@@ -89,15 +89,14 @@ class AggregatesTest extends FunSuite with Matchers {
       AggregationFunction.percentile(i) -> (minimum + (maximum - minimum) * i.toDouble / 100.0)
     }
 
-    val si = SearchableValue.searchIndex _
     val insertHourAggs = Comps.db.aggregates ++= ((0.until(24)).flatMap { hourOffset =>
       val from = m(hourOffset * 60)
       val to = m((hourOffset + 1) * 60)
       val range = SimpleRangeOf(from.toInstant, to.toInstant)
       Seq(
-        Aggregate(hour, generationUnit, "a", from, to, aggValue(2.0, 1.0, 3.0), si(range)),
-        Aggregate(hour, generationUnit, "b", from, to, aggValue(20.0, 10.0, 30.0), si(range)),
-        Aggregate(hour, tradingUnit, "a+b", from, to, aggValue(22.0, 11.0, 33.0), si(range))
+        Aggregate(hour, generationUnit, "a", from, to, aggValue(2.0, 1.0, 3.0)).autoSearchIndex,
+        Aggregate(hour, generationUnit, "b", from, to, aggValue(20.0, 10.0, 30.0)).autoSearchIndex,
+        Aggregate(hour, tradingUnit, "a+b", from, to, aggValue(22.0, 11.0, 33.0)).autoSearchIndex
       )
      })
     val insertAggProgress = Comps.db.aggregateProgresses ++= Seq(

@@ -39,7 +39,7 @@ trait SearchableValue extends MergeableValue {
   def searchIndex: Int
   def withSearchIndex(searchIndex: Int): this.type
 
-  def withSearchIndex: this.type = withSearchIndex(SearchableValue.searchIndex(this))
+  def autoSearchIndex: this.type = withSearchIndex(SearchableValue.searchIndex(this))
 }
 
 object SearchableValue {
