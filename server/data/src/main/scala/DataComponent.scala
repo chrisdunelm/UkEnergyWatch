@@ -4,7 +4,7 @@ import scala.concurrent.Future
 import slick.dbio._
 import org.ukenergywatch.db._
 import org.ukenergywatch.utils.RangeOfExtensions._
-import org.ukenergywatch.utils.{ RangeOf, AlignedRangeOf, SimpleRangeOfValue }
+import org.ukenergywatch.utils.{ RangeOf, AlignedRangeOf, SimpleRangeOfValue, SimpleRangeOf }
 import org.ukenergywatch.utils.maths.Implicits._
 import org.ukenergywatch.utils.JavaTimeExtensions._
 import org.ukenergywatch.utils.units._
@@ -21,13 +21,7 @@ trait DataComponent {
   class Data {
     import db.driver.api._
 
-    def database = db.db
-
-    def writeRaw(raw: Seq[RawData]): Unit = {
-      database.run(db.rawDatas ++= raw)
-    }
-
-    def calculateRawAggregate(
+    private def calculateRawAggregate(
       aggregationType: AggregationType, name: Name,
       rawDatas: Seq[RawData], alignedRange: RangeOf[Instant]
     ): Aggregate = {
@@ -71,9 +65,8 @@ trait DataComponent {
       )
     }
 
-    def createHourAggregatesFromRaw(limit: Int = 1): DBIO[Unit] = {
+    def actualGenerationHourAggregatesFromRaw(limit: Int = 1): DBIO[Unit] = {
       // Creates all hourly aggregations from actual-generation
-      // TODO: Fuel-type aggregation
       val qRawProgresses = db.rawProgresses
         .filter(_.rawDataType === RawDataType.actualGeneration)
         .sortBy(_.fromTime)
@@ -106,12 +99,18 @@ trait DataComponent {
               }
               val ukAggregate = calculateRawAggregate(AggregationType.region, Region.uk, rawDatas, alignedRange) 
               val allAggregates = bmuAggregates ++ tradingUnitAggregates :+ ukAggregate
-              db.aggregates ++= allAggregates // Merge instead?
+              db.aggregates ++= allAggregates // Merge instead? Probably not, very unlikely to be mergeable
             }
-            val insertAggregateProgress = db.aggregateProgresses.merge(AggregateProgress(
-              AggregationInterval.hour, AggregationType.generationUnit, alignedRangeFrom, alignedRangeTo
-            ))
-            insertAggregates >> insertAggregateProgress
+            val progresses = Seq(
+              AggregateProgress(AggregationInterval.hour, AggregationType.generationUnit,
+                alignedRangeFrom, alignedRangeTo),
+              AggregateProgress(AggregationInterval.hour, AggregationType.tradingUnit,
+                alignedRangeFrom, alignedRangeTo),
+              AggregateProgress(AggregationInterval.hour, AggregationType.region,
+                alignedRangeFrom, alignedRangeTo)
+            )
+            val progressesAction = DBIOAction.seq(progresses.map(x => db.aggregateProgresses.merge(x)): _*)
+            (insertAggregates >> progressesAction).transactionally
           }
           DBIOAction.seq(actions: _*)
       }
@@ -128,35 +127,40 @@ trait DataComponent {
       }
     }
 
-    def createSubAggregates(
+    def calculateSubAggregates(
+      aggregationType: AggregationType,
       sourceInterval: AggregationInterval,
       destinationInterval: AggregationInterval,
       limit: Int = 1
     ): DBIO[Unit] = {
       val qSource = db.aggregateProgresses
-        .filter(x => x.aggregationInterval === sourceInterval &&
-          x.aggregationType === AggregationType.generationUnit)
+        .filter(x => x.aggregationInterval === sourceInterval && x.aggregationType === aggregationType)
         .sortBy(_.fromTime)
       val qDestination = db.aggregateProgresses
-        .filter(x => x.aggregationInterval === destinationInterval &&
-          x.aggregationType === AggregationType.generationUnit)
+        .filter(x => x.aggregationInterval === destinationInterval && x.aggregationType === aggregationType)
       (qSource.result zip qDestination.result).flatMap { case (sources, destinations) =>
         val unaggregatedRanges = sources - destinations
         val alignedRanges: Seq[RangeOf[Instant]] =
           alignedRangeFn(destinationInterval)(unaggregatedRanges).take(limit)
+        //println("alignedRanges:")
+        //println(alignedRanges)
         val actions: Seq[DBIO[_]] = alignedRanges.map { alignedRange: RangeOf[Instant] =>
           val alignedRangeFrom = DbTime(alignedRange.from)
           val alignedRangeTo = DbTime(alignedRange.to)
-          val qSourceData = db.aggregates.filter { x =>
-            x.aggregationInterval === sourceInterval &&
-            x.fromTime < alignedRangeTo && x.toTime > alignedRangeFrom
+          val qSourceData = db.aggregates.search(alignedRange.from, alignedRange.to).filter { x =>
+            x.aggregationInterval === sourceInterval && x.aggregationType === aggregationType
           }
+          //println("qSourceData.result.statements:")
+          //println(qSourceData.result.statements)
           val insertAggregates: DBIO[_] = qSourceData.result.flatMap { sourceDatas: Seq[Aggregate] =>
+            //println("sourceDatas:")
+            //println(sourceDatas)
             case class NameType(name: String, aggregationType: AggregationType)
             val sourceDataByNameType = sourceDatas.groupBy(x => NameType(x.name, x.aggregationType))
             val destAggs: Seq[Aggregate] = sourceDataByNameType.toSeq.map {
               case (nameType, sourceDatas: Seq[Aggregate]) =>
                 // All the source aggregates will have the same duration, so mean can be calculated simply
+                // (OK, not quite true for year aggregation, but never mind for now)
                 def getFn(aggregationFunction: AggregationFunction): Seq[Power] = sourceDatas.map { d =>
                   Power.watts(d.value(aggregationFunction))
                 }
@@ -182,34 +186,43 @@ trait DataComponent {
                   nameType.name,
                   alignedRangeFrom,
                   alignedRangeTo,
-                  aggregations ++ percentiles
+                  aggregations ++ percentiles,
+                  searchIndex = SearchableValue.searchIndex(SimpleRangeOf(alignedRange.from, alignedRange.to))
                 )
             }
-            db.aggregates ++= destAggs // Merge instead?
+            db.aggregates ++= destAggs // Merge instead? Probably not, very unlikely to match
           }
           val insertAggregateProgress = db.aggregateProgresses.merge(AggregateProgress(
-            destinationInterval, AggregationType.generationUnit, alignedRangeFrom, alignedRangeTo
+            destinationInterval, aggregationType, alignedRangeFrom, alignedRangeTo
           ))
-          insertAggregates >> insertAggregateProgress
+          (insertAggregates >> insertAggregateProgress).transactionally
         }
         DBIOAction.seq(actions: _*)
       }
     }
 
-    def createSubAggregatesDay(limit: Int = 1): DBIO[Unit] = {
-      createSubAggregates(AggregationInterval.hour, AggregationInterval.day, limit)
+    private def actualGenerationSubAggregates(
+      sourceInterval: AggregationInterval, destinationInterval: AggregationInterval, limit: Int
+    ): DBIO[Unit] = {
+      calculateSubAggregates(AggregationType.generationUnit, sourceInterval, destinationInterval, limit) >>
+        calculateSubAggregates(AggregationType.tradingUnit, sourceInterval, destinationInterval, limit) >>
+        calculateSubAggregates(AggregationType.region, sourceInterval, destinationInterval, limit)
     }
 
-    def createSubAggregatesWeek(limit: Int = 1): DBIO[Unit] = {
-      createSubAggregates(AggregationInterval.day, AggregationInterval.week, limit)
+    def actualGenerationSubAggregatesDay(limit: Int = 1): DBIO[Unit] = {
+      actualGenerationSubAggregates(AggregationInterval.hour, AggregationInterval.day, limit)
     }
 
-    def createSubAggregatesMonth(limit: Int = 1): DBIO[Unit] = {
-      createSubAggregates(AggregationInterval.day, AggregationInterval.month, limit)
+    def actualGenerationSubAggregatesWeek(limit: Int = 1): DBIO[Unit] = {
+      actualGenerationSubAggregates(AggregationInterval.day, AggregationInterval.week, limit)
     }
 
-    def createSubAggregatesYear(limit: Int = 1): DBIO[Unit] = {
-      createSubAggregates(AggregationInterval.month, AggregationInterval.year, limit)
+    def actualGenerationSubAggregatesMonth(limit: Int = 1): DBIO[Unit] = {
+      actualGenerationSubAggregates(AggregationInterval.day, AggregationInterval.month, limit)
+    }
+
+    def actualGenerationSubAggregatesYear(limit: Int = 1): DBIO[Unit] = {
+      actualGenerationSubAggregates(AggregationInterval.month, AggregationInterval.year, limit)
     }
 
   }

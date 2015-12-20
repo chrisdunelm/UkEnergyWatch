@@ -4,6 +4,7 @@ import org.scalatest._
 
 import org.ukenergywatch.db._
 import org.ukenergywatch.data._
+import org.ukenergywatch.utils.SimpleRangeOf
 import org.ukenergywatch.utils.JavaTimeExtensions._
 
 import scala.concurrent._
@@ -48,7 +49,7 @@ class AggregatesTest extends FunSuite with Matchers {
 
     val actions = Comps.createTables() >>
       insertRawProgress >> insertRawData >>
-      Comps.data.createHourAggregatesFromRaw() >>
+      Comps.data.actualGenerationHourAggregatesFromRaw() >>
       (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
     val fActionResult = Comps.db.db.run(actions.withPinnedSession)
     val (aggs, prog) = Await.result(fActionResult, 1.second.toConcurrent)
@@ -66,9 +67,11 @@ class AggregatesTest extends FunSuite with Matchers {
     aggs.find(_.name == Region.uk.name).get.value(AggregationFunction.mean) shouldBe 4.0 +- 1e-10
     aggs.find(_.name == Region.uk.name).get.value(AggregationFunction.percentile(25)) shouldBe 3.0 +- 1e-10
 
-    prog.map(_.id0) shouldBe Seq(AggregateProgress(
-      AggregationInterval.hour, AggregationType.generationUnit, m(0), m(60)
-    ))
+    prog.map(_.id0).toSet shouldBe Set(
+      AggregateProgress(AggregationInterval.hour, AggregationType.generationUnit, m(0), m(60)),
+      AggregateProgress(AggregationInterval.hour, AggregationType.tradingUnit, m(0), m(60)),
+      AggregateProgress(AggregationInterval.hour, AggregationType.region, m(0), m(60))
+    )
   }
 
   test("simple aggregation aggregation") {
@@ -79,7 +82,6 @@ class AggregatesTest extends FunSuite with Matchers {
     val generationUnit = AggregationType.generationUnit
     val tradingUnit = AggregationType.tradingUnit
     def aggValue(mean: Double, minimum: Double, maximum: Double): Map[AggregationFunction, Double] = Map(
-      // TODO: Percentiles
       AggregationFunction.mean -> mean,
       AggregationFunction.minimum -> minimum,
       AggregationFunction.maximum -> maximum
@@ -87,22 +89,25 @@ class AggregatesTest extends FunSuite with Matchers {
       AggregationFunction.percentile(i) -> (minimum + (maximum - minimum) * i.toDouble / 100.0)
     }
 
-    val insertHourAggs = Comps.db.aggregates ++= (0.until(24)).flatMap { hourOffset =>
+    val si = SearchableValue.searchIndex _
+    val insertHourAggs = Comps.db.aggregates ++= ((0.until(24)).flatMap { hourOffset =>
       val from = m(hourOffset * 60)
       val to = m((hourOffset + 1) * 60)
+      val range = SimpleRangeOf(from.toInstant, to.toInstant)
       Seq(
-        Aggregate(hour, generationUnit, "a", from, to, aggValue(2.0, 1.0, 3.0)),
-        Aggregate(hour, generationUnit, "b", from, to, aggValue(20.0, 10.0, 30.0)),
-        Aggregate(hour, tradingUnit, "a+b", from, to, aggValue(22.0, 11.0, 33.0))
+        Aggregate(hour, generationUnit, "a", from, to, aggValue(2.0, 1.0, 3.0), si(range)),
+        Aggregate(hour, generationUnit, "b", from, to, aggValue(20.0, 10.0, 30.0), si(range)),
+        Aggregate(hour, tradingUnit, "a+b", from, to, aggValue(22.0, 11.0, 33.0), si(range))
       )
-    }
+     })
     val insertAggProgress = Comps.db.aggregateProgresses ++= Seq(
-      AggregateProgress(hour, generationUnit, m(0), m(24 * 60))
+      AggregateProgress(hour, generationUnit, m(0), m(24 * 60)),
+      AggregateProgress(hour, tradingUnit, m(0), m(24 * 60))
     )
 
     val actions = Comps.createTables() >>
       insertHourAggs >> insertAggProgress >>
-      Comps.data.createSubAggregates(AggregationInterval.hour, AggregationInterval.day) >>
+      Comps.data.actualGenerationSubAggregatesDay() >>
       (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
     val fActionResult = Comps.db.db.run(actions.withPinnedSession)
     val (aggs, prog) = Await.result(fActionResult, 1.second.toConcurrent)

@@ -1,7 +1,7 @@
 package org.ukenergywatch.utils
 
 import java.time.{ Clock => JavaClock }
-import java.time.{ ZoneOffset, LocalDateTime, Duration, Instant, LocalDate, OffsetDateTime, ZoneId }
+import java.time.{ ZoneOffset, LocalDateTime, Duration, Instant, LocalDate, OffsetDateTime, ZoneId, LocalTime }
 import java.time.temporal.{ ChronoField, ChronoUnit }
 import scala.concurrent.duration.{ Duration => ScalaDuration }
 
@@ -35,6 +35,8 @@ object JavaTimeExtensions {
   }
 
   implicit class RichLocalDate(val ld: LocalDate) extends AnyVal {
+    def +(time: LocalTime): LocalDateTime = ld.atTime(time)
+
     def toInstant: Instant = ld.toEpochDay.daysToInstant
 
     def atStartOfSettlementPeriod(settlementPeriod: Int): OffsetDateTime = {
@@ -90,6 +92,8 @@ object JavaTimeExtensions {
 
   // 2015-12-01
   val localDateRx = """(\d{4})-(\d{2})-(\d{2})""".r
+  // 00:00:00
+  val localTimeRx = """(\d{2}):(\d{2}):(\d{2})""".r
   // 2015-12-01 00:05:00
   val localDateTimeRx = """(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})""".r
   // Slightly strange name required for some reason
@@ -97,6 +101,10 @@ object JavaTimeExtensions {
     def toLocalDate: LocalDate = s match {
       case localDateRx(year, month, day) => LocalDate.of(year.toInt, month.toInt, day.toInt)
       case _ => throw new Exception(s"Invalid LocalDate string: '$s'")
+    }
+    def toLocalTime: LocalTime = s match {
+      case localTimeRx(hour, minute, second) => LocalTime.of(hour.toInt, minute.toInt, second.toInt)
+      case _ => throw new Exception(s"Invalid LocalTime string: '$s'")
     }
     def toLocalDateTime: LocalDateTime = s match {
       case localDateTimeRx(year, month, day, hour, minute, second) =>

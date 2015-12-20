@@ -43,7 +43,8 @@ trait AggregateTable extends Mergeable with Searchable {
     def indexMerge = index("idx_aggregates_merge", (aggregationInterval, aggregationType, name, searchIndex))
   }
 
-  object aggregates extends TableQuery[Aggregates](new Aggregates(_)) with MergeQuery[Aggregate, Aggregates] {
+  object aggregates extends TableQuery[Aggregates](new Aggregates(_))
+      with MergeQuery[Aggregate, Aggregates] with SearchQuery[Aggregate, Aggregates] {
     protected def mergeFilter(item: Aggregate) = { x =>
       x.aggregationInterval === item.aggregationInterval && x.aggregationType === item.aggregationType &&
       x.name === item.name && x.value === item.value

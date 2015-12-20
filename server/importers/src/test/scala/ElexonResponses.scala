@@ -14,4 +14,7 @@ object ElexonResponses {
   def fuelInstError_BadFormat = get("/fuelInstError_BadFormat.xml")
   def fuelInstOk_20151201_00_01 = get("/fuelInstOk_20151201_00_01.xml")
 
+  def freqError_BadFormat = get("/freqError_BadFormat.xml")
+  def freqOk_20151201_0000_0005 = get("/freqOk_20151201_0000_0005.xml")
+
 }
