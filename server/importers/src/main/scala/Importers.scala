@@ -74,7 +74,7 @@ trait ImportersComponent {
             toTime = DbTime(settlementInstant + 30.minutes),
             fromValue = power.watts,
             toValue = power.watts
-          )
+          ).autoSearchIndex
           db.rawDatas.merge(rawData)
         }
         val progressAction = db.rawProgresses.merge(RawProgress(
@@ -105,7 +105,7 @@ trait ImportersComponent {
               toTime = DbTime(toTime),
               fromValue = fuelPower.watts,
               toValue = fuelPower.watts
-            )
+            ).autoSearchIndex
             db.rawDatas.merge(rawData)
           }
           val progressAction = db.rawProgresses.merge(RawProgress(
@@ -150,9 +150,8 @@ trait ImportersComponent {
               fromTime = DbTime(fromTime),
               toTime = DbTime(toTime),
               fromValue = fromFreq,
-              toValue = toFreq,
-              searchIndex = SearchableValue.searchIndex(SimpleRangeOf(fromTime, toTime))
-            )
+              toValue = toFreq
+            ).autoSearchIndex
           }
         val minTime = mappedItems.map(_._1).min
         val maxTime = mappedItems.map(_._1).max
