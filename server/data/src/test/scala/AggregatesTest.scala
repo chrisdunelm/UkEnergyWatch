@@ -42,9 +42,9 @@ class AggregatesTest extends FunSuite with Matchers {
       RawProgress(RawDataType.actualGeneration, m(0), m(60))
     )
     val insertRawData = Comps.db.rawDatas ++= Seq(
-      RawData(RawDataType.actualGeneration, drax0, m(0), m(60), 1.0, 1.0),
-      RawData(RawDataType.actualGeneration, drax1, m(0), m(30), 1.0, 3.0),
-      RawData(RawDataType.actualGeneration, drax1, m(30), m(60), 3.0, 5.0)
+      RawData(RawDataType.actualGeneration, drax0, m(0), m(60), 1.0, 1.0).withSearchIndex,
+      RawData(RawDataType.actualGeneration, drax1, m(0), m(30), 1.0, 3.0).withSearchIndex,
+      RawData(RawDataType.actualGeneration, drax1, m(30), m(60), 3.0, 5.0).withSearchIndex
     )
 
     val actions = Comps.createTables() >>

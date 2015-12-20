@@ -22,8 +22,10 @@ trait DataComponent {
     import db.driver.api._
 
     private def calculateRawAggregate(
-      aggregationType: AggregationType, name: Name,
-      rawDatas: Seq[RawData], alignedRange: RangeOf[Instant]
+      aggregationType: AggregationType,
+      name: Name,
+      rawDatas: Seq[RawData],
+      alignedRange: RangeOf[Instant]
     ): Aggregate = {
       val data: Seq[SimpleRangeOfValue[Instant, Power]] = rawDatas.map { rawData =>
         val rawFromTime = implicitly[Ordering[Instant]].max(rawData.fromTime.toInstant, alignedRange.from)
@@ -65,55 +67,65 @@ trait DataComponent {
       )
     }
 
+    def hourlyAggregateFromRaw(
+      rawDataType: RawDataType,
+      aggregationType: AggregationType,
+      aggregationFn: Seq[RawData] => Map[Name, Seq[RawData]],
+      limit: Int = 1
+    ): DBIO[Unit] = {
+      val qRawProgress = db.rawProgresses
+        .filter(_.rawDataType === rawDataType)
+        .sortBy(_.fromTime)
+      val qAggregateProgress = db.aggregateProgresses
+        .filter(x => x.aggregationInterval === AggregationInterval.hour && x.aggregationType === aggregationType)
+        .sortBy(_.fromTime)
+      (qRawProgress.result zip qAggregateProgress.result).flatMap { case (rawProgress, aggregateProgress) =>
+        val unaggregatedRanges = rawProgress - aggregateProgress
+        val alignedRanges: Seq[RangeOf[Instant]] = AlignedRangeOf.hour(unaggregatedRanges).take(limit)
+        val actions: Seq[DBIO[_]] = alignedRanges.map { alignedRange: RangeOf[Instant] =>
+          val qRawData = db.rawDatas.search(alignedRange).filter(_.rawDataType === rawDataType)
+          val insertAggregates: DBIO[_] = qRawData.result.flatMap { rawDatas: Seq[RawData] =>
+            val rawDataGrouped: Map[Name, Seq[RawData]] = aggregationFn(rawDatas)
+            val aggregates: Seq[Aggregate] = rawDataGrouped.toSeq.map { case (name, rawDatas) =>
+              calculateRawAggregate(aggregationType, name, rawDatas, alignedRange)
+            }
+            db.aggregates ++= aggregates // Don't merge, very unlikely to be mergeable
+          }
+          val insertProgress: DBIO[_] = db.aggregateProgresses.merge(
+            AggregateProgress(
+              AggregationInterval.hour, aggregationType, DbTime(alignedRange.from), DbTime(alignedRange.to)
+            )
+          )
+          (insertAggregates >> insertProgress).transactionally
+        }
+        DBIOAction.seq(actions: _*)
+      }
+    }
+
+    // TODO: Move this elsewhere. All other functions here are not rawdata-type specific
     def actualGenerationHourAggregatesFromRaw(limit: Int = 1): DBIO[Unit] = {
       // Creates all hourly aggregations from actual-generation
-      val qRawProgresses = db.rawProgresses
-        .filter(_.rawDataType === RawDataType.actualGeneration)
-        .sortBy(_.fromTime)
-      val qAggregateProgresses = db.aggregateProgresses
-        .filter(x => x.aggregationInterval === AggregationInterval.hour &&
-          x.aggregationType === AggregationType.generationUnit)
-        .sortBy(_.fromTime)
-      (qRawProgresses.result zip qAggregateProgresses.result).flatMap {
-        case (rawProgress: Seq[RawProgress], aggProgress: Seq[AggregateProgress]) =>
-          val unaggregatedRanges = rawProgress - aggProgress
-          val alignedRanges: Seq[RangeOf[Instant]] = AlignedRangeOf.hour(unaggregatedRanges).take(limit)
-          // For each hour range, load all the raw data for that hour
-          val actions: Seq[DBIO[_]] = alignedRanges.map { alignedRange: RangeOf[Instant] =>
-            val alignedRangeTo = DbTime(alignedRange.to)
-            val alignedRangeFrom = DbTime(alignedRange.from)
-            val qRawData = db.rawDatas.filter { x =>
-              x.rawDataType === RawDataType.actualGeneration &&
-              x.fromTime < alignedRangeTo && x.toTime > alignedRangeFrom
-            }
-            val insertAggregates: DBIO[_] = qRawData.result.flatMap { rawDatas: Seq[RawData] =>
-              val rawDataByBmuId: Map[BmuId, Seq[RawData]] = rawDatas.groupBy(x => BmuId(x.name))
-              val rawDataByTradingUnit: Map[TradingUnitName, Seq[RawData]] = rawDatas.groupBy { x =>
-                StaticData.tradingUnitsByBmuId.get(BmuId(x.name)).map(_.name).getOrElse(TradingUnitName.empty)
-              } - TradingUnitName.empty
-              val bmuAggregates = rawDataByBmuId.toSeq.map { case (bmuId: BmuId, rawDatas: Seq[RawData]) =>
-                calculateRawAggregate(AggregationType.generationUnit, bmuId, rawDatas, alignedRange)
-              }
-              val tradingUnitAggregates = rawDataByTradingUnit.toSeq.map { case (tradingUnitName, rawDatas) =>
-                calculateRawAggregate(AggregationType.tradingUnit, tradingUnitName, rawDatas, alignedRange)
-              }
-              val ukAggregate = calculateRawAggregate(AggregationType.region, Region.uk, rawDatas, alignedRange) 
-              val allAggregates = bmuAggregates ++ tradingUnitAggregates :+ ukAggregate
-              db.aggregates ++= allAggregates // Merge instead? Probably not, very unlikely to be mergeable
-            }
-            val progresses = Seq(
-              AggregateProgress(AggregationInterval.hour, AggregationType.generationUnit,
-                alignedRangeFrom, alignedRangeTo),
-              AggregateProgress(AggregationInterval.hour, AggregationType.tradingUnit,
-                alignedRangeFrom, alignedRangeTo),
-              AggregateProgress(AggregationInterval.hour, AggregationType.region,
-                alignedRangeFrom, alignedRangeTo)
-            )
-            val progressesAction = DBIOAction.seq(progresses.map(x => db.aggregateProgresses.merge(x)): _*)
-            (insertAggregates >> progressesAction).transactionally
-          }
-          DBIOAction.seq(actions: _*)
-      }
+      val generationUnit = hourlyAggregateFromRaw(
+        RawDataType.actualGeneration,
+        AggregationType.generationUnit,
+        data => data.groupBy(x => BmuId(x.name))
+      )
+      val tradingUnit = hourlyAggregateFromRaw(
+        RawDataType.actualGeneration,
+        AggregationType.tradingUnit,
+        data => data.groupBy { x =>
+          StaticData.tradingUnitsByBmuId.get(BmuId(x.name))
+            .map(_.name)
+            .getOrElse(TradingUnitName.empty)
+            .asInstanceOf[Name]
+        } - TradingUnitName.empty
+      )
+      val uk = hourlyAggregateFromRaw(
+        RawDataType.actualGeneration,
+        AggregationType.region,
+        data => Map(Region.uk -> data)
+      )
+      generationUnit >> tradingUnit >> uk
     }
 
     private def alignedRangeFn(interval: AggregationInterval): Seq[RangeOf[Instant]] => Seq[RangeOf[Instant]] = {

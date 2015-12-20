@@ -38,6 +38,8 @@ import java.time.Duration
 trait SearchableValue extends MergeableValue {
   def searchIndex: Int
   def withSearchIndex(searchIndex: Int): this.type
+
+  def withSearchIndex: this.type = withSearchIndex(SearchableValue.searchIndex(this))
 }
 
 object SearchableValue {
@@ -132,6 +134,8 @@ trait Searchable extends Mergeable {
         x.fromTime < toDbTime && x.toTime > fromDbTime
       }
     }
+
+    def search(range: RangeOf[Instant]): Query[TTable, TValue, Seq] = search(range.from, range.to)
 
   }
 }
