@@ -22,8 +22,9 @@ object AggregationType {
   object Electric {
     val generationUnit = AggregationType(1)
     val tradingUnit = AggregationType(2)
-    val region = AggregationType(3) // E.g. country
-    val fuelType = AggregationType(4)
+    val regionalGeneration = AggregationType(3)
+    val fuelType = AggregationType(5)
+    val regionalFuelType = AggregationType(4)
   }
 
   object Gas {

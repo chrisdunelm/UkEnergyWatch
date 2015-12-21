@@ -70,7 +70,7 @@ class AggregatesTest extends FunSuite with Matchers {
     prog.map(_.id0).toSet shouldBe Set(
       AggregateProgress(AggregationInterval.hour, AggregationType.Electric.generationUnit, m(0), m(60)),
       AggregateProgress(AggregationInterval.hour, AggregationType.Electric.tradingUnit, m(0), m(60)),
-      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.region, m(0), m(60))
+      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.regionalGeneration, m(0), m(60))
     )
   }
 

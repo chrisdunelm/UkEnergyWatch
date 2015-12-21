@@ -87,7 +87,9 @@ trait ImportersComponent {
     }
 
     // 5-minute resolution
-    // Parameters are inclusive, and the times coming back are the end of each 5-minute period
+    // 'from' parameter is sometimes inclusive, sometimes exclusive. 'to' parameter is inclusive
+    // Parameters are in UTC, I think.
+    // The times coming back are the end of each 5-minute period
     // New data appears to be available within seconds of the time passing.
     def importFuelInst(fromTime: LocalDateTime, toTime: LocalDateTime)(implicit ec: ExecutionContext): DBIO[_] = {
       val url = makeElexonApiUrl("FUELINST") + s"&FromDateTime=${fmtLdt(fromTime)}&ToDateTime=${fmtLdt(toTime)}"
@@ -113,7 +115,7 @@ trait ImportersComponent {
             fromTime = DbTime(fromTime),
             toTime = DbTime(toTime)
           ))
-            (DBIOAction.seq(fuelActions: _*) >> progressAction).transactionally
+          (DBIOAction.seq(fuelActions: _*) >> progressAction).transactionally
         }
         DBIOAction.seq(actions: _*)
       }

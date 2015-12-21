@@ -123,7 +123,7 @@ trait DataComponent {
       )
       val uk = hourlyAggregateFromRaw(
         RawDataType.Electric.actualGeneration,
-        AggregationType.Electric.region,
+        AggregationType.Electric.regionalGeneration,
         data => Map(Region.uk -> data)
       )
       generationUnit >> tradingUnit >> uk
@@ -218,7 +218,7 @@ trait DataComponent {
     ): DBIO[Unit] = {
       calculateSubAggregates(AggregationType.Electric.generationUnit, sourceInterval, destinationInterval, limit) >>
         calculateSubAggregates(AggregationType.Electric.tradingUnit, sourceInterval, destinationInterval, limit) >>
-        calculateSubAggregates(AggregationType.Electric.region, sourceInterval, destinationInterval, limit)
+        calculateSubAggregates(AggregationType.Electric.regionalGeneration, sourceInterval, destinationInterval, limit)
     }
 
     def actualGenerationSubAggregatesDay(limit: Int = 1): DBIO[Unit] = {

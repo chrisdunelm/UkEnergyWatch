@@ -25,7 +25,6 @@ trait DbComponent {
       rawProgresses.schema.create >>
       aggregates.schema.create >>
       aggregateProgresses.schema.create
-      // TODO: All tables
     }
 
     def executeAndWait[T](action: DBIO[T], timeout: Duration): T = {
@@ -52,9 +51,10 @@ trait DbMemoryComponent extends DbComponent {
 
 trait DbPersistentMemoryComponent extends DbComponent {
   object db extends Db {
+    private val name = java.util.UUID.randomUUID().toString
     lazy val driver = H2Driver
     lazy val db = driver.api.Database.forURL(
-      "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+      s"jdbc:h2:mem:$name;DB_CLOSE_DELAY=60", // Keep DB around for 60 seconds
       driver = "org.h2.Driver"
     )
   }

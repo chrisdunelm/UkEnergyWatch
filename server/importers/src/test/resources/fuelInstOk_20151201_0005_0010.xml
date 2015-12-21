@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>200
+    </httpCode>
+    <errorType>Ok
+    </errorType>
+    <description>Success
+    </description>
+    <cappingApplied>No
+    </cappingApplied>
+    <cappingLimit>884
+    </cappingLimit>
+    <queryString>FromDateTime=2015-12-01 00:05:01,ToDateTime=2015-12-01 00:10:00
+    </queryString>
+  </responseMetadata>
+  <responseHeader>
+    <recordType>HDR
+    </recordType>
+    <fileType>INSTANTANEOUS GENERATION BY FUEL TYPE DATA
+    </fileType>
+  </responseHeader>
+  <responseBody>
+    <responseList>
+      <item>
+	<recordType>FUELINST
+	</recordType>
+	<startTimeOfHalfHrPeriod>2015-12-01
+	</startTimeOfHalfHrPeriod>
+	<settlementPeriod>1
+	</settlementPeriod>
+	<publishingPeriodCommencingTime>2015-12-01 00:10:00
+	</publishingPeriodCommencingTime>
+	<ccgt>8507
+	</ccgt>
+	<oil>0
+	</oil>
+	<coal>7605
+	</coal>
+	<nuclear>8237
+	</nuclear>
+	<wind>953
+	</wind>
+	<ps>-878
+	</ps>
+	<npshyd>558
+	</npshyd>
+	<ocgt>0
+	</ocgt>
+	<other>2098
+	</other>
+	<intfr>1494
+	</intfr>
+	<intirl>199
+	</intirl>
+	<intned>1026
+	</intned>
+	<intew>99
+	</intew>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+    </responseList>
+  </responseBody>
+</response>

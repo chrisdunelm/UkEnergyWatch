@@ -22,6 +22,8 @@ object JavaTimeExtensions {
 
   implicit class RichInstant(val i: Instant) extends AnyVal {
     def toLocalDate: LocalDate = LocalDate.ofEpochDay(i.millis / (86400L * 1000L))
+    def toLocalDateTimeUtc: LocalDateTime =
+      LocalDateTime.ofEpochSecond(i.getEpochSecond, i.getNano, ZoneOffset.UTC)
     def millis: Long = i.getEpochSecond * 1000L + i.getNano / 1000000L
 
     def +(d: Duration): Instant = i.plus(d)
@@ -94,8 +96,8 @@ object JavaTimeExtensions {
     def second: Duration = seconds
     def minutes: Duration = Duration.ofMinutes(i)
     def minute: Duration = minutes
-    def hour: Duration = Duration.ofHours(i)
-    def hours: Duration = hours
+    def hours: Duration = Duration.ofHours(i)
+    def hour: Duration = hours
   }
 
   implicit class RichLong(val l: Long) extends AnyVal {

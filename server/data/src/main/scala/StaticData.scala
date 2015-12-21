@@ -7,6 +7,7 @@ trait Name extends Any {
 }
 
 case class BmuId(name: String) extends AnyVal with Name
+case class FuelType(name: String) extends AnyVal with Name
 
 case class TradingUnitName(name: String) extends AnyVal with Name
 object TradingUnitName {

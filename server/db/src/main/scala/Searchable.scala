@@ -44,8 +44,7 @@ trait SearchableValue extends MergeableValue {
 
 object SearchableValue {
 
-  //val level0Duration = 2.hours
-  val level0Duration = Duration.ofHours(2) // Above infinite loops, don't know why
+  val level0Duration = 2.hours
   val levelCount = 7
 
   def levelDuration(level: Int): Duration = level0Duration * (1 << (level * 3)) // 8x per level
