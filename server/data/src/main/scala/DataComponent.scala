@@ -37,9 +37,10 @@ trait DataComponent {
       val dataN = data.last
       def getAt(t: Instant): Power = {
         // This slightly convoluted code to get the correct value at the very end of the time
+        //println(s"$t, $aggregationType, $name")
         data.filter(x =>
           (t >= x.from && t < x.to) || (t == x.to && t == dataN.to)
-        ).map(_.interpolatedValue(t)).reduce(_ + _)
+        ).map(_.interpolatedValue(t)).fold(Power.zero)(_ + _)
       }
       val meanPower: Power = data.map { data =>
         (data.value0 + data.value1) * 0.5 * (data.to - data.from)
@@ -64,7 +65,7 @@ trait DataComponent {
         DbTime(alignedRange.from),
         DbTime(alignedRange.to),
         aggregations ++ percentiles
-      )
+      ).autoSearchIndex
     }
 
     def hourlyAggregateFromRaw(
@@ -192,9 +193,8 @@ trait DataComponent {
                   nameType.name,
                   alignedRangeFrom,
                   alignedRangeTo,
-                  aggregations ++ percentiles,
-                  searchIndex = SearchableValue.searchIndex(SimpleRangeOf(alignedRange.from, alignedRange.to))
-                )
+                  aggregations ++ percentiles
+                ).autoSearchIndex
             }
             db.aggregates ++= destAggs // Merge instead? Probably not, very unlikely to match
           }

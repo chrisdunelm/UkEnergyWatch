@@ -24,6 +24,7 @@ case class Power private(watts: Double) extends AnyVal {
 }
 
 object Power {
+  val zero = Power(0)
   def watts(watts: Double) = Power(watts)
   def kiloWatts(kiloWatts: Double) = Power(kiloWatts * 1e3)
   def megaWatts(megaWatts: Double) = Power(megaWatts * 1e6)

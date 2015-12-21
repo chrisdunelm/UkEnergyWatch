@@ -52,7 +52,7 @@ class AggregatesTest extends FunSuite with Matchers {
       Comps.data.actualGenerationHourAggregatesFromRaw() >>
       (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
     val fActionResult = Comps.db.db.run(actions.withPinnedSession)
-    val (aggs, prog) = Await.result(fActionResult, 1.second.toConcurrent)
+    val (aggs, prog) = Await.result(fActionResult, 3.seconds.toConcurrent)
 
     aggs.find(_.name == drax0).get.value(AggregationFunction.mean) shouldBe 1.0 +- 1e-10
     aggs.find(_.name == drax1).get.value(AggregationFunction.mean) shouldBe 3.0 +- 1e-10
@@ -109,7 +109,7 @@ class AggregatesTest extends FunSuite with Matchers {
       Comps.data.actualGenerationSubAggregatesDay() >>
       (Comps.db.aggregates.result zip Comps.db.aggregateProgresses.result)
     val fActionResult = Comps.db.db.run(actions.withPinnedSession)
-    val (aggs, prog) = Await.result(fActionResult, 1.second.toConcurrent)
+    val (aggs, prog) = Await.result(fActionResult, 3.seconds.toConcurrent)
 
     val aDay: Aggregate = aggs.find(x => x.name == "a" && x.aggregationInterval == AggregationInterval.day).get
     aDay.fromTime shouldBe DbTime(0)

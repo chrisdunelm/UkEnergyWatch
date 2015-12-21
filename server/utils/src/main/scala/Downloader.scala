@@ -45,8 +45,7 @@ trait DownloaderFakeComponent extends DownloaderComponent {
       content.get(url) match {
         case Some(data) => Future.successful(data)
         case None =>
-          //println(s"No data for url: '$url'")
-          Future.failed(new Exception)
+          Future.failed(new Exception(s"No fake data for url: '$url'"))
       }
     }
   }
