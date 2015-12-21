@@ -6,6 +6,8 @@ import java.time.{ ZonedDateTime }
 import java.time.temporal.{ ChronoField, ChronoUnit }
 import scala.concurrent.duration.{ Duration => ScalaDuration }
 
+case class Settlement(date: LocalDate, period: Int)
+
 object JavaTimeExtensions {
 
   val londonZoneId: ZoneId = ZoneId.of("Europe/London")
@@ -36,8 +38,15 @@ object JavaTimeExtensions {
       (m - m % duration.millis).millisToInstant
     }
 
-    def settlementDate: LocalDate = ???
-    def settlementPeriod: Int = ???
+    def settlement: Settlement = {
+      val zdt = ZonedDateTime.ofInstant(i, londonZoneId)
+      val ld = zdt.toLocalDate
+      val zdtT0 = ZonedDateTime.of(ld, LocalTime.MIDNIGHT, londonZoneId)
+      Settlement(
+        date = ld,
+        period = ((i - zdtT0.toInstant).millis / (30L * 60L * 1000L)).toInt + 1
+      )
+    }
   }
 
   implicit class RichLocalDate(val ld: LocalDate) extends AnyVal {
@@ -55,13 +64,6 @@ object JavaTimeExtensions {
 
   implicit class RichLocalDateTime(val ldt: LocalDateTime) extends AnyVal {
     def toInstantUtc: Instant = ldt.atOffset(ZoneOffset.UTC).toInstant
-  }
-
-  implicit class RichZonedDateTime(val zdt: ZonedDateTime) extends AnyVal {
-    // Between 1 and 50
-    def settlementPeriod: Int = {
-      ???
-    }
   }
 
   implicit class RichDuration(val d: Duration) extends AnyVal {
