@@ -19,6 +19,8 @@ trait RawProgressTable extends Mergeable {
     def fromTime = column[DbTime]("fromTime")
     def toTime = column[DbTime]("toTime")
     def * = (rawDataType, fromTime, toTime, id) <> (RawProgress.tupled, RawProgress.unapply)
+
+    // TODO: Index rawDataType. also with fromTime?
   }
 
   object rawProgresses extends TableQuery[RawProgresses](new RawProgresses(_))

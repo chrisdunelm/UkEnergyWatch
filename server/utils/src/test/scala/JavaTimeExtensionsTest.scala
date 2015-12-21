@@ -31,4 +31,8 @@ class JavaTimeExtensionsTest extends FunSuite with Matchers {
     ld(10, 25).atStartOfSettlementPeriod(50) shouldBe odt(10, 25, 23, 30, ZoneOffset.ofHours(0))
   }
 
+  test("Instant settlementDate/Period") {
+    // TODO
+  }
+
 }

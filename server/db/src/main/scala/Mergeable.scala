@@ -50,27 +50,22 @@ trait Mergeable {
         .filter(mergeFilter(item))
         .sortBy(_.fromTime)
         .take(3)
-      //println(qExisting.result.statements)
       val qUpdate = qExisting.result.flatMap { existings =>
         existings.toList match {
           case Nil =>
             // Nothing to merge with, just add
-            //this += item
             addItem(item)
           case a :: Nil =>
             // Single mergeable neighbour, either before or after item
             if (a.toTime == item.fromTime) {
-              //this.filter(_.id === a.id).map(_.toTime).update(item.toTime)
               updateItem(a.id, SimpleRangeOf(a.fromTime, item.toTime))
             } else if (a.fromTime == item.toTime) {
-              //this.filter(_.id === a.id).map(_.fromTime).update(item.fromTime)
               updateItem(a.id, SimpleRangeOf(item.fromTime, a.toTime))
             } else {
               throw new Exception("Failed. Overlapping times")
             }
           case a :: b :: Nil =>
             if (a.toTime == item.fromTime && item.toTime == b.fromTime) {
-              //val update = this.filter(_.id === a.id).map(_.toTime).update(b.toTime)
               val update = updateItem(a.id, SimpleRangeOf(a.fromTime, b.toTime))
               val delete = this.filter(_.id === b.id).delete
               update >> delete

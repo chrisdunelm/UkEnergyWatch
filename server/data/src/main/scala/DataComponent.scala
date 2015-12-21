@@ -207,6 +207,11 @@ trait DataComponent {
       }
     }
 
+    def missingRawProgress(rawDataType: RawDataType, extremes: RangeOf[Instant]): DBIO[Seq[RangeOf[Instant]]] = {
+      val qRawProgress = db.rawProgresses.filter(_.rawDataType === rawDataType).sortBy(_.fromTime)
+      qRawProgress.result.map { rawProgress: Seq[RawProgress] => Seq(extremes) - rawProgress }
+    }
+
     // TODO: Move all the following elsewhere, so nothing here is datatype-specific
     private def actualGenerationSubAggregates(
       sourceInterval: AggregationInterval, destinationInterval: AggregationInterval, limit: Int

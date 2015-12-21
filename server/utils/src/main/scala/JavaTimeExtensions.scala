@@ -2,10 +2,13 @@ package org.ukenergywatch.utils
 
 import java.time.{ Clock => JavaClock }
 import java.time.{ ZoneOffset, LocalDateTime, Duration, Instant, LocalDate, OffsetDateTime, ZoneId, LocalTime }
+import java.time.{ ZonedDateTime }
 import java.time.temporal.{ ChronoField, ChronoUnit }
 import scala.concurrent.duration.{ Duration => ScalaDuration }
 
 object JavaTimeExtensions {
+
+  val londonZoneId: ZoneId = ZoneId.of("Europe/London")
 
   object Clock {
     def utc: JavaClock = JavaClock.systemUTC()
@@ -32,6 +35,9 @@ object JavaTimeExtensions {
       val m = i.millis
       (m - m % duration.millis).millisToInstant
     }
+
+    def settlementDate: LocalDate = ???
+    def settlementPeriod: Int = ???
   }
 
   implicit class RichLocalDate(val ld: LocalDate) extends AnyVal {
@@ -40,7 +46,7 @@ object JavaTimeExtensions {
     def toInstant: Instant = ld.toEpochDay.daysToInstant
 
     def atStartOfSettlementPeriod(settlementPeriod: Int): OffsetDateTime = {
-      val zonedDt = ld.atStartOfDay(ZoneId.of("Europe/London"))
+      val zonedDt = ld.atStartOfDay(londonZoneId)
       zonedDt.plusMinutes((settlementPeriod - 1) * 30).toOffsetDateTime
     }
     def atEndOfSettlementPeriod(settlementPeriod: Int): OffsetDateTime =
@@ -51,12 +57,24 @@ object JavaTimeExtensions {
     def toInstantUtc: Instant = ldt.atOffset(ZoneOffset.UTC).toInstant
   }
 
+  implicit class RichZonedDateTime(val zdt: ZonedDateTime) extends AnyVal {
+    // Between 1 and 50
+    def settlementPeriod: Int = {
+      ???
+    }
+  }
+
   implicit class RichDuration(val d: Duration) extends AnyVal {
     def millis: Long = d.getSeconds * 1000L + d.getNano / 1000000L
     def secondsDouble: Double = d.getSeconds.toDouble + d.getNano.toDouble * 1e-9
 
     def *(scale: Double): Duration = (d.secondsDouble * scale).seconds
     def /(other: Duration): Double = d.secondsDouble / other.secondsDouble
+
+    def <(other: Duration): Boolean = d.compareTo(other) < 0
+    def <=(other: Duration): Boolean = d.compareTo(other) <= 0
+    def >(other: Duration): Boolean = d.compareTo(other) > 0
+    def >=(other: Duration): Boolean = d.compareTo(other) >= 0
 
     def toConcurrent: ScalaDuration = ScalaDuration.fromNanos(d.toNanos)
   }

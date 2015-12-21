@@ -52,6 +52,7 @@ object RangeOfExtensions {
   implicit class RichSeqMergeableValue[T : Ordering](a: Seq[RangeOf[T]]) {
     val o = implicitly[Ordering[T]]
 
+    // Requires both inputs to be sorted and non-overlapping
     def -(b: Seq[RangeOf[T]]): Seq[SimpleRangeOf[T]] = {
       @tailrec def inner(as: List[RangeOf[T]], bs: List[RangeOf[T]], result: Vector[SimpleRangeOf[T]]):
           Seq[SimpleRangeOf[T]] = {
