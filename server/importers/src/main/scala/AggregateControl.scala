@@ -88,6 +88,22 @@ trait AggregateControlComponent {
       db.executeAndWait(actions, timeout)
     }
 
+    def frequency(limit: Int, timeout: Duration)(implicit ec: ExecutionContext): Unit = {
+      val hour = data.hourlyAggregateFromRaw(
+        RawDataType.Electric.frequency,
+        AggregationType.Electric.frequency,
+        data => Map(Region.uk -> data),
+        limit
+      )
+      val subAggActions = for {
+        (sourceInterval, destinationInterval) <- intervals
+      } yield {
+        data.calculateSubAggregates(AggregationType.Electric.frequency, sourceInterval, destinationInterval, limit)
+      }
+      val actions = hour >> DBIO.seq(subAggActions: _*)
+      db.executeAndWait(actions, timeout)
+    }
+
   }
 
 }
