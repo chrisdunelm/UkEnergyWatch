@@ -23,7 +23,7 @@ object AggregationType {
     val generationUnit = AggregationType(1)
     val tradingUnit = AggregationType(2)
     val regionalGeneration = AggregationType(3)
-    val fuelType = AggregationType(5)
+    val fuelType = AggregationType(5) // TODO: rename to generationByFuelType
     val regionalFuelType = AggregationType(4)
   }
 

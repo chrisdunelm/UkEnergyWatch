@@ -3,7 +3,7 @@ package org.ukenergywatch.importers
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.db.DbComponent
 import org.ukenergywatch.db.{ RawDataType, AggregationType, AggregationInterval }
-import org.ukenergywatch.data.{ StaticData, BmuId, TradingUnitName, Name, Region }
+import org.ukenergywatch.data.{ StaticData, BmuId, TradingUnitName, Name, Region, FuelType }
 import java.time.Duration
 import scala.concurrent.ExecutionContext
 
@@ -14,6 +14,13 @@ trait AggregateControlComponent {
 
   class AggregateControl {
     import db.driver.api._
+
+    private val intervals = Seq(
+      AggregationInterval.hour -> AggregationInterval.day,
+      AggregationInterval.day -> AggregationInterval.week,
+      AggregationInterval.day -> AggregationInterval.month,
+      AggregationInterval.month -> AggregationInterval.year
+    )
 
     def actualGeneration(limit: Int, timeout: Duration)(implicit ec: ExecutionContext): Unit = {
       val generationUnit = data.hourlyAggregateFromRaw(
@@ -44,12 +51,6 @@ trait AggregateControlComponent {
         AggregationType.Electric.tradingUnit,
         AggregationType.Electric.regionalGeneration
       )
-      val intervals = Seq(
-        AggregationInterval.hour -> AggregationInterval.day,
-        AggregationInterval.day -> AggregationInterval.week,
-        AggregationInterval.day -> AggregationInterval.month,
-        AggregationInterval.month -> AggregationInterval.year
-      )
       val subAggActions = for {
         aggregationType <- aggregationTypes
         (sourceInterval, destinationInterval) <- intervals
@@ -57,6 +58,33 @@ trait AggregateControlComponent {
         data.calculateSubAggregates(aggregationType, sourceInterval, destinationInterval, limit)
       }
       val actions = generationUnit >> tradingUnit >> uk >> DBIO.seq(subAggActions: _*)
+      db.executeAndWait(actions, timeout)
+    }
+
+    def fuelInst(limit: Int, timeout: Duration)(implicit ec: ExecutionContext): Unit = {
+      val fuelType = data.hourlyAggregateFromRaw(
+        RawDataType.Electric.generationByFuelType,
+        AggregationType.Electric.fuelType,
+        data => data.groupBy(x => FuelType(x.name)),
+        limit
+      )
+      val uk = data.hourlyAggregateFromRaw(
+        RawDataType.Electric.generationByFuelType,
+        AggregationType.Electric.regionalFuelType,
+        data => Map(Region.uk -> data),
+        limit
+      )
+      val aggregationTypes = Seq(
+        AggregationType.Electric.fuelType,
+        AggregationType.Electric.regionalFuelType
+      )
+      val subAggActions = for {
+        aggregationType <- aggregationTypes
+        (sourceInterval, destinationInterval) <- intervals
+      } yield {
+        data.calculateSubAggregates(aggregationType, sourceInterval, destinationInterval, limit)
+      }
+      val actions = fuelType >> uk >> DBIO.seq(subAggActions: _*)
       db.executeAndWait(actions, timeout)
     }
 
