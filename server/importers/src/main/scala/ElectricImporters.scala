@@ -12,14 +12,14 @@ import org.ukenergywatch.data.{ BmuId, StaticData }
 import org.ukenergywatch.utils.units._
 import org.ukenergywatch.utils.JavaTimeExtensions._
 
-trait ImportersComponent {
+trait ElectricImportersComponent {
   this: DbComponent with DownloaderComponent with ElexonParamsComponent =>
 
   import db.driver.api._
 
-  lazy val importers: Importers = new Importers
+  lazy val electricImporters: ElectricImporters = new ElectricImporters
 
-  class Importers {
+  class ElectricImporters {
 
     // B1610 - actual generation of all generating units
     // B1620 - actual per fuel type, no interconnects

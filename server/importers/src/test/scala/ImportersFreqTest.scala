@@ -21,7 +21,7 @@ class ImportersFreqTest extends FunSuite with Matchers {
       def key = "elexonkey"
     }
   }
-  trait AppComp extends ImportersComponent
+  trait AppComp extends ElectricImportersComponent
       with DbMemoryComponent
       with DownloaderFakeComponent
       with InlineElexonParamsComponent
@@ -33,7 +33,7 @@ class ImportersFreqTest extends FunSuite with Matchers {
         def key = "elexonkey"
       }
     }
-    object App extends ImportersComponent
+    object App extends ElectricImportersComponent
         with DbMemoryComponent
         with DownloaderFakeComponent
         with InlineElexonParamsComponent
@@ -45,7 +45,7 @@ class ImportersFreqTest extends FunSuite with Matchers {
         -> ElexonResponses.freqError_BadFormat
     )
 
-    val dbioAction = App.importers.importFreq(
+    val dbioAction = App.electricImporters.importFreq(
       LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 0, 5, 0))
     val f = App.db.db.run(dbioAction.transactionally)
     an [ImportException] should be thrownBy Await.result(f, 1.second.toConcurrent)
@@ -64,7 +64,7 @@ class ImportersFreqTest extends FunSuite with Matchers {
     val toDateTime = LocalDateTime.of(2015, 12, 1, 0, 5, 0)
     val actions =
       App.db.createTables >>
-      App.importers.importFreq(fromDateTime, toDateTime) >>
+      App.electricImporters.importFreq(fromDateTime, toDateTime) >>
       (App.db.rawDatas.result zip App.db.rawProgresses.result)
 
     val f = App.db.db.run(actions.transactionally)

@@ -15,18 +15,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class ImportersFuelInstTest extends FunSuite with Matchers {
 
-  test("error import") {
-    trait InlineElexonParamsComponent extends ElexonParamsComponent {
-      def elexonParams = InlineElexonParams
-      object InlineElexonParams extends ElexonParams {
-        def key = "elexonkey"
-      }
+  trait InlineElexonParamsComponent extends ElexonParamsComponent {
+    def elexonParams = InlineElexonParams
+    object InlineElexonParams extends ElexonParams {
+      def key = "elexonkey"
     }
-    object App extends ImportersComponent
-        with DbMemoryComponent
-        with DownloaderFakeComponent
-        with InlineElexonParamsComponent
+  }
+  trait AppTemplate extends ElectricImportersComponent
+      with DbMemoryComponent
+      with DownloaderFakeComponent
+      with InlineElexonParamsComponent
 
+  test("error import") {
+    object App extends AppTemplate
     import App.db.driver.api._
 
     App.downloader.content = Map(
@@ -34,24 +35,14 @@ class ImportersFuelInstTest extends FunSuite with Matchers {
         -> ElexonResponses.fuelInstError_BadFormat
     )
 
-    val dbioAction = App.importers.importFuelInst(
+    val dbioAction = App.electricImporters.importFuelInst(
       LocalDateTime.of(2015, 12, 1, 0, 0, 0), LocalDateTime.of(2015, 12, 1, 1, 0, 0))
     val f = App.db.db.run(dbioAction.transactionally)
     an [ImportException] should be thrownBy Await.result(f, 1.second.toConcurrent)
   }
 
   test("good import") {
-    trait InlineElexonParamsComponent extends ElexonParamsComponent {
-      def elexonParams = InlineElexonParams
-      object InlineElexonParams extends ElexonParams {
-        def key = "elexonkey"
-      }
-    }
-    object App extends ImportersComponent
-        with DbMemoryComponent
-        with DownloaderFakeComponent
-        with InlineElexonParamsComponent
-
+    object App extends AppTemplate
     import App.db.driver.api._
 
     App.downloader.content = Map(
@@ -64,7 +55,7 @@ class ImportersFuelInstTest extends FunSuite with Matchers {
 
     val actions =
       App.db.createTables >>
-      App.importers.importFuelInst(fromDateTime, toDateTime) >>
+      App.electricImporters.importFuelInst(fromDateTime, toDateTime) >>
       (App.db.rawDatas.result zip App.db.rawProgresses.result)
     val f = App.db.db.run(actions.transactionally)
     val (rawDatas, rawProgresses) = Await.result(f, 5.second.toConcurrent)

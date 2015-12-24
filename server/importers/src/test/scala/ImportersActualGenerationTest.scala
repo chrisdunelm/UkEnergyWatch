@@ -15,18 +15,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class ImportersActualGenerationTest extends FunSuite with Matchers {
 
-  test("bad key") {
-    trait InlineElexonParamsComponent extends ElexonParamsComponent {
-      def elexonParams = InlineElexonParams
-      object InlineElexonParams extends ElexonParams {
-        def key = "elexonkey"
-      }
+  trait InlineElexonParamsComponent extends ElexonParamsComponent {
+    def elexonParams = InlineElexonParams
+    object InlineElexonParams extends ElexonParams {
+      def key = "elexonkey"
     }
-    object App extends ImportersComponent
-        with DbMemoryComponent
-        with DownloaderFakeComponent
-        with InlineElexonParamsComponent
+  }
+  trait AppTemplate extends ElectricImportersComponent
+      with DbMemoryComponent
+      with DownloaderFakeComponent
+      with InlineElexonParamsComponent
 
+  test("bad key") {
+    object App extends AppTemplate
     import App.db.driver.api._
 
     App.downloader.content = Map(
@@ -34,23 +35,13 @@ class ImportersActualGenerationTest extends FunSuite with Matchers {
         -> ElexonResponses.b1610Error_BadKey
     )
 
-    val dbioAction = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
+    val dbioAction = App.electricImporters.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
     val f = App.db.db.run(dbioAction.transactionally)
     an [ImportException] should be thrownBy Await.result(f, 1.second.toConcurrent)
   }
 
   test("good import") {
-    trait InlineElexonParamsComponent extends ElexonParamsComponent {
-      def elexonParams = InlineElexonParams
-      object InlineElexonParams extends ElexonParams {
-        def key = "elexonkey"
-      }
-    }
-    object App extends ImportersComponent
-        with DbMemoryComponent
-        with DownloaderFakeComponent
-        with InlineElexonParamsComponent
-
+    object App extends AppTemplate
     import App.db.driver.api._
     val createTablesAction = App.db.createTables
 
@@ -59,7 +50,7 @@ class ImportersActualGenerationTest extends FunSuite with Matchers {
         -> ElexonResponses.b1610Ok_20151201_1
     )
 
-    val importAction = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
+    val importAction = App.electricImporters.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
 
     val getDataAction = App.db.rawDatas.result zip App.db.rawProgresses.result
 
@@ -87,17 +78,7 @@ class ImportersActualGenerationTest extends FunSuite with Matchers {
   }
 
   test("multiple file good import") {
-    trait InlineElexonParamsComponent extends ElexonParamsComponent {
-      def elexonParams = InlineElexonParams
-      object InlineElexonParams extends ElexonParams {
-        def key = "elexonkey"
-      }
-    }
-    object App extends ImportersComponent
-        with DbMemoryComponent
-        with DownloaderFakeComponent
-        with InlineElexonParamsComponent
-
+    object App extends AppTemplate
     import App.db.driver.api._
     val createTablesAction = App.db.createTables
 
@@ -108,8 +89,8 @@ class ImportersActualGenerationTest extends FunSuite with Matchers {
         -> ElexonResponses.b1610Ok_20151201_2
     )
 
-    val importAction1 = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
-    val importAction2 = App.importers.importActualGeneration(LocalDate.of(2015, 12, 1), 2)
+    val importAction1 = App.electricImporters.importActualGeneration(LocalDate.of(2015, 12, 1), 1)
+    val importAction2 = App.electricImporters.importActualGeneration(LocalDate.of(2015, 12, 1), 2)
 
     val actions = createTablesAction >> importAction1 >> importAction2 >>
       (App.db.rawDatas.result zip App.db.rawProgresses.result)

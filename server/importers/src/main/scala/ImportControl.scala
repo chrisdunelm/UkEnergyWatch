@@ -12,7 +12,7 @@ import org.ukenergywatch.data.{ FuelType, Region }
 import slick.dbio.DBIOAction
 
 trait ImportControlComponent {
-  this: DbComponent with DataComponent with ImportersComponent with ClockComponent =>
+  this: DbComponent with DataComponent with ElectricImportersComponent with ClockComponent =>
 
   lazy val importControl = new ImportControl
 
@@ -39,7 +39,7 @@ trait ImportControlComponent {
             // Import most recent data that isn't already imported
             assert((range.to - range.from) >= 30.minutes)
             val settlement = (range.to - 30.minutes).settlement
-            importers.importActualGeneration(settlement.date, settlement.period)
+            electricImporters.importActualGeneration(settlement.date, settlement.period)
           case None =>
             // Nothing currently to import. Do nothing
             DBIOAction.successful(())
@@ -65,7 +65,7 @@ trait ImportControlComponent {
             assert((range.to - range.from) >= 5.minutes)
             val toTime = range.to
             val fromTime = Seq(range.from, range.to - 24.hours).max + 1.second
-            importers.importFuelInst(fromTime.toLocalDateTimeUtc, toTime.toLocalDateTimeUtc)
+            electricImporters.importFuelInst(fromTime.toLocalDateTimeUtc, toTime.toLocalDateTimeUtc)
           case None =>
             // Nothing currently available to import. Do nothing
             DBIOAction.successful(())

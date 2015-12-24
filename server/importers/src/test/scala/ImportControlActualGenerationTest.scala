@@ -22,7 +22,7 @@ class ImportControlActualGenerationTest extends FunSuite with Matchers {
       with ClockFakeComponent
       with DbPersistentMemoryComponent
       with DataComponent
-      with ImportersComponent
+      with ElectricImportersComponent
       with InlineElexonParamsComponent
       with DownloaderFakeComponent
 
