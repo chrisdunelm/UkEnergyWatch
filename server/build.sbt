@@ -60,10 +60,15 @@ lazy val data = (project in file("data"))
   .dependsOn(db)
   .dependsOn(utils)
  */
+import ScalaxbKeys._
 lazy val importers = (project in file("importers"))
   .settings(commonSettings: _*)
   .settings(
     name := "importers"
+  )
+  .settings(scalaxbSettings: _*)
+  .settings(
+    sourceGenerators in Compile += (scalaxb in Compile).taskValue
   )
   .dependsOn(data)
   .dependsOn(db)
