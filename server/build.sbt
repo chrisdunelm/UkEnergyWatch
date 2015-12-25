@@ -49,26 +49,24 @@ lazy val data = (project in file("data"))
   .dependsOn(db)
   .dependsOn(utils)
 
-/*lazy val importer = (project in file("importer"))
-  .settings(commonSettings: _*)
-  .settings(
-    name := "importer",
-    libraryDependencies ++= Seq(
-      "com.github.scopt" %% "scopt" % "3.3.0"
-    )
-  )
-  .dependsOn(db)
-  .dependsOn(utils)
- */
 import ScalaxbKeys._
 lazy val importers = (project in file("importers"))
   .settings(commonSettings: _*)
   .settings(
-    name := "importers"
+    name := "importers",
+    libraryDependencies ++= Seq(
+      "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
+      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1",
+      "net.databinder.dispatch" %% "dispatch-core" % "0.11.2"
+    )
   )
   .settings(scalaxbSettings: _*)
   .settings(
-    sourceGenerators in Compile += (scalaxb in Compile).taskValue
+    sourceGenerators in Compile += (scalaxb in Compile).taskValue,
+    dispatchVersion in (Compile, scalaxb) := "0.11.2",
+    ScalaxbKeys.packageName in (Compile, scalaxb) := "InstantaneousFlowWebService",
+    async in (Compile, scalaxb) := true
+    //logLevel in (Compile, scalaxb) := Level.Debug
   )
   .dependsOn(data)
   .dependsOn(db)

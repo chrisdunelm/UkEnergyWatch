@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.NationalGrid.com/EDP/UI/" xmlns:s1="http://www.NationalGrid.com/EDP/BusinessEntities/Public" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.NationalGrid.com/EDP/UI/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.NationalGrid.com/EDP/UI/">
+      <s:import namespace="http://www.NationalGrid.com/EDP/BusinessEntities/Public" />
+      <s:element name="GetInstantaneousFlowData">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetInstantaneousFlowDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetInstantaneousFlowDataResult" type="s1:EDPReportBE" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLatestPublicationTime">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetLatestPublicationTimeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetLatestPublicationTimeResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.NationalGrid.com/EDP/BusinessEntities/Public">
+      <s:complexType name="EDPReportBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ReportName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PublishedTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="EDPReportPage" type="s1:EDPReportPageBE" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="EDPReportPageBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PageName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CurrentGasDay" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="EDPEnergyGraphTableCollection" type="s1:ArrayOfEDPEnergyGraphTableBE" />
+          <s:element minOccurs="0" maxOccurs="1" name="NoteCollection" type="s1:ArrayOfEDPNoteBE" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfEDPEnergyGraphTableBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="EDPEnergyGraphTableBE" nillable="true" type="s1:EDPEnergyGraphTableBE" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="EDPEnergyGraphTableBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="EDPEnergyGraphTableName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ItemPosition" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="EDPObjectCollection" type="s1:ArrayOfEDPObjectBE" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfEDPObjectBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="EDPObjectBE" nillable="true" type="s1:EDPObjectBE" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="EDPObjectBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="EDPObjectName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EDPObjectType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EDPObjectID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EnergyDataList" type="s1:ArrayOfEDPEnergyDataBE" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfEDPEnergyDataBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="EDPEnergyDataBE" nillable="true" type="s1:EDPEnergyDataBE" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="EDPEnergyDataBE">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ApplicableAt" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="FlowRate" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="QualityIndicator" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AmendedTimeStamp" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ScheduleTime" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfEDPNoteBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="EDPNoteBE" nillable="true" type="s1:EDPNoteBE" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="EDPNoteBE">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="NoteText" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="StartDate" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetInstantaneousFlowDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetInstantaneousFlowData" />
+  </wsdl:message>
+  <wsdl:message name="GetInstantaneousFlowDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetInstantaneousFlowDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLatestPublicationTimeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLatestPublicationTime" />
+  </wsdl:message>
+  <wsdl:message name="GetLatestPublicationTimeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLatestPublicationTimeResponse" />
+  </wsdl:message>
+  <wsdl:portType name="InstantaneousFlowWebServiceSoap">
+    <wsdl:operation name="GetInstantaneousFlowData">
+      <wsdl:input message="tns:GetInstantaneousFlowDataSoapIn" />
+      <wsdl:output message="tns:GetInstantaneousFlowDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLatestPublicationTime">
+      <wsdl:input message="tns:GetLatestPublicationTimeSoapIn" />
+      <wsdl:output message="tns:GetLatestPublicationTimeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InstantaneousFlowWebServiceSoap" type="tns:InstantaneousFlowWebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetInstantaneousFlowData">
+      <soap:operation soapAction="http://www.NationalGrid.com/EDP/UI/GetInstantaneousFlowData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLatestPublicationTime">
+      <soap:operation soapAction="http://www.NationalGrid.com/EDP/UI/GetLatestPublicationTime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="InstantaneousFlowWebServiceSoap12" type="tns:InstantaneousFlowWebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetInstantaneousFlowData">
+      <soap12:operation soapAction="http://www.NationalGrid.com/EDP/UI/GetInstantaneousFlowData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLatestPublicationTime">
+      <soap12:operation soapAction="http://www.NationalGrid.com/EDP/UI/GetLatestPublicationTime" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InstantaneousFlowWebService">
+    <wsdl:port name="InstantaneousFlowWebServiceSoap" binding="tns:InstantaneousFlowWebServiceSoap">
+      <soap:address location="http://energywatch.natgrid.co.uk/EDP-PublicUI/PublicPI/InstantaneousFlowWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="InstantaneousFlowWebServiceSoap12" binding="tns:InstantaneousFlowWebServiceSoap12">
+      <soap12:address location="http://energywatch.natgrid.co.uk/EDP-PublicUI/PublicPI/InstantaneousFlowWebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
