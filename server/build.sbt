@@ -37,7 +37,10 @@ lazy val utils = (project in file("utils"))
 lazy val db = (project in file("db"))
   .settings(commonSettings: _*)
   .settings(
-    name := "db"
+    name := "db",
+    libraryDependencies ++= Seq(
+      "mysql" % "mysql-connector-java" % "5.1.37"
+    )
   )
   .dependsOn(utils)
 
