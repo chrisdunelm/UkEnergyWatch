@@ -30,6 +30,7 @@ lazy val utils = (project in file("utils"))
   .settings(
     name := "utils",
     libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % "2.11.7",
       "net.databinder.dispatch" %% "dispatch-core" % "0.11.2"
     )
   )
