@@ -5,70 +5,116 @@ import org.scalatest._
 class FlagsBaseTest extends FunSuite with Matchers {
 
   test("String flag") {
-    object Flags extends FlagsBase {
-      val ss = flag[String](name = "ss")
+    trait AppComponent { this: FlagsBaseComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val ss = flag[String](name = "ss")
+        }
+      }
+      app.Flags
     }
-    Flags.parse("--ss=ssss".split(' '))
-    Flags.ss() shouldBe "ssss"
+    object App extends AppComponent with FlagsBaseComponent
+    App.flags.parse("--ss=ssss".split(' '))
+    App.app.Flags.ss() shouldBe "ssss"
   }
 
   test("Int flag") {
-    object Flags extends FlagsBase {
-      val ii = flag[Int](name = "ii")
+    trait AppComponent { this: FlagsBaseComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val ii = flag[Int](name = "ii")
+        }
+      }
+      app.Flags
     }
-    Flags.parse("--ii=1234".split(' '))
-    Flags.ii() shouldBe 1234
+    object App extends AppComponent with FlagsBaseComponent
+    App.flags.parse("--ii=1234".split(' '))
+    App.app.Flags.ii() shouldBe 1234
   }
 
   test("Double flag") {
-    object Flags extends FlagsBase {
-      val dd = flag[Double](name = "dd")
+    trait AppComponent { this: FlagsBaseComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val dd = flag[Double](name = "dd")
+        }
+      }
+      app.Flags
     }
-    Flags.parse("--dd 1.234".split(' '))
-    Flags.dd() shouldBe 1.234 +- 1e-10
+    object App extends AppComponent with FlagsBaseComponent
+    App.flags.parse("--dd 1.234".split(' '))
+    App.app.Flags.dd() shouldBe 1.234 +- 1e-10
   }
 
   test("Parse longname with value") {
-    class Flags extends FlagsBase {
-      val aa = flag[String](name = "aa")
-      val bb = flag[String](name = "bb")
-      def all: (String, String) = (aa(), bb())
+    trait AppComponent { this: FlagsBaseComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val aa = flag[String](name = "aa")
+          val bb = flag[String](name = "bb")
+        }
+      }
+      app.Flags
     }
-    def f(args: String): Flags = {
-      val flags = new Flags
-      flags.parse(args.split(' '))
-      flags
+    def f(args: String): (String, String) = {
+      object App extends AppComponent with FlagsBaseComponent
+      App.flags.parse(args.split(' '))
+      (App.app.Flags.aa(), App.app.Flags.bb())
     }
-    f("--aa=a --bb=b").all shouldBe ("a", "b")
-    f("--aa a --bb b").all shouldBe ("a", "b")
-    f("--aa a --bb=b").all shouldBe ("a", "b")
-    f("--aa=a --bb b").all shouldBe ("a", "b")
+    f("--aa=a --bb=b") shouldBe ("a", "b")
+    f("--aa a --bb b") shouldBe ("a", "b")
+    f("--aa a --bb=b") shouldBe ("a", "b")
+    f("--aa=a --bb b") shouldBe ("a", "b")
   }
 
   test("Fail to parse if non-default flag not given") {
-    object Flags extends FlagsBase {
-      val ss = flag[String](name = "ss")
+    trait AppComponent { this: FlagsBaseComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val ss = flag[String](name = "ss")
+        }
+      }
+      app.Flags
     }
-    a [FlagsException] should be thrownBy Flags.parse(Seq.empty)
+    object App extends AppComponent with FlagsBaseComponent
+    a [FlagsException] should be thrownBy App.flags.parse(Seq.empty)
   }
 
   test("Accept default value") {
-    object Flags extends FlagsBase {
-      val ss = flag[String](name = "ss", defaultValue = "def")
+    trait AppComponent { this: FlagsBaseComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val ss = flag[String](name = "ss", defaultValue = "def")
+        }
+      }
+      app.Flags
     }
-    Flags.parse(Seq.empty)
-    Flags.ss() shouldBe "def"
+    object App extends AppComponent with FlagsBaseComponent
+    App.flags.parse(Seq.empty)
+    App.app.Flags.ss() shouldBe "def"
   }
 
   test("Multiple flag objects") {
-    object Flags1 extends FlagsBase {
-      val ss = flag[String](name = "ss")
+    trait App1Component { this: FlagsBaseComponent =>
+      object app1 {
+        object Flags extends FlagsBase {
+          val ss1 = flag[String](name = "ss1")
+        }
+      }
+      app1.Flags
     }
-    object Flags2 extends FlagsBase {
-      register(Flags1)
+    trait App2Component { this: FlagsBaseComponent =>
+      object app2 {
+        object Flags extends FlagsBase {
+          val ss2 = flag[String](name = "ss2")
+        }
+      }
+      app2.Flags
     }
-    Flags2.parse("--ss xyz".split(' '))
-    Flags1.ss() shouldBe "xyz"
+    object App extends App1Component with App2Component with FlagsBaseComponent
+    App.flags.parse("--ss1 abc --ss2=xyz".split(' '))
+    App.app1.Flags.ss1() shouldBe "abc"
+    App.app2.Flags.ss2() shouldBe "xyz"
   }
 
 }
