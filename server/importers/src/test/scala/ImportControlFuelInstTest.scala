@@ -1,6 +1,7 @@
 package org.ukenergywatch.importers
 
-import org.ukenergywatch.utils.{ ClockFakeComponent, ElexonParamsComponent, DownloaderFakeComponent }
+import org.ukenergywatch.utils.{ ClockFakeComponent, ElexonParamsComponent,
+  DownloaderFakeComponent, LogMemoryComponent }
 import org.ukenergywatch.db.DbPersistentMemoryComponent
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.utils.JavaTimeExtensions._
@@ -23,6 +24,7 @@ class ImportControlFuelInstTest extends FunSuite with Matchers {
       with ElectricImportersComponent
       with InlineElexonParamsComponent
       with DownloaderFakeComponent
+      with LogMemoryComponent
 
   test("No existing data, 2 successful imports, in time order") {
     object App extends AppTemplate

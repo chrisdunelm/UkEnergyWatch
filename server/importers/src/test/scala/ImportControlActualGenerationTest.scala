@@ -1,6 +1,7 @@
 package org.ukenergywatch.importers
 
-import org.ukenergywatch.utils.{ ClockFakeComponent, ElexonParamsComponent, DownloaderFakeComponent }
+import org.ukenergywatch.utils.{ ClockFakeComponent, ElexonParamsComponent,
+  DownloaderFakeComponent, LogMemoryComponent }
 import org.ukenergywatch.db.DbPersistentMemoryComponent
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.db.{ RawDataType, RawData, DbTime, RawProgress, AggregateProgress }
@@ -25,6 +26,7 @@ class ImportControlActualGenerationTest extends FunSuite with Matchers {
       with ElectricImportersComponent
       with InlineElexonParamsComponent
       with DownloaderFakeComponent
+      with LogMemoryComponent
 
   test("No existing data, 2 successful imports, in time order") {
     object App extends AppTemplate
@@ -45,6 +47,10 @@ class ImportControlActualGenerationTest extends FunSuite with Matchers {
     // Perform second import
     App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 1, 5, 0).toInstantUtc
     App.importControl.actualGeneration(5.seconds)
+
+    // Check log
+    App.log.msgs.count(_.contains("ImportControl: actualGeneration starting")) shouldBe 2
+    App.log.msgs.count(_.contains("ImportControl: actualGeneration complete")) shouldBe 2
 
     // Check import raw data
     val qRaw = App.db.rawDatas.search(

@@ -15,11 +15,13 @@ trait DownloaderComponent {
 }
 
 trait DownloaderRealComponent extends DownloaderComponent {
+  this: LogComponent =>
 
   lazy val downloader = new DownloaderReal
 
   class DownloaderReal extends Downloader {
     def get(getUrl: String)(implicit ec: ExecutionContext): Future[Array[Byte]] = {
+      log.info(s"Downloader: get '$getUrl'")
       Http(url(getUrl) OK as.Bytes)
     }
   }
@@ -27,6 +29,7 @@ trait DownloaderRealComponent extends DownloaderComponent {
 }
 
 trait DownloaderFakeComponent extends DownloaderComponent {
+  this: LogComponent =>
 
   lazy val downloader = new DownloaderFake
 
@@ -42,6 +45,7 @@ trait DownloaderFakeComponent extends DownloaderComponent {
     }
 
     def get(url: String)(implicit ec: ExecutionContext): Future[Array[Byte]] = {
+      log.info(s"FakeDownloader: get '$url'")
       content.get(url) match {
         case Some(data) => Future.successful(data)
         case None =>

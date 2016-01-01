@@ -148,13 +148,13 @@ trait OldFuelTypeComponent {
   def init(elexonKey: String, instantDownload: Boolean, runForever: Boolean): Unit = {
 
     def onTimer(n: Int): ReAction = {
-      println("fetching data from elexonportal...")
+      //println("fetching data from elexonportal...")
       val url = s"https://downloads.elexonportal.co.uk/fuel/download/latest?key=$elexonKey"
       val download = downloader.get(url)
       Await.ready(download, 30.seconds.toConcurrent)
       download.value match {
         case Some(Success(bytes)) =>
-          println("Got data successfully")
+          //println("Got data successfully")
           handleDownload(bytes.toStringUtf8)
         case _ =>
           println("ERROR downloading")
@@ -217,7 +217,7 @@ trait OldFuelTypeComponent {
           DBIO.successful(())
         } else {
           // Insert into database
-          println(s"Inserting ${toInsert.size} rows into database")
+          //println(s"Inserting ${toInsert.size} rows into database")
           db.generationByFuelTypes ++= toInsert
         }
       }
@@ -264,6 +264,7 @@ object OldFuelType {
         //with DownloaderFakeComponent
         with DownloaderRealComponent
         with ClockRealtimeComponent
+        with LogMemoryComponent
 
     //App.downloader.content = Map(
     //  s"https://downloads.elexonportal.co.uk/fuel/download/latest?key=$elexonKey" ->

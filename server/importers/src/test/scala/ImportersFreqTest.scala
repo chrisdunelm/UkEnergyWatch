@@ -1,8 +1,8 @@
 package org.ukenergywatch.importers
 
 import org.scalatest._
-import org.ukenergywatch.utils.DownloaderFakeComponent
-import org.ukenergywatch.utils.ElexonParamsComponent
+import org.ukenergywatch.utils.{ DownloaderFakeComponent, ElexonParamsComponent,
+  LogMemoryComponent, ClockFakeComponent }
 import org.ukenergywatch.db.DbMemoryComponent
 import java.time.LocalDateTime
 import org.ukenergywatch.utils.StringExtensions._
@@ -21,23 +21,15 @@ class ImportersFreqTest extends FunSuite with Matchers {
       def key = "elexonkey"
     }
   }
-  trait AppComp extends ElectricImportersComponent
+  trait AppTemplate extends ElectricImportersComponent
       with DbMemoryComponent
       with DownloaderFakeComponent
       with InlineElexonParamsComponent
+      with LogMemoryComponent
+      with ClockFakeComponent
 
   test("error import") {
-    trait InlineElexonParamsComponent extends ElexonParamsComponent {
-      def elexonParams = InlineElexonParams
-      object InlineElexonParams extends ElexonParams {
-        def key = "elexonkey"
-      }
-    }
-    object App extends ElectricImportersComponent
-        with DbMemoryComponent
-        with DownloaderFakeComponent
-        with InlineElexonParamsComponent
-
+    object App extends AppTemplate
     import App.db.driver.api._
 
     App.downloader.content = Map(
@@ -52,7 +44,7 @@ class ImportersFreqTest extends FunSuite with Matchers {
   }
 
   test("good import") {
-    object App extends AppComp
+    object App extends AppTemplate
     import App.db.driver.api._
 
     App.downloader.content = Map(

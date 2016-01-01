@@ -39,7 +39,8 @@ trait LogMemoryComponent extends LogComponent {
   object log extends Log {
     var msgs: Vector[String] = Vector.empty
     def finalLog(msg: String): Unit = {
-      msgs = msgs :+ msg
+      val curMsgs = if (msgs.size > 100) msgs.drop(1) else msgs
+      msgs = curMsgs :+ msg
     }
   }
 }

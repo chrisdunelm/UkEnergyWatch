@@ -13,14 +13,14 @@ class DownloaderTest extends FunSuite with Matchers {
   def await[T](f: Future[T]): T = Await.result(f, 1.second.toConcurrent)
 
   test("Fake downloader works") {
-    object Components extends DownloaderFakeComponent
-    val dl = Components.downloader
+    object App extends DownloaderFakeComponent with LogMemoryComponent with ClockFakeComponent
 
-    dl.setStrings(Map("a" -> "test_a", "b" -> "test_b"))
+    App.downloader.setStrings(Map("a" -> "test_a", "b" -> "test_b"))
 
-    await(dl.get("a")).toStringUtf8 shouldBe "test_a"
-    await(dl.get("b")).toStringUtf8 shouldBe "test_b"
-    an [Exception] should be thrownBy await(dl.get("c"))
+    await(App.downloader.get("a")).toStringUtf8 shouldBe "test_a"
+    await(App.downloader.get("b")).toStringUtf8 shouldBe "test_b"
+    an [Exception] should be thrownBy await(App.downloader.get("c"))
+    App.log.msgs.count(_.contains("Downloader:")) shouldBe 3
   }
 
 }

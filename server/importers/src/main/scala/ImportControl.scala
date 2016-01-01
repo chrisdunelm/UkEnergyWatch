@@ -1,6 +1,6 @@
 package org.ukenergywatch.importers
 
-import org.ukenergywatch.utils.ClockComponent
+import org.ukenergywatch.utils.{ ClockComponent, LogComponent }
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.db.DbComponent
 import java.time.{ LocalDate, Instant, Duration }
@@ -12,7 +12,7 @@ import org.ukenergywatch.data.{ FuelType, Region }
 import slick.dbio.DBIOAction
 
 trait ImportControlComponent {
-  this: DbComponent with DataComponent with ElectricImportersComponent with ClockComponent =>
+  this: DbComponent with DataComponent with ElectricImportersComponent with ClockComponent with LogComponent =>
 
   lazy val importControl = new ImportControl
 
@@ -45,7 +45,9 @@ trait ImportControlComponent {
             DBIOAction.successful(())
         }
       }.transactionally
+      log.info("ImportControl: actualGeneration starting")
       db.executeAndWait(qImport, timeout)
+      log.info("ImportControl: actualGeneration complete")
     }
 
     // Import some data.
@@ -71,7 +73,9 @@ trait ImportControlComponent {
             DBIOAction.successful(())
         }
       }
+      log.info("ImportControl: fuelInst starting")
       db.executeAndWait(qImport.transactionally, timeout)
+      log.info("ImportControl: fuelInst complete")
     }
 
     def freq()(implicit ec: ExecutionContext): Unit = {

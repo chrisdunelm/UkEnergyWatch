@@ -18,6 +18,7 @@ class OldFuelTypeTest extends FunSuite with Matchers {
         with SchedulerFakeComponent
         with DownloaderFakeComponent
         with ClockFakeComponent
+        with LogMemoryComponent
     import App.db.driver.api._
 
     App.db.db.run(App.db.generationByFuelTypes.schema.create)
