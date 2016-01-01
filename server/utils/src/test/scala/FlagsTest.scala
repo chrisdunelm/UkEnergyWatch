@@ -2,10 +2,10 @@ package org.ukenergywatch.utils
 
 import org.scalatest._
 
-class FlagsBaseTest extends FunSuite with Matchers {
+class FlagsTest extends FunSuite with Matchers {
 
   test("String flag") {
-    trait AppComponent { this: FlagsBaseComponent =>
+    trait AppComponent { this: FlagsComponent =>
       object app {
         object Flags extends FlagsBase {
           val ss = flag[String](name = "ss")
@@ -13,13 +13,13 @@ class FlagsBaseTest extends FunSuite with Matchers {
       }
       app.Flags
     }
-    object App extends AppComponent with FlagsBaseComponent
+    object App extends AppComponent with FlagsComponent
     App.flags.parse("--ss=ssss".split(' '))
     App.app.Flags.ss() shouldBe "ssss"
   }
 
   test("Int flag") {
-    trait AppComponent { this: FlagsBaseComponent =>
+    trait AppComponent { this: FlagsComponent =>
       object app {
         object Flags extends FlagsBase {
           val ii = flag[Int](name = "ii")
@@ -27,13 +27,13 @@ class FlagsBaseTest extends FunSuite with Matchers {
       }
       app.Flags
     }
-    object App extends AppComponent with FlagsBaseComponent
+    object App extends AppComponent with FlagsComponent
     App.flags.parse("--ii=1234".split(' '))
     App.app.Flags.ii() shouldBe 1234
   }
 
   test("Double flag") {
-    trait AppComponent { this: FlagsBaseComponent =>
+    trait AppComponent { this: FlagsComponent =>
       object app {
         object Flags extends FlagsBase {
           val dd = flag[Double](name = "dd")
@@ -41,13 +41,13 @@ class FlagsBaseTest extends FunSuite with Matchers {
       }
       app.Flags
     }
-    object App extends AppComponent with FlagsBaseComponent
+    object App extends AppComponent with FlagsComponent
     App.flags.parse("--dd 1.234".split(' '))
     App.app.Flags.dd() shouldBe 1.234 +- 1e-10
   }
 
   test("Parse longname with value") {
-    trait AppComponent { this: FlagsBaseComponent =>
+    trait AppComponent { this: FlagsComponent =>
       object app {
         object Flags extends FlagsBase {
           val aa = flag[String](name = "aa")
@@ -57,7 +57,7 @@ class FlagsBaseTest extends FunSuite with Matchers {
       app.Flags
     }
     def f(args: String): (String, String) = {
-      object App extends AppComponent with FlagsBaseComponent
+      object App extends AppComponent with FlagsComponent
       App.flags.parse(args.split(' '))
       (App.app.Flags.aa(), App.app.Flags.bb())
     }
@@ -68,7 +68,7 @@ class FlagsBaseTest extends FunSuite with Matchers {
   }
 
   test("Fail to parse if non-default flag not given") {
-    trait AppComponent { this: FlagsBaseComponent =>
+    trait AppComponent { this: FlagsComponent =>
       object app {
         object Flags extends FlagsBase {
           val ss = flag[String](name = "ss")
@@ -76,12 +76,12 @@ class FlagsBaseTest extends FunSuite with Matchers {
       }
       app.Flags
     }
-    object App extends AppComponent with FlagsBaseComponent
+    object App extends AppComponent with FlagsComponent
     a [FlagsException] should be thrownBy App.flags.parse(Seq.empty)
   }
 
   test("Accept default value") {
-    trait AppComponent { this: FlagsBaseComponent =>
+    trait AppComponent { this: FlagsComponent =>
       object app {
         object Flags extends FlagsBase {
           val ss = flag[String](name = "ss", defaultValue = "def")
@@ -89,13 +89,13 @@ class FlagsBaseTest extends FunSuite with Matchers {
       }
       app.Flags
     }
-    object App extends AppComponent with FlagsBaseComponent
+    object App extends AppComponent with FlagsComponent
     App.flags.parse(Seq.empty)
     App.app.Flags.ss() shouldBe "def"
   }
 
   test("Multiple flag objects") {
-    trait App1Component { this: FlagsBaseComponent =>
+    trait App1Component { this: FlagsComponent =>
       object app1 {
         object Flags extends FlagsBase {
           val ss1 = flag[String](name = "ss1")
@@ -103,7 +103,7 @@ class FlagsBaseTest extends FunSuite with Matchers {
       }
       app1.Flags
     }
-    trait App2Component { this: FlagsBaseComponent =>
+    trait App2Component { this: FlagsComponent =>
       object app2 {
         object Flags extends FlagsBase {
           val ss2 = flag[String](name = "ss2")
@@ -111,7 +111,7 @@ class FlagsBaseTest extends FunSuite with Matchers {
       }
       app2.Flags
     }
-    object App extends App1Component with App2Component with FlagsBaseComponent
+    object App extends App1Component with App2Component with FlagsComponent
     App.flags.parse("--ss1 abc --ss2=xyz".split(' '))
     App.app1.Flags.ss1() shouldBe "abc"
     App.app2.Flags.ss2() shouldBe "xyz"
