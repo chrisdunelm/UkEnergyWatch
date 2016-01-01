@@ -110,6 +110,7 @@ object JavaTimeExtensions {
 
   implicit class RichDouble(val d: Double) extends AnyVal {
     def seconds: Duration = Duration.ofNanos((d * 1e9).toLong)
+    def minutes: Duration = (d * 60.0).seconds
   }
 
   // 2015-12-01

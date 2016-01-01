@@ -1,6 +1,6 @@
 package org.ukenergywatch.utils
 
-import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit, Callable}
+import java.util.concurrent.{ Executors, ScheduledExecutorService, TimeUnit, Callable, ThreadFactory }
 import org.ukenergywatch.utils.JavaTimeExtensions._
 import java.time.{ Duration, Instant }
 
@@ -60,7 +60,13 @@ trait SchedulerRealtimeComponent extends SchedulerComponent {
   lazy val scheduler = new SchedulerRealtime
 
   class SchedulerRealtime extends Scheduler with SchedulerLogic {
-    val executor = Executors.newSingleThreadScheduledExecutor()
+    val executor = Executors.newSingleThreadScheduledExecutor(new ThreadFactory {
+      override def newThread(r: Runnable): Thread = {
+        val thread = new Thread(r)
+        thread.setDaemon(true)
+        thread
+      }
+    })
     protected def nowUtc(): Instant = clock.nowUtc()
     def schedule(when: Instant)(fn: () => Unit): Unit = {
       val now = clock.nowUtc()
