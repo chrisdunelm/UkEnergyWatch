@@ -61,12 +61,18 @@ trait FlagsComponent {
     private val longNameOnlyRx = """--(\w+)""".r
 
     @tailrec final def parse(args: Seq[String]): Unit = {
+      def find(errorName: String)(pred: Flag[_] => Boolean): Flag[_] = {
+        allFlags.find(pred) match {
+          case Some(flag) => flag
+          case None => throw new FlagsException(s"Passed flag not found: '$errorName'")
+        }
+      }
       args match {
         case Seq(longNameWithValueRx(longName, value), tail @ _*) =>
-          allFlags.find(_.name == longName).get.set(value)
+          find(longName)(_.name == longName).set(value)
           parse(tail)
         case Seq(longNameOnlyRx(longName), value, tail @ _*) =>
-          allFlags.find(_.name == longName).get.set(value)
+          find(longName)(_.name == longName).set(value)
           parse(tail)
         case Seq() =>
           // All done, check all non-default flags are initialised
@@ -76,9 +82,11 @@ trait FlagsComponent {
             throw new FlagsException(s"Uninitialised flags: $flagList")
           }
         case _ =>
-          throw new Exception(s"Cannot understand args part: '$args'")
+          throw new FlagsException(s"Cannot understand args part: '$args'")
       }
     }
+
+    def parse(args: String): Unit = parse(args.split(' '))
 
   }
 
