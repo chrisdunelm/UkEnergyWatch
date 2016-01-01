@@ -72,6 +72,16 @@ lazy val importers = (project in file("importers"))
   .dependsOn(db)
   .dependsOn(utils)
 
+lazy val appimporter = (project in file("appimporter"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "appimporter"
+  )
+  .dependsOn(importers)
+  .dependsOn(data)
+  .dependsOn(db)
+  .dependsOn(utils)
+
 lazy val oldfueltype = (project in file("oldfueltype"))
   .settings(commonSettings: _*)
   .settings(
