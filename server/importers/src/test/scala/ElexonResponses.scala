@@ -18,5 +18,7 @@ object ElexonResponses {
 
   def freqError_BadFormat = get("/freqError_BadFormat.xml")
   def freqOk_20151201_0000_0005 = get("/freqOk_20151201_0000_0005.xml")
+  def freqOk_20151130_230000_20151201_000000 = get("/freqOk_20151130_230000_20151201_000000.xml")
+  def freqOk_20151201_000000_20151201_000200 = get("/freqOk_20151201_000000_20151201_000200.xml")
 
 }

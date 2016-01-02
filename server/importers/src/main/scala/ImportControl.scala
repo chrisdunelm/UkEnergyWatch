@@ -21,6 +21,7 @@ trait ImportControlComponent {
 
     val minActualGeneration = LocalDate.of(2015, 1, 1).toInstant
     val minFuelInst = LocalDate.of(2015, 1, 1).toInstant
+    val minFreq = LocalDate.of(2015, 1, 1).toInstant
 
     // Import some data
     // Call every five minutes, with a ~1 minute offset
@@ -44,9 +45,9 @@ trait ImportControlComponent {
             // Nothing currently to import. Do nothing
             DBIOAction.successful(())
         }
-      }.transactionally
+      }
       log.info("ImportControl: actualGeneration starting")
-      db.executeAndWait(qImport, timeout)
+      db.executeAndWait(qImport.transactionally, timeout)
       log.info("ImportControl: actualGeneration complete")
     }
 
@@ -63,7 +64,7 @@ trait ImportControlComponent {
       val qImport = qMissing.flatMap { missing: Seq[RangeOf[Instant]] =>
         missing.lastOption match {
           case Some(range) =>
-            // Import most recent data this isn't already imported
+            // Import most recent data that isn't already imported
             assert((range.to - range.from) >= 5.minutes)
             val toTime = range.to
             val fromTime = Seq(range.from, range.to - 24.hours).max + 1.second
@@ -78,8 +79,31 @@ trait ImportControlComponent {
       log.info("ImportControl: fuelInst complete")
     }
 
-    def freq()(implicit ec: ExecutionContext): Unit = {
-      ???
+    // Import some data.
+    // Call every 1 minute, with a 15 second offset (???)
+    // Will attempt a now download every 2 minutes, otherwise will get historic data
+    def freq(timeout: Duration)(implicit ec: ExecutionContext): Unit = {
+      val now: Instant = clock.nowUtc()
+
+      val extremes = SimpleRangeOf(minFreq, now.alignTo(2.minutes))
+      val qMissing: DBIO[Seq[RangeOf[Instant]]] =
+        data.missingRawProgress(RawDataType.Electric.frequency, extremes)
+      val qImport = qMissing.flatMap { missing: Seq[RangeOf[Instant]] =>
+        missing.lastOption match {
+          case Some(range) =>
+            // Import most recent data that isn't already imported
+            assert((range.to - range.from) >= 2.minutes)
+            val toTime = range.to
+            val fromTime = Seq(range.from, range.to - 1.hour).max
+            electricImporters.importFreq(fromTime.toLocalDateTimeUtc, toTime.toLocalDateTimeUtc)
+          case None =>
+            // Nothing currently available to import. Do nothing
+            DBIOAction.successful(())
+        }
+      }
+      log.info("ImportControl: freq starting")
+      db.executeAndWait(qImport.transactionally, timeout)
+      log.info("ImportControl: freq complete")
     }
 
   }
