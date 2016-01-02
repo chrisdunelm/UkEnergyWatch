@@ -67,7 +67,7 @@ class ImportersFreqTest extends FunSuite with Matchers {
     )
 
     def freq(secOfs: Int, from: Double, to: Double): RawData = RawData(
-      RawDataType.Electric.frequency, "",
+      RawDataType.Electric.frequency, "uk",
       DbTime(fromDateTime.toInstantUtc + secOfs.seconds),
       DbTime(fromDateTime.toInstantUtc + (secOfs + 15).seconds),
       from, to

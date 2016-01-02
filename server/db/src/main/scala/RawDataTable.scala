@@ -27,7 +27,7 @@ trait RawDataTable extends Mergeable with Searchable {
   class RawDatas(tag: Tag) extends Table[RawData](tag, "rawdata") with MergeableTable with SearchableTable {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def rawDataType = column[RawDataType]("rawDataType")
-    def name = column[String]("name")
+    def name = column[String]("name", O.Length(100))
     def fromTime = column[DbTime]("fromTime")
     def toTime = column[DbTime]("toTime")
     def fromValue = column[Double]("fromValue")

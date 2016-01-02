@@ -4,6 +4,7 @@ lazy val root = (project in file("."))
   .aggregate(db)
   .aggregate(data)
   .aggregate(importers)
+  .aggregate(initmysql)
   .aggregate(appimporter)
   .aggregate(oldfueltype)
 
@@ -74,6 +75,14 @@ lazy val importers = (project in file("importers"))
     //logLevel in (Compile, scalaxb) := Level.Debug
   )
   .dependsOn(data)
+  .dependsOn(db)
+  .dependsOn(utils)
+
+lazy val initmysql = (project in file("initmysql"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "initmysql"
+  )
   .dependsOn(db)
   .dependsOn(utils)
 

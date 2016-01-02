@@ -34,7 +34,7 @@ trait AggregateTable extends Mergeable with Searchable {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def aggregationInterval = column[AggregationInterval]("aggregationInterval")
     def aggregationType = column[AggregationType]("aggregationType")
-    def name = column[String]("name")
+    def name = column[String]("name", O.Length(100))
     def fromTime = column[DbTime]("fromTime")
     def toTime = column[DbTime]("toTime")
     def value = column[Map[AggregationFunction, Double]]("value")

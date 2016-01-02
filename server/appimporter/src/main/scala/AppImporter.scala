@@ -40,7 +40,7 @@ object AppImporter {
 
       def run() {
         // Schedule actual generation import. Every 5 minutes, 1 minute offset
-        scheduler.run(5.minutes, 75.seconds) { retry =>
+        scheduler.run(5.minutes, 78.seconds) { retry =>
           try {
             importControl.actualGeneration(4.minutes)
           } catch {
@@ -49,7 +49,7 @@ object AppImporter {
           ReAction.Success
         }
         // Schedule fuel-inst (generation by fuel type). Every 2.5 minutes, 1 minute offset
-        scheduler.run(2.5.minutes, 61.seconds) { retry =>
+        scheduler.run(2.5.minutes, 66.seconds) { retry =>
           try {
             importControl.fuelInst(2.minutes)
           } catch {

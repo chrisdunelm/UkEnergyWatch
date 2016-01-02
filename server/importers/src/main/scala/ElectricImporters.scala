@@ -148,7 +148,7 @@ trait ElectricImportersComponent {
             }
             RawData(
               rawDataType = RawDataType.Electric.frequency,
-              name = "", // Name not required, there is only one system frequency
+              name = "uk", // Name the same across the whole uk
               fromTime = DbTime(fromTime),
               toTime = DbTime(toTime),
               fromValue = fromFreq,
