@@ -76,7 +76,7 @@ lazy val importers = (project in file("importers"))
   .dependsOn(db)
   .dependsOn(utils)
 
-// Use universal:packageZipTarball form sbt to package into .tgz
+// Use universal:packageZipTarball from sbt to package into .tgz
 lazy val appimporter = (project in file("appimporter"))
   .settings(commonSettings: _*)
   .settings(
@@ -88,6 +88,7 @@ lazy val appimporter = (project in file("appimporter"))
   .dependsOn(db)
   .dependsOn(utils)
 
+// Use universal:packageZipTarball from sbt to package into .tgz
 lazy val oldfueltype = (project in file("oldfueltype"))
   .settings(commonSettings: _*)
   .settings(
