@@ -4,6 +4,7 @@ lazy val root = (project in file("."))
   .aggregate(db)
   .aggregate(data)
   .aggregate(importers)
+  .aggregate(appimporter)
   .aggregate(oldfueltype)
 
 lazy val commonSettings = Seq(
