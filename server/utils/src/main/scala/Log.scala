@@ -1,5 +1,7 @@
 package org.ukenergywatch.utils
 
+import org.ukenergywatch.utils.StringExtensions._
+
 trait LogComponent {
   this: ClockComponent =>
 
@@ -18,17 +20,31 @@ trait LogComponent {
 
     protected def finalLog(msg: String): Unit
 
-    protected def log(level: Level, msg: String): Unit = {
+    protected def log(level: Level, msg: String, ex: Option[Throwable]): Unit = {
       val now = clock.nowUtc()
       val logMsg = s"$now [$level] $msg"
-      finalLog(logMsg)
+      val exMsg = ex match {
+        case Some(ex) =>
+          val baos = new java.io.ByteArrayOutputStream
+          val writer = new java.io.PrintWriter(baos)
+          ex.printStackTrace(writer)
+          writer.flush()
+          writer.close()
+          "\n" + baos.toByteArray.toStringUtf8 +"\n"
+        case None => ""
+      }
+      finalLog(logMsg + exMsg)
     }
 
-    def debug(msg: String): Unit = log(Level.Debug, msg)
-    def info(msg: String): Unit = log(Level.Info, msg)
-    def warn(msg: String): Unit = log(Level.Warn, msg)
-    def error(msg: String): Unit = log(Level.Error, msg)
-    def fatal(msg: String): Unit = log(Level.Fatal, msg)
+    def debug(msg: String): Unit = log(Level.Debug, msg, None)
+    def info(msg: String): Unit = log(Level.Info, msg, None)
+    def warn(msg: String): Unit = log(Level.Warn, msg, None)
+    def error(msg: String): Unit = log(Level.Error, msg, None)
+    def fatal(msg: String): Unit = log(Level.Fatal, msg, None)
+
+    def warn(msg: String, ex: Throwable): Unit = log(Level.Warn, msg, Some(ex))
+    def error(msg: String, ex: Throwable): Unit = log(Level.Error, msg, Some(ex))
+    def fatal(msg: String, ex: Throwable): Unit = log(Level.Fatal, msg, Some(ex))
 
   }
 

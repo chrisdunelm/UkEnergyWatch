@@ -80,24 +80,26 @@ trait ImportControlComponent {
     }
 
     // Import some data.
-    // Call every 1 minute, with a 15 second offset (???)
-    // Will attempt a now download every 2 minutes, otherwise will get historic data
+    // Call every 2.5 minute, with a 1 minute offset (???)
+    // Will attempt a now download every 5 minutes, otherwise will get historic data
     def freq(timeout: Duration)(implicit ec: ExecutionContext): Unit = {
       val now: Instant = clock.nowUtc()
 
-      val extremes = SimpleRangeOf(minFreq, now.alignTo(2.minutes))
+      val extremes = SimpleRangeOf(minFreq, now.alignTo(5.minutes))
       val qMissing: DBIO[Seq[RangeOf[Instant]]] =
         data.missingRawProgress(RawDataType.Electric.frequency, extremes)
       val qImport = qMissing.flatMap { missing: Seq[RangeOf[Instant]] =>
         missing.lastOption match {
           case Some(range) =>
             // Import most recent data that isn't already imported
-            assert((range.to - range.from) >= 2.minutes)
+            //assert((range.to - range.from) >= 5.minutes)
             val toTime = range.to
             val fromTime = Seq(range.from, range.to - 1.hour).max
+            log.info(s"ImportControl: freq $fromTime -> $toTime")
             electricImporters.importFreq(fromTime.toLocalDateTimeUtc, toTime.toLocalDateTimeUtc)
           case None =>
             // Nothing currently available to import. Do nothing
+            log.info("ImportControl: freq <nothing to do>")
             DBIOAction.successful(())
         }
       }

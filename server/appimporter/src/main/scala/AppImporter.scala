@@ -39,12 +39,13 @@ object AppImporter {
       }
 
       def run() {
+        log.info("AppImporter starting")
         // Schedule actual generation import. Every 5 minutes, 1 minute offset
         scheduler.run(5.minutes, 78.seconds) { retry =>
           try {
             importControl.actualGeneration(4.minutes)
           } catch {
-            case t: Throwable => log.error(s"actualGeneration import error: $t")
+            case t: Throwable => log.error(s"actualGeneration import error: $t", t)
           }
           ReAction.Success
         }
@@ -53,19 +54,20 @@ object AppImporter {
           try {
             importControl.fuelInst(2.minutes)
           } catch {
-            case t: Throwable => log.error(s"fuelInst import error: $t")
+            case t: Throwable => log.error(s"fuelInst import error: $t", t)
           }
           ReAction.Success
         }
         // Schedule frequency. Every 1 minutes, 10 second offset
-        scheduler.run(1.minute, 10.seconds) { retry =>
+        scheduler.run(2.5.minutes, 59.seconds) { retry =>
           try {
             importControl.freq(55.seconds)
           } catch {
-            case t: Throwable => log.error(s"frequency import error: $t")
+            case t: Throwable => log.error(s"frequency import error: $t", t)
           }
           ReAction.Success
         }
+        log.info("AppImporter imports scheduled")
       }
     }
 
@@ -85,8 +87,14 @@ object AppImporter {
     App.flags.parse(args)
     App.run()
 
-    println("Press enter to exit...")
-    io.StdIn.readLine()
+    println("Type 'exit' and press enter to exit...")
+    var exit = false
+    while (!exit) {
+      val r = io.StdIn.readLine()
+      if (r == "exit") {
+        exit = true
+      }
+    }
   }
 
 }

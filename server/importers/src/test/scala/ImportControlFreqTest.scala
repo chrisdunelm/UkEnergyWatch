@@ -35,7 +35,7 @@ class ImportControlFreqTest extends FunSuite with Matchers {
         "FromDateTime=2015-11-30%2023:00:00&ToDateTime=2015-12-01%2000:00:00"
         -> ElexonResponses.freqOk_20151130_230000_20151201_000000,
       "https://api.bmreports.com/BMRS/FREQ/v1?APIKey=elexonkey&serviceType=xml&" +
-        "FromDateTime=2015-12-01%2000:00:00&ToDateTime=2015-12-01%2000:02:00"
+        "FromDateTime=2015-12-01%2000:00:00&ToDateTime=2015-12-01%2000:05:00"
         -> ElexonResponses.freqOk_20151201_000000_20151201_000200
     )
     App.db.executeAndWait(App.db.createTables, 1.second)
@@ -44,7 +44,7 @@ class ImportControlFreqTest extends FunSuite with Matchers {
     App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 0, 0, 0).toInstantUtc
     App.importControl.freq(15.seconds)
     // Second import, will be 2 minutes of data
-    App.clock.fakeInstant += 2.minutes
+    App.clock.fakeInstant += 5.minutes
     App.importControl.freq(5.seconds)
 
     // Check import raw data
