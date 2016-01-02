@@ -76,11 +76,13 @@ lazy val importers = (project in file("importers"))
   .dependsOn(db)
   .dependsOn(utils)
 
+// Use universal:packageZipTarball form sbt to package into .tgz
 lazy val appimporter = (project in file("appimporter"))
   .settings(commonSettings: _*)
   .settings(
     name := "appimporter"
   )
+  .enablePlugins(JavaAppPackaging)
   .dependsOn(importers)
   .dependsOn(data)
   .dependsOn(db)
