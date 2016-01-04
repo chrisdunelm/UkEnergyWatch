@@ -2,11 +2,13 @@ package org.ukenergywatch.appimporter
 
 import org.ukenergywatch.importers.{ ImportControlComponent, ElectricImportersComponent }
 import org.ukenergywatch.data.DataComponent
-import org.ukenergywatch.db.{ DbMysqlComponent, DbParamsComponent }
+import org.ukenergywatch.db.{ DbComponent, DbMysqlComponent,
+  DbParamsComponent, DbFlagParamsComponent, DbPersistentMemoryComponent }
 import org.ukenergywatch.utils.{ LogFileComponent, ClockRealtimeComponent, FlagsComponent,
   ElexonParamsComponent, DownloaderRealComponent, SchedulerComponent, SchedulerRealtimeComponent,
-  LogComponent, ReAction }
+  LogComponent, ReAction, ElexonFlagParamsComponent, LogMemoryComponent }
 import org.ukenergywatch.utils.JavaTimeExtensions._
+import java.time.Duration
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -14,29 +16,14 @@ object AppImporter {
 
   def main(args: Array[String]): Unit = {
 
-    trait AppComponent extends ElexonParamsComponent with DbParamsComponent {
+    trait AppComponent {
       this: FlagsComponent with SchedulerComponent with ImportControlComponent with LogComponent =>
 
-      object app {
-        object Flags extends FlagsBase {
-          val elexonKey = flag[String](name = "elexonKey")
-          val mysqlHost = flag[String](name = "mysqlHost", defaultValue = "127.0.0.1")
-          val mysqlDatabase = flag[String](name = "mysqlDatabase", defaultValue = "ukenergywatch2")
-          val mysqlUser = flag[String](name = "mysqlUser")
-          val mysqlPassword = flag[String](name = "mysqlPassword")
-        }
+      object Flags extends FlagsBase {
+        val disableElectricFuelInst = flag[Boolean](name = "disableElectricFuelInst", defaultValue = false)
+        val disableElectricFrequency = flag[Boolean](name = "disableElectricFrequency", defaultValue = false)
       }
-      app.Flags // Early initialise flags object
-
-      object elexonParams extends ElexonParams {
-        def key: String = app.Flags.elexonKey()
-      }
-      object dbParams extends DbParams {
-        def host: String = app.Flags.mysqlHost()
-        def database: String = app.Flags.mysqlDatabase()
-        def user: String = app.Flags.mysqlUser()
-        def password: String = app.Flags.mysqlPassword()
-      }
+      Flags // Early initialise
 
       private def catchAll(errorPrefix: String)(fn: => Unit): Int => ReAction = {
         retry: Int => {
@@ -50,20 +37,30 @@ object AppImporter {
       }
 
       private def scheduleElectricFuelInst(): Unit = {
-        // Schedule fuel-inst (generation by fuel type).
         // Every 5 minutes, 1 minute offset for real-time.
         // Every 5 minutes, 3.5 minute offset for past-only.
-        scheduler.run(2.5.minutes, 66.seconds)(catchAll("fuelInst import error (realtime)") {
+        scheduler.run(5.minutes, 66.seconds)(catchAll("fuelInst import error (realtime)") {
           importControl.fuelInst(false, 2.minutes)
         })
-        scheduler.run(2.5.minutes, 3.5.minutes)(catchAll("fuelInst import error (pastonly)") {
+        scheduler.run(5.minutes, 3.5.minutes)(catchAll("fuelInst import error (past-only)") {
           importControl.fuelInst(true, 2.minutes)
+        })
+      }
+
+      private def scheduleElectricFrequency(): Unit = {
+        // Every 2 minutes, 1 second offset for real-time.
+        // Every 2 minutes, 61 second offset for past-only.
+        scheduler.run(2.minutes, 1.second)(catchAll("frequency import error (realtime)") {
+          importControl.freq(false, 55.seconds)
+        })
+        scheduler.run(2.minutes, 61.seconds)(catchAll("frequency import error(past-only)") {
+          importControl.freq(true, 55.seconds)
         })
       }
 
       def run(): Unit = {
         log.info("AppImporter starting")
-        // Schedule actual generation import. Every 5 minutes, 1 minute offset
+        /*// Schedule actual generation import. Every 5 minutes, 1 minute offset
         scheduler.run(5.minutes, 78.seconds) { retry =>
           try {
             importControl.actualGeneration(4.minutes)
@@ -71,36 +68,62 @@ object AppImporter {
             case t: Throwable => log.error(s"actualGeneration import error: $t", t)
           }
           ReAction.Success
+        }*/
+        if (!Flags.disableElectricFuelInst()) {
+          log.info("Scheduling ElectricFuelInst")
+          scheduleElectricFuelInst()
         }
-        scheduleElectricFuelInst()
-        // Schedule frequency. Every 1 minutes, 10 second offset
-        scheduler.run(2.5.minutes, 59.seconds) { retry =>
-          try {
-            importControl.freq(55.seconds)
-          } catch {
-            case t: Throwable => log.error(s"frequency import error: $t", t)
-          }
-          ReAction.Success
+        if (!Flags.disableElectricFrequency()) {
+          log.info("Scheduling ElectricFrequency")
+          scheduleElectricFrequency()
         }
         log.info("AppImporter imports scheduled")
       }
     }
 
-    object App extends AppComponent
+    trait InitFlagsTemplate extends FlagsComponent {
+      object InitFlags extends FlagsBase {
+        val useMemoryDbAndLog = flag[Boolean](name = "useMemoryDbAndLog", defaultValue = false)
+      }
+      InitFlags
+    }
+    object InitFlags extends InitFlagsTemplate
+    InitFlags.flags.parse(args, allowUnknownFlags = true)
+
+    trait AppTemplate extends AppComponent
+        with InitFlagsTemplate // Only so --useMemoryDbAndLog is recognised as a valid flag
         with ImportControlComponent
         with ElectricImportersComponent
+        with ElexonFlagParamsComponent
         with DataComponent
-        with DbMysqlComponent
-        with DbParamsComponent
-        with LogFileComponent
+        with DbComponent
+        with LogComponent
         with DownloaderRealComponent
         with ClockRealtimeComponent
         with FlagsComponent
         with SchedulerRealtimeComponent
+    val app = if (InitFlags.InitFlags.useMemoryDbAndLog()) {
+      println("In-memory configuration")
+      trait DbPersistentMemoryComponent1Hour extends DbPersistentMemoryComponent {
+        override def dbPersistentMemoryCloseDelay: Duration = 1.hour
+      }
+      object App extends AppTemplate
+          with DbPersistentMemoryComponent1Hour
+          with LogMemoryComponent
+      App.db.executeAndWait(App.db.createTables, 1.second)
+      App
+    } else {
+      println("Real database configuration")
+      object App extends AppTemplate
+          with DbMysqlComponent
+          with DbFlagParamsComponent
+          with LogFileComponent
+      App
+    }
 
     println("AppImporter")
-    App.flags.parse(args)
-    App.run()
+    app.flags.parse(args)
+    app.run()
 
     println("Type 'exit' and press enter to exit...")
     var exit = false

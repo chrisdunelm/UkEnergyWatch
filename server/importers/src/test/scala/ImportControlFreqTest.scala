@@ -43,10 +43,10 @@ class ImportControlFreqTest extends FunSuite with Matchers {
 
     // First import, will be 1 hour of data
     App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 0, 0, 0).toInstantUtc
-    App.importControl.freq(15.seconds)
+    App.importControl.freq(false, 15.seconds)
     // Second import, will be 2 minutes of data
     App.clock.fakeInstant += 5.minutes
-    App.importControl.freq(5.seconds)
+    App.importControl.freq(false, 5.seconds)
 
     // Check import raw data
     val qRaw = App.db.rawDatas.search(

@@ -46,11 +46,12 @@ trait DbMemoryComponent extends DbComponent {
 }
 
 trait DbPersistentMemoryComponent extends DbComponent {
+  def dbPersistentMemoryCloseDelay: Duration = 60.seconds
   object db extends Db {
     private val name = java.util.UUID.randomUUID().toString
     lazy val driver = H2Driver
     lazy val db = driver.api.Database.forURL(
-      s"jdbc:h2:mem:$name;DB_CLOSE_DELAY=60", // Keep DB around for 60 seconds
+      s"jdbc:h2:mem:$name;DB_CLOSE_DELAY=${dbPersistentMemoryCloseDelay.seconds}",
       driver = "org.h2.Driver"
     )
   }

@@ -19,11 +19,11 @@ lazy val commonSettings = Seq(
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick" % "3.1.0",
-    "org.slf4j" % "slf4j-nop" % "1.6.4"
+    "org.slf4j" % "slf4j-nop" % "1.6.4",
+    "com.h2database" % "h2" % "1.4.187"
   ),
   libraryDependencies ++= Seq(
-    "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
-    "com.h2database" % "h2" % "1.4.187" % "test"
+    "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
   )
 )
 

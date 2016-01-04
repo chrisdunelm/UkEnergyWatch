@@ -68,6 +68,7 @@ trait LogMemoryComponent extends LogComponent {
       msgs = curMsgs :+ msg
     }
   }
+  log // Early initialise parent flags
 }
 
 trait LogFileComponent extends LogComponent {

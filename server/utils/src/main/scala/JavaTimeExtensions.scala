@@ -70,6 +70,7 @@ object JavaTimeExtensions {
 
   implicit class RichDuration(val d: Duration) extends AnyVal {
     def millis: Long = d.getSeconds * 1000L + d.getNano / 1000000L
+    def seconds: Long = d.getSeconds
     def secondsDouble: Double = d.getSeconds.toDouble + d.getNano.toDouble * 1e-9
 
     def *(scale: Double): Duration = (d.secondsDouble * scale).seconds

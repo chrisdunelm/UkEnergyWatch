@@ -14,7 +14,7 @@ trait FlagsComponent {
       val name: String,
       val shortName: Option[String],
       val defaultValue: Option[T],
-      val ldescription: Option[String]
+      val description: Option[String]
     ) {
       private[FlagsComponent] var flagValue: Option[T] = defaultValue
       private[FlagsComponent] def isBoolean: Boolean = typeOf[T] =:= typeOf[Boolean]
@@ -67,49 +67,62 @@ trait FlagsComponent {
     private val longNameWithValueRx = """--(\w+)=(.+)""".r
     private val longNameOnlyRx = """--(\w+)""".r
 
-    @tailrec final def parse(args: Seq[String]): Unit = {
-      def find(errorName: String)(pred: Flag[_] => Boolean): Flag[_] = {
-        allFlags.find(pred) match {
-          case Some(flag) => flag
-          case None => throw new FlagsException(s"Passed flag not found: '$errorName'")
+    def parse(args: Seq[String], allowUnknownFlags: Boolean = false): Unit = {
+      @tailrec def loop(args: List[String]): Unit = {
+        def find(errorName: String)(pred: Flag[_] => Boolean): Flag[_] = {
+          allFlags.find(pred) match {
+            case Some(flag) => flag
+            case None =>
+              if (allowUnknownFlags) {
+                new Flag[String]("", None, None, None)
+              } else {
+                throw new FlagsException(s"Passed flag not found: '$errorName'")
+              }
+          }
         }
-      }
-      args match {
-        case Seq(longNameWithValueRx(longName, value), tail @ _*) =>
-          find(longName)(_.name == longName).set(value)
-          parse(tail)
-        case Seq(longNameOnlyRx(longName), value, tail @ _*) =>
-          val flag = find(longName)(_.name == longName)
-          if (flag.isBoolean) {
-            if (value.startsWith("-")) {
-              flag.set("true")
-              parse(value +: tail)
+        args match {
+          case longNameWithValueRx(longName, value) :: tail =>
+            find(longName)(_.name == longName).set(value)
+            loop(tail)
+          case longNameOnlyRx(longName) :: value :: tail =>
+            val flag = find(longName)(_.name == longName)
+            if (flag.isBoolean) {
+              if (value.startsWith("-")) {
+                flag.set("true")
+                loop(value :: tail)
+              } else {
+                flag.set(value)
+                loop(tail)
+              }
             } else {
               flag.set(value)
-              parse(tail)
+              loop(tail)
             }
-          } else {
-            flag.set(value)
-            parse(tail)
-          }
-        case Seq(longNameOnlyRx(longName)) =>
-          val flag = find(longName)(_.name == longName)
-          if (flag.isBoolean) {
-            flag.set("true")
-            parse(Seq.empty)
-          } else {
-            throw new FlagsException(s"Cannot understand args part: '$args'")
-          }
-        case Seq() =>
-          // All done, check all non-default flags are initialised
-          val uninitialisedFlags = allFlags.filter(_.flagValue.isEmpty)
-          if (uninitialisedFlags.nonEmpty) {
-            val flagList = uninitialisedFlags.map(_.name).mkString(", ")
-            throw new FlagsException(s"Uninitialised flags: $flagList")
-          }
-        case _ =>
-          throw new FlagsException(s"Cannot understand args part: '$args'")
+          case longNameOnlyRx(longName) :: Nil =>
+            val flag = find(longName)(_.name == longName)
+            if (flag.isBoolean || allowUnknownFlags) {
+              flag.set("true")
+              loop(Nil)
+            } else {
+              println(flag.name)
+              throw new FlagsException(s"Cannot understand args part: '$args'")
+            }
+          case Nil =>
+            // All done, check all non-default flags are initialised
+            val uninitialisedFlags = allFlags.filter(_.flagValue.isEmpty)
+            if (uninitialisedFlags.nonEmpty) {
+              val flagList = uninitialisedFlags.map(_.name).mkString(", ")
+              throw new FlagsException(s"Uninitialised flags: $flagList")
+            }
+          case x :: tail =>
+            if (allowUnknownFlags) {
+              loop(tail)
+            } else {
+              throw new FlagsException(s"Cannot understand args part: '$args'")
+            }
+        }
       }
+      loop(args.toList)
     }
 
     def parse(args: String): Unit = parse(args.split(' '))

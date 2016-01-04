@@ -2,8 +2,8 @@ package org.ukenergywatch.importers
 
 import org.ukenergywatch.db.{ DbComponent, RawData, RawDataType, DbTime, RawProgress, SearchableValue }
 import org.ukenergywatch.utils.{ ElexonParamsComponent, DownloaderComponent }
-import org.ukenergywatch.utils.SimpleRangeOf
-import java.time.{ LocalDate, LocalDateTime }
+import org.ukenergywatch.utils.{ RangeOf, SimpleRangeOf }
+import java.time.{ LocalDate, LocalDateTime, Instant }
 import scala.concurrent.ExecutionContext
 import slick.dbio.{ DBIOAction }
 import scala.xml.{ XML, Elem, Node }
@@ -31,7 +31,7 @@ trait ElectricImportersComponent {
       s"https://api.bmreports.com/BMRS/$report/v1?APIKey=${elexonParams.key}&serviceType=xml"
     }
 
-    def elexonDownload(url: String)(okFn: Elem => DBIO[_])(implicit ec: ExecutionContext): DBIO[_] = {
+    def elexonDownload[A](url: String)(okFn: Elem => DBIO[A])(implicit ec: ExecutionContext): DBIO[A] = {
       val fDownload = downloader.get(url)
       val dbioDownload: DBIO[Array[Byte]] = DBIOAction.from(fDownload)
       dbioDownload.flatMap { bytes =>
@@ -91,11 +91,12 @@ trait ElectricImportersComponent {
     // Parameters are in UTC, I think.
     // The times coming back are the end of each 5-minute period
     // New data appears to be available within seconds of the time passing.
-    def importFuelInst(fromTime: LocalDateTime, toTime: LocalDateTime)(implicit ec: ExecutionContext): DBIO[_] = {
+    def importFuelInst(fromTime: LocalDateTime, toTime: LocalDateTime)
+      (implicit ec: ExecutionContext): DBIO[ImportResult] = {
       val url = makeElexonApiUrl("FUELINST") + s"&FromDateTime=${fmtLdt(fromTime)}&ToDateTime=${fmtLdt(toTime)}"
       elexonDownload(url) { xml =>
         val items = xml \ "responseBody" \ "responseList" \ "item"
-        val actions: Seq[DBIO[_]] = for (item <- items) yield {
+        val actionsAndTimes: Seq[(DBIO[_], RangeOf[Instant])] = for (item <- items) yield {
           val toTime = (item \ "publishingPeriodCommencingTime").text.trim.toLocalDateTime.toInstantUtc
           val fromTime = toTime - 5.minutes
           val fuelActions: Seq[DBIO[_]] = for (fuelType <- StaticData.fuelTypes) yield {
@@ -115,9 +116,17 @@ trait ElectricImportersComponent {
             fromTime = DbTime(fromTime),
             toTime = DbTime(toTime)
           ))
-          (DBIOAction.seq(fuelActions: _*) >> progressAction).transactionally
+          val action = (DBIOAction.seq(fuelActions: _*) >> progressAction).transactionally
+          val range = SimpleRangeOf(fromTime, toTime)
+          (action, range)
         }
-        DBIOAction.seq(actions: _*)
+        if (actionsAndTimes.nonEmpty) {
+          val (actions, timeRanges) = actionsAndTimes.unzip
+          val result = ImportResult.Ok(actions.size, timeRanges.reduce(_ union _))
+          DBIO.seq(actions: _*) >> DBIO.successful(result)
+        } else {
+          DBIO.successful(ImportResult.Empty)
+        }
       }
     }
 
@@ -128,7 +137,8 @@ trait ElectricImportersComponent {
     // 15-second resolution, not sure how often data is available.
     // Values are used in pairs, with each pair forming a from/to pair.
     // Parameters appear to be inclusive.
-    def importFreq(fromTime: LocalDateTime, toTime: LocalDateTime)(implicit ec: ExecutionContext): DBIO[_] = {
+    def importFreq(fromTime: LocalDateTime, toTime: LocalDateTime)
+      (implicit ec: ExecutionContext): DBIO[ImportResult] = {
       val url = makeElexonApiUrl("FREQ") + s"&FromDateTime=${fmtLdt(fromTime)}&ToDateTime=${fmtLdt(toTime)}"
       elexonDownload(url) { xml =>
         val items = xml \ "responseBody" \ "responseList" \ "item"
@@ -138,7 +148,7 @@ trait ElectricImportersComponent {
           localDate + localTime
         }
         // Don't try to merge frequencies, it'll almost never happen and will be slow
-       val mappedItems =  items.map { item =>
+        val mappedItems =  items.map { item =>
           ldt(item).toInstantUtc -> (item \ "frequency").text.trim.toDouble
         }.toSeq.sortBy(_._1)
         val rawDatas: Seq[RawData] =
@@ -155,15 +165,21 @@ trait ElectricImportersComponent {
               toValue = toFreq
             ).autoSearchIndex
           }
-        val minTime = mappedItems.map(_._1).min
-        val maxTime = mappedItems.map(_._1).max
-        val rawDataAction = db.rawDatas ++= rawDatas
-        val progressAction = db.rawProgresses.merge(RawProgress(
-          rawDataType = RawDataType.Electric.frequency,
-          fromTime = DbTime(minTime),
-          toTime = DbTime(maxTime)
-        ))
-        (rawDataAction >> progressAction).transactionally
+        if (rawDatas.nonEmpty) {
+          val minTime = mappedItems.map(_._1).min
+          val maxTime = mappedItems.map(_._1).max
+          val rawDataAction = db.rawDatas ++= rawDatas
+          val progressAction = db.rawProgresses.merge(RawProgress(
+            rawDataType = RawDataType.Electric.frequency,
+            fromTime = DbTime(minTime),
+            toTime = DbTime(maxTime)
+          ))
+          val actions = (rawDataAction >> progressAction).transactionally
+          val result = ImportResult.Ok(rawDatas.size, SimpleRangeOf(minTime, maxTime))
+          actions >> DBIO.successful(result)
+        } else {
+          DBIO.successful(ImportResult.Empty)
+        }
       }
     }
 
