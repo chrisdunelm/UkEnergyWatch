@@ -13,7 +13,7 @@ class DownloaderTest extends FunSuite with Matchers {
   def await[T](f: Future[T]): T = Await.result(f, 1.second.toConcurrent)
 
   test("Fake downloader works") {
-    object App extends DownloaderFakeComponent with LogMemoryComponent with ClockFakeComponent
+    object App extends DownloaderFakeComponent with LogMemoryComponent with ClockFakeComponent with FlagsComponent
 
     App.downloader.setStrings(Map("a" -> "test_a", "b" -> "test_b"))
 

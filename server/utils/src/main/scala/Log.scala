@@ -3,11 +3,16 @@ package org.ukenergywatch.utils
 import org.ukenergywatch.utils.StringExtensions._
 
 trait LogComponent {
-  this: ClockComponent =>
+  this: ClockComponent with FlagsComponent =>
 
   def log: Log
 
   trait Log {
+
+    private object Flags extends FlagsBase {
+      val logAlsoToStdOut = flag[Boolean](name = "logAlsoToStdOut", defaultValue = false)
+    }
+    Flags // Early initialise flags
 
     sealed trait Level
     object Level {
@@ -33,7 +38,11 @@ trait LogComponent {
           "\n" + baos.toByteArray.toStringUtf8 +"\n"
         case None => ""
       }
-      finalLog(logMsg + exMsg)
+      val finalMsg = logMsg + exMsg
+      finalLog(finalMsg)
+      if (Flags.logAlsoToStdOut()) {
+        println(finalMsg)
+      }
     }
 
     def debug(msg: String): Unit = log(Level.Debug, msg, None)
@@ -51,7 +60,7 @@ trait LogComponent {
 }
 
 trait LogMemoryComponent extends LogComponent {
-  this: ClockComponent =>
+  this: ClockComponent with FlagsComponent =>
   object log extends Log {
     var msgs: Vector[String] = Vector.empty
     def finalLog(msg: String): Unit = {
