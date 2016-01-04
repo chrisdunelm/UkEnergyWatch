@@ -14,6 +14,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object AppImporter {
 
+  sealed trait ImportType
+  object ImportType {
+    case object All extends ImportType
+    case object ElectricFuelInst extends ImportType
+    case object ElectricFrequency extends ImportType
+  }
+
   def main(args: Array[String]): Unit = {
 
     trait AppComponent {
@@ -22,6 +29,7 @@ object AppImporter {
       object Flags extends FlagsBase {
         val disableElectricFuelInst = flag[Boolean](name = "disableElectricFuelInst", defaultValue = false)
         val disableElectricFrequency = flag[Boolean](name = "disableElectricFrequency", defaultValue = false)
+        val enableOnly = flag[ImportType](name = "enableOnly", defaultValue = ImportType.All)
       }
       Flags // Early initialise
 
@@ -60,6 +68,9 @@ object AppImporter {
 
       def run(): Unit = {
         log.info("AppImporter starting")
+        def enabled(flag: FlagsBase.Flag[Boolean], importType: ImportType): Boolean = {
+          !flag() && (Flags.enableOnly() == ImportType.All || Flags.enableOnly() == importType)
+        }
         /*// Schedule actual generation import. Every 5 minutes, 1 minute offset
         scheduler.run(5.minutes, 78.seconds) { retry =>
           try {
@@ -69,11 +80,11 @@ object AppImporter {
           }
           ReAction.Success
         }*/
-        if (!Flags.disableElectricFuelInst()) {
+        if (enabled(Flags.disableElectricFuelInst, ImportType.ElectricFuelInst)) {
           log.info("Scheduling ElectricFuelInst")
           scheduleElectricFuelInst()
         }
-        if (!Flags.disableElectricFrequency()) {
+        if (enabled(Flags.disableElectricFrequency, ImportType.ElectricFrequency)) {
           log.info("Scheduling ElectricFrequency")
           scheduleElectricFrequency()
         }
