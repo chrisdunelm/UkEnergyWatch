@@ -2,7 +2,7 @@ package org.ukenergywatch.importers
 
 import org.scalatest._
 import org.ukenergywatch.utils.{ DownloaderFakeComponent, ElexonParamsComponent,
-  LogMemoryComponent, ClockFakeComponent }
+  LogMemoryComponent, ClockFakeComponent, FlagsComponent }
 import org.ukenergywatch.db.DbMemoryComponent
 import java.time.LocalDate
 import org.ukenergywatch.utils.StringExtensions._
@@ -27,6 +27,7 @@ class ImportersActualGenerationTest extends FunSuite with Matchers {
       with InlineElexonParamsComponent
       with LogMemoryComponent
       with ClockFakeComponent
+      with FlagsComponent
 
   test("bad key") {
     object App extends AppTemplate

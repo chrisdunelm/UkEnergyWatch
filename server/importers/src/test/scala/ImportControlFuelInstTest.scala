@@ -1,7 +1,7 @@
 package org.ukenergywatch.importers
 
 import org.ukenergywatch.utils.{ ClockFakeComponent, ElexonParamsComponent,
-  DownloaderFakeComponent, LogMemoryComponent }
+  DownloaderFakeComponent, LogMemoryComponent, FlagsComponent }
 import org.ukenergywatch.db.DbPersistentMemoryComponent
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.utils.JavaTimeExtensions._
@@ -25,6 +25,7 @@ class ImportControlFuelInstTest extends FunSuite with Matchers {
       with InlineElexonParamsComponent
       with DownloaderFakeComponent
       with LogMemoryComponent
+      with FlagsComponent
 
   test("pastonly null past-only import") {
     object App extends AppTemplate

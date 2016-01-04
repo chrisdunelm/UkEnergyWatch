@@ -1,7 +1,7 @@
 package org.ukenergywatch.importers
 
 import org.ukenergywatch.utils.{ ClockFakeComponent, ElexonParamsComponent,
-  DownloaderFakeComponent, LogMemoryComponent }
+  DownloaderFakeComponent, LogMemoryComponent, FlagsComponent }
 import org.ukenergywatch.db.DbPersistentMemoryComponent
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.db.{ RawDataType, RawData, DbTime, RawProgress, AggregateProgress }
@@ -27,6 +27,7 @@ class ImportControlActualGenerationTest extends FunSuite with Matchers {
       with InlineElexonParamsComponent
       with DownloaderFakeComponent
       with LogMemoryComponent
+      with FlagsComponent
 
   test("No existing data, 2 successful imports, in time order") {
     object App extends AppTemplate

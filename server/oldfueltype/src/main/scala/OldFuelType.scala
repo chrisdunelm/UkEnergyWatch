@@ -265,6 +265,7 @@ object OldFuelType {
         with DownloaderRealComponent
         with ClockRealtimeComponent
         with LogMemoryComponent
+        with FlagsComponent
 
     //App.downloader.content = Map(
     //  s"https://downloads.elexonportal.co.uk/fuel/download/latest?key=$elexonKey" ->

@@ -2,7 +2,7 @@ package org.ukenergywatch.importers
 
 import org.scalatest._
 import org.ukenergywatch.utils.{ DownloaderFakeComponent, ElexonParamsComponent,
-  LogMemoryComponent, ClockFakeComponent }
+  LogMemoryComponent, ClockFakeComponent, FlagsComponent }
 import org.ukenergywatch.db.DbMemoryComponent
 import java.time.LocalDateTime
 import org.ukenergywatch.utils.StringExtensions._
@@ -27,6 +27,7 @@ class ImportersFreqTest extends FunSuite with Matchers {
       with InlineElexonParamsComponent
       with LogMemoryComponent
       with ClockFakeComponent
+      with FlagsComponent
 
   test("error import") {
     object App extends AppTemplate
