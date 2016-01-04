@@ -1,6 +1,7 @@
 package org.ukenergywatch.appimporter
 
-import org.ukenergywatch.importers.{ ImportControlComponent, ElectricImportersComponent }
+import org.ukenergywatch.importers.{ ImportControlComponent, AggregateControlComponent,
+  ElectricImportersComponent }
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.db.{ DbComponent, DbMysqlComponent,
   DbParamsComponent, DbFlagParamsComponent, DbPersistentMemoryComponent }
@@ -24,7 +25,11 @@ object AppImporter {
   def main(args: Array[String]): Unit = {
 
     trait AppComponent {
-      this: FlagsComponent with SchedulerComponent with ImportControlComponent with LogComponent =>
+      this: FlagsComponent
+          with SchedulerComponent
+          with ImportControlComponent
+          with AggregateControlComponent
+          with LogComponent =>
 
       object Flags extends FlagsBase {
         val disableElectricFuelInst = flag[Boolean](name = "disableElectricFuelInst", defaultValue = false)
@@ -63,6 +68,9 @@ object AppImporter {
         })
         scheduler.run(2.minutes, 61.seconds)(catchAll("frequency import error(past-only)") {
           importControl.freq(true, 55.seconds)
+        })
+        scheduler.run(1.hour, 10.minutes)(catchAll("frequency aggregate error") {
+          aggregateControl.frequency(10, 10.minutes)
         })
       }
 
@@ -104,6 +112,7 @@ object AppImporter {
     trait AppTemplate extends AppComponent
         with InitFlagsTemplate // Only so --useMemoryDbAndLog is recognised as a valid flag
         with ImportControlComponent
+        with AggregateControlComponent
         with ElectricImportersComponent
         with ElexonFlagParamsComponent
         with DataComponent

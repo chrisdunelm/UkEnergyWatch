@@ -2,7 +2,9 @@ package org.ukenergywatch.importers
 
 import org.ukenergywatch.db.DbPersistentMemoryComponent
 import org.ukenergywatch.data.DataComponent
-import org.ukenergywatch.db.{ RawData, RawDataType, DbTime, RawProgress, AggregateProgress, AggregationType, AggregationInterval, AggregationFunction }
+import org.ukenergywatch.utils.{ LogMemoryComponent, ClockFakeComponent, FlagsComponent }
+import org.ukenergywatch.db.{ RawData, RawDataType, DbTime, RawProgress, AggregateProgress,
+  AggregationType, AggregationInterval, AggregationFunction }
 import org.ukenergywatch.data.{ StaticData, Region }
 import org.ukenergywatch.utils.JavaTimeExtensions._
 import java.time.LocalDateTime
@@ -14,6 +16,9 @@ class AggregateControlActualGenerationTest extends FunSuite with Matchers {
   trait AppTemplate extends AggregateControlComponent
       with DbPersistentMemoryComponent
       with DataComponent
+      with LogMemoryComponent
+      with ClockFakeComponent
+      with FlagsComponent
 
   test("Aggregate trading unit over day") {
     object App extends AppTemplate

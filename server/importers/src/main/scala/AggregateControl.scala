@@ -2,13 +2,14 @@ package org.ukenergywatch.importers
 
 import org.ukenergywatch.data.DataComponent
 import org.ukenergywatch.db.DbComponent
+import org.ukenergywatch.utils.LogComponent
 import org.ukenergywatch.db.{ RawDataType, AggregationType, AggregationInterval }
 import org.ukenergywatch.data.{ StaticData, BmuId, TradingUnitName, Name, Region, FuelType }
 import java.time.Duration
 import scala.concurrent.ExecutionContext
 
 trait AggregateControlComponent {
-  this: DbComponent with DataComponent =>
+  this: DbComponent with DataComponent with LogComponent =>
 
   lazy val aggregateControl = new AggregateControl
 
@@ -58,7 +59,9 @@ trait AggregateControlComponent {
         data.calculateSubAggregates(aggregationType, sourceInterval, destinationInterval, limit)
       }
       val actions = generationUnit >> tradingUnit >> uk >> DBIO.seq(subAggActions: _*)
+      log.info("AggregateControl: actualGeneration starting")
       db.executeAndWait(actions, timeout)
+      log.info("AggregateControl: actualGeneration complete")
     }
 
     def fuelInst(limit: Int, timeout: Duration)(implicit ec: ExecutionContext): Unit = {
@@ -85,7 +88,9 @@ trait AggregateControlComponent {
         data.calculateSubAggregates(aggregationType, sourceInterval, destinationInterval, limit)
       }
       val actions = fuelType >> uk >> DBIO.seq(subAggActions: _*)
+      log.info("AggregateControl: fuelInst starting")
       db.executeAndWait(actions, timeout)
+      log.info("AggregateControl: fuelInst complete")
     }
 
     def frequency(limit: Int, timeout: Duration)(implicit ec: ExecutionContext): Unit = {
@@ -101,7 +106,9 @@ trait AggregateControlComponent {
         data.calculateSubAggregates(AggregationType.Electric.frequency, sourceInterval, destinationInterval, limit)
       }
       val actions = hour >> DBIO.seq(subAggActions: _*)
+      log.info("AggregateControl: frequency starting")
       db.executeAndWait(actions, timeout)
+      log.info("AggregateControl: frequency complete")
     }
 
   }
