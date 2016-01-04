@@ -1,5 +1,6 @@
 package org.ukenergywatch.utils
 
+import scala.reflect.runtime._
 import scala.reflect.runtime.universe._
 import scala.language.implicitConversions
 import scala.annotation.tailrec
@@ -24,11 +25,26 @@ trait FlagsComponent {
         case _ => throw new FlagsException(s"Unrecognised boolean value: '$v'")
       }
       private[FlagsComponent] def set(v: String): Unit = {
+        def isEnum(t: Symbol): Boolean = {
+          t.isClass && t.asClass.isSealed && t.asClass.isTrait
+        }
         typeOf[T] match {
           case t if t =:= typeOf[String] => flagValue = Some(v.asInstanceOf[T])
           case t if t =:= typeOf[Int] => flagValue = Some(v.toInt.asInstanceOf[T])
           case t if t =:= typeOf[Double] => flagValue = Some(v.toDouble.asInstanceOf[T])
           case t if t =:= typeOf[Boolean] => flagValue = Some(booleanValue(v).asInstanceOf[T])
+          case t if isEnum(t.typeSymbol) =>
+            val tClass = t.typeSymbol.asClass
+            val o: Option[Symbol] = tClass.knownDirectSubclasses.find(
+              _.name.decodedName.toString.toLowerCase == v.toLowerCase
+            )
+            o match {
+              case Some(o) =>
+                val p = currentMirror.reflectModule(o.asClass.module.asModule).instance
+                flagValue = Some(p.asInstanceOf[T])
+              case None =>
+                throw new FlagsException(s"Invalid value '$v' for enum '${tClass.name.decodedName}'")
+            }
           case _ => throw new FlagsException(s"Unsupported flag type: ${typeOf[T]}")
         }
       }

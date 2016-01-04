@@ -2,6 +2,12 @@ package org.ukenergywatch.utils
 
 import org.scalatest._
 
+sealed trait Letter
+object Letter {
+ case object A extends Letter
+ case object B extends Letter
+}
+
 class FlagsTest extends FunSuite with Matchers {
 
   test("String flag") {
@@ -65,6 +71,27 @@ class FlagsTest extends FunSuite with Matchers {
     f("--bb true") shouldBe true
     f("--bb false") shouldBe false
     f("--bb") shouldBe true
+  }
+
+  test("Enum flag") {
+    trait AppComponent { this: FlagsComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val ll = flag[Letter](name = "ll")
+        }
+      }
+      app.Flags
+    }
+    def f(args: String): Letter = {
+      object App extends AppComponent with FlagsComponent
+      App.flags.parse(args)
+      App.app.Flags.ll()
+    }
+    f("--ll A") shouldBe Letter.A
+    f("--ll a") shouldBe Letter.A
+    f("--ll B") shouldBe Letter.B
+    f("--ll b") shouldBe Letter.B
+    an [FlagsException] should be thrownBy f("--ll C")
   }
 
   test("Booleans in various guises") {
