@@ -27,6 +27,12 @@ trait RangeOf[T] {
       None
     }
   }
+
+  def union(that: RangeOf[T])(implicit o: Ordering[T]): SimpleRangeOf[T] = {
+    val from = if (o.lt(this.from, that.from)) this.from else that.from
+    val to = if (o.gt(this.to, that.to)) this.to else that.to
+    SimpleRangeOf[T](from, to)
+  }
 }
 
 trait RangeOfValue[T, Value] extends RangeOf[T] {
