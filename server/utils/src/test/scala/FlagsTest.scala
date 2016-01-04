@@ -20,7 +20,7 @@ class FlagsTest extends FunSuite with Matchers {
       app.Flags
     }
     object App extends AppComponent with FlagsComponent
-    App.flags.parse("--ss=ssss".split(' '))
+    App.flags.parse("--ss=ssss")
     App.app.Flags.ss() shouldBe "ssss"
   }
 
@@ -34,7 +34,7 @@ class FlagsTest extends FunSuite with Matchers {
       app.Flags
     }
     object App extends AppComponent with FlagsComponent
-    App.flags.parse("--ii=1234".split(' '))
+    App.flags.parse("--ii=1234")
     App.app.Flags.ii() shouldBe 1234
   }
 
@@ -48,7 +48,7 @@ class FlagsTest extends FunSuite with Matchers {
       app.Flags
     }
     object App extends AppComponent with FlagsComponent
-    App.flags.parse("--dd 1.234".split(' '))
+    App.flags.parse("--dd 1.234")
     App.app.Flags.dd() shouldBe 1.234 +- 1e-10
   }
 
@@ -91,7 +91,7 @@ class FlagsTest extends FunSuite with Matchers {
     f("--ll a") shouldBe Letter.A
     f("--ll B") shouldBe Letter.B
     f("--ll b") shouldBe Letter.B
-    an [FlagsException] should be thrownBy f("--ll C")
+    a [FlagsException] should be thrownBy f("--ll C")
   }
 
   test("Booleans in various guises") {
@@ -129,7 +129,7 @@ class FlagsTest extends FunSuite with Matchers {
     }
     def f(args: String): (String, String) = {
       object App extends AppComponent with FlagsComponent
-      App.flags.parse(args.split(' '))
+      App.flags.parse(args)
       (App.app.Flags.aa(), App.app.Flags.bb())
     }
     f("--aa=a --bb=b") shouldBe ("a", "b")
@@ -183,7 +183,7 @@ class FlagsTest extends FunSuite with Matchers {
       app2.Flags
     }
     object App extends App1Component with App2Component with FlagsComponent
-    App.flags.parse("--ss1 abc --ss2=xyz".split(' '))
+    App.flags.parse("--ss1 abc --ss2=xyz")
     App.app1.Flags.ss1() shouldBe "abc"
     App.app2.Flags.ss2() shouldBe "xyz"
   }
