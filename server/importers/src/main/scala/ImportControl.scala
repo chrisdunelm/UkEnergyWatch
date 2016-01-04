@@ -55,14 +55,20 @@ trait ImportControlComponent {
     // Call every 2.5 minutes, with a ~1 minute offset
     // Will always get the most recent data (up to 24 hours at a time) that is not yet downloaded
     // This method will block for DB and network things
-    def fuelInst(timeout: Duration)(implicit ec: ExecutionContext): Unit = {
+    // If pastOnly is set then it will not attempt to load current data.
+    def fuelInst(pastOnly: Boolean, timeout: Duration)(implicit ec: ExecutionContext): Unit = {
       val now: Instant = clock.nowUtc()
 
       val extremes = SimpleRangeOf(minFuelInst, now.alignTo(5.minutes))
       val qMissing: DBIO[Seq[RangeOf[Instant]]] =
         data.missingRawProgress(RawDataType.Electric.generationByFuelType, extremes)
       val qImport = qMissing.flatMap { missing: Seq[RangeOf[Instant]] =>
-        missing.lastOption match {
+        val useRange = if (pastOnly) {
+          missing.filter(_.to < extremes.to).lastOption
+        } else {
+          missing.lastOption
+        }
+        useRange match {
           case Some(range) =>
             // Import most recent data that isn't already imported
             assert((range.to - range.from) >= 5.minutes)

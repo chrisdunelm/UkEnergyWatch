@@ -26,6 +26,18 @@ class ImportControlFuelInstTest extends FunSuite with Matchers {
       with DownloaderFakeComponent
       with LogMemoryComponent
 
+  test("pastonly null past-only import") {
+    object App extends AppTemplate
+    import App.db.driver.api._
+
+    App.db.executeAndWait(App.db.createTables, 1.second)
+    App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 0, 0, 0).toInstantUtc
+    App.importControl.fuelInst(true, 5.seconds)
+
+    App.db.executeAndWait(App.db.rawDatas.result, 1.second) should have size 0
+    App.db.executeAndWait(App.db.rawProgresses.result, 1.second) should have size 0
+  }
+
   test("No existing data, 2 successful imports, in time order") {
     object App extends AppTemplate
     import App.db.driver.api._
@@ -42,10 +54,10 @@ class ImportControlFuelInstTest extends FunSuite with Matchers {
 
     // First import, will be 24 hours
     App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 0, 1, 0).toInstantUtc
-    App.importControl.fuelInst(15.seconds)
+    App.importControl.fuelInst(false, 15.seconds)
     // Second import, will be 5 minutes
     App.clock.fakeInstant += 5.minutes
-    App.importControl.fuelInst(5.seconds)
+    App.importControl.fuelInst(false, 5.seconds)
 
     // Check import raw data
     val qRaw = App.db.rawDatas.search(

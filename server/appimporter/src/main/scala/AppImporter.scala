@@ -38,7 +38,30 @@ object AppImporter {
         def password: String = app.Flags.mysqlPassword()
       }
 
-      def run() {
+      private def catchAll(errorPrefix: String)(fn: => Unit): Int => ReAction = {
+        retry: Int => {
+          try {
+            fn
+          } catch {
+            case t: Throwable => log.error(s"$errorPrefix: $t")
+          }
+          ReAction.Success
+        }
+      }
+
+      private def scheduleElectricFuelInst(): Unit = {
+        // Schedule fuel-inst (generation by fuel type).
+        // Every 5 minutes, 1 minute offset for real-time.
+        // Every 5 minutes, 3.5 minute offset for past-only.
+        scheduler.run(2.5.minutes, 66.seconds)(catchAll("fuelInst import error (realtime)") {
+          importControl.fuelInst(false, 2.minutes)
+        })
+        scheduler.run(2.5.minutes, 3.5.minutes)(catchAll("fuelInst import error (pastonly)") {
+          importControl.fuelInst(true, 2.minutes)
+        })
+      }
+
+      def run(): Unit = {
         log.info("AppImporter starting")
         // Schedule actual generation import. Every 5 minutes, 1 minute offset
         scheduler.run(5.minutes, 78.seconds) { retry =>
@@ -49,15 +72,7 @@ object AppImporter {
           }
           ReAction.Success
         }
-        // Schedule fuel-inst (generation by fuel type). Every 2.5 minutes, 1 minute offset
-        scheduler.run(2.5.minutes, 66.seconds) { retry =>
-          try {
-            importControl.fuelInst(2.minutes)
-          } catch {
-            case t: Throwable => log.error(s"fuelInst import error: $t", t)
-          }
-          ReAction.Success
-        }
+        scheduleElectricFuelInst()
         // Schedule frequency. Every 1 minutes, 10 second offset
         scheduler.run(2.5.minutes, 59.seconds) { retry =>
           try {
