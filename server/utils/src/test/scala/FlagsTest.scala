@@ -46,6 +46,50 @@ class FlagsTest extends FunSuite with Matchers {
     App.app.Flags.dd() shouldBe 1.234 +- 1e-10
   }
 
+  test("Boolean flag") {
+    trait AppComponent { this: FlagsComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val bb = flag[Boolean](name = "bb")
+        }
+      }
+      app.Flags
+    }
+    def f(args: String): Boolean = {
+      object App extends AppComponent with FlagsComponent
+      App.flags.parse(args)
+      App.app.Flags.bb()
+    }
+    f("--bb=true") shouldBe true
+    f("--bb=false") shouldBe false
+    f("--bb true") shouldBe true
+    f("--bb false") shouldBe false
+    f("--bb") shouldBe true
+  }
+
+  test("Booleans in various guises") {
+    trait AppComponent { this: FlagsComponent =>
+      object app {
+        object Flags extends FlagsBase {
+          val bb = flag[Boolean](name = "bb")
+          val ss = flag[String](name = "ss")
+        }
+      }
+      app.Flags
+    }
+    def f(args: String): (Boolean, String) = {
+      object App extends AppComponent with FlagsComponent
+      App.flags.parse(args)
+      (App.app.Flags.bb(), App.app.Flags.ss())
+    }
+    f("--bb --ss str") shouldBe (true, "str")
+    f("--bb true --ss str") shouldBe (true, "str")
+    f("--bb=false --ss str") shouldBe (false, "str")
+    f("--bb=false --ss=str") shouldBe (false, "str")
+    f("--ss str --bb") shouldBe (true, "str")
+    f("--ss str --bb false") shouldBe (false, "str")
+  }
+
   test("Parse longname with value") {
     trait AppComponent { this: FlagsComponent =>
       object app {
