@@ -161,4 +161,31 @@ class FlagsTest extends FunSuite with Matchers {
     App.app2.Flags.ss2() shouldBe "xyz"
   }
 
+  test("Flag in component trait") {
+    trait AppBaseComponent { this: FlagsComponent =>
+      def app: App
+      trait App {
+        private object Flags extends FlagsBase {
+          val f0 = flag[String](name = "f0")
+        }
+        Flags // Early initialise trait flags
+        def f0: String = Flags.f0()
+      }
+    }
+    trait AppComponent extends AppBaseComponent { this: FlagsComponent =>
+      object app extends App {
+        object Flags extends FlagsBase {
+          val f1 = flag[String](name = "f1")
+        }
+        Flags
+        def f1: String = Flags.f1()
+      }
+      app.Flags // Early initialise object flags
+    }
+    object App extends AppComponent with FlagsComponent
+    App.flags.parse("--f0=f0 --f1=f1")
+    App.app.f0 shouldBe "f0"
+    App.app.f1 shouldBe "f1"
+  }
+
 }
