@@ -4,8 +4,29 @@ import java.time.{ Instant }
 import org.ukenergywatch.utils.JavaTimeExtensions._
 import slick.lifted.MappedTo
 
-case class RawDataType(val value: Byte) extends MappedTo[Byte]
-object RawDataType {
+trait Named[A <: MappedTo[Byte]] {
+  import scala.reflect.runtime._
+  import scala.reflect.runtime.universe._
+  private def get(parent: Any, name: Seq[String]): Iterable[(Byte, Seq[String])] = {
+    val im = currentMirror.reflect(parent)
+    val members = im.symbol.asClass.typeSignature.members
+    members.filter(_.isTerm).map(_.asTerm).collect {
+      case s if s.isModule =>
+        val child = currentMirror.reflectModule(s.asModule)
+        get(child.instance, name :+ s.name.toString)
+      case s if s.isAccessor =>
+        val method = im.reflectMethod(s.asMethod)
+        val value = method().asInstanceOf[A].value
+        Seq(value -> (name :+ s.name.toString))
+    }.flatten
+  }
+  def names: Map[Byte, String] = get(this, Seq.empty).toMap.mapValues(_.mkString("."))
+}
+
+case class RawDataType(val value: Byte) extends MappedTo[Byte] {
+  override def toString: String = RawDataType.names(value)
+}
+object RawDataType extends Named[RawDataType] {
   object Electric {
     val actualGeneration = RawDataType(1)
     val predictedGeneration = RawDataType(2)
@@ -17,8 +38,10 @@ object RawDataType {
   }
 }
 
-case class AggregationType(val value: Byte) extends MappedTo[Byte]
-object AggregationType {
+case class AggregationType(val value: Byte) extends MappedTo[Byte] {
+  override def toString: String = AggregationType.names(value)
+}
+object AggregationType extends Named[AggregationType] {
   object Electric {
     val generationUnit = AggregationType(1)
     val tradingUnit = AggregationType(2)
@@ -32,8 +55,10 @@ object AggregationType {
   }
 }
 
-case class AggregationInterval(val value: Byte) extends MappedTo[Byte]
-object AggregationInterval {
+case class AggregationInterval(val value: Byte) extends MappedTo[Byte] {
+  override def toString: String = AggregationInterval.names(value)
+}
+object AggregationInterval extends Named[AggregationInterval] {
   val hour = AggregationInterval(1)
   val day = AggregationInterval(2)
   val week = AggregationInterval(3)
