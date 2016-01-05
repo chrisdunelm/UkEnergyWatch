@@ -69,7 +69,8 @@ object AppImporter {
         scheduler.run(2.minutes, 61.seconds)(catchAll("frequency import error(past-only)") {
           importControl.freq(true, 55.seconds)
         })
-        scheduler.run(1.hour, 10.minutes)(catchAll("frequency aggregate error") {
+        // Aggregate
+        scheduler.run(/*1.hour, 10.minutes*/4.minutes, 0.seconds)(catchAll("frequency aggregate error") {
           aggregateControl.frequency(10, 10.minutes)
         })
       }

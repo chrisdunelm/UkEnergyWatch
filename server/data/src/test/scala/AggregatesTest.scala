@@ -2,6 +2,7 @@ package org.ukenergywatch.data
 
 import org.scalatest._
 
+import org.ukenergywatch.utils.{ LogMemoryComponent, ClockFakeComponent, FlagsComponent }
 import org.ukenergywatch.db._
 import org.ukenergywatch.data._
 import org.ukenergywatch.utils.SimpleRangeOf
@@ -14,7 +15,10 @@ class AggregatesTest extends FunSuite with Matchers {
 
   trait Components
       extends DbMemoryComponent
-      with DataComponent {
+      with DataComponent
+      with LogMemoryComponent
+      with ClockFakeComponent
+      with FlagsComponent {
 
     def createTables(): DBIO[_] = {
       import db.driver.api._

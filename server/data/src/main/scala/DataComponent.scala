@@ -1,5 +1,6 @@
 package org.ukenergywatch.data
 
+import org.ukenergywatch.utils.LogComponent
 import scala.concurrent.Future
 import slick.dbio._
 import org.ukenergywatch.db._
@@ -14,7 +15,7 @@ import java.time.Instant
 import scala.concurrent.ExecutionContext.Implicits.global
 
 trait DataComponent {
-  this: DbComponent =>
+  this: DbComponent with LogComponent =>
 
   lazy val data = new Data
 
@@ -86,6 +87,8 @@ trait DataComponent {
         val actions: Seq[DBIO[_]] = alignedRanges.map { alignedRange: RangeOf[Instant] =>
           val qRawData = db.rawDatas.search(alignedRange).filter(_.rawDataType === rawDataType)
           val insertAggregates: DBIO[_] = qRawData.result.flatMap { rawDatas: Seq[RawData] =>
+            log.info(s"Data: hourlyAggregateFromRaw ${alignedRange.from} -> ${alignedRange.to} " +
+              s"from ${rawDatas.size} raw data items, rawDataType:$rawDataType, aggregationType:$aggregationType")
             val rawDataGrouped: Map[Name, Seq[RawData]] = aggregationFn(rawDatas)
             val aggregates: Seq[Aggregate] = rawDataGrouped.toSeq.map { case (name, rawDatas) =>
               calculateRawAggregate(aggregationType, name, rawDatas, alignedRange)
@@ -162,6 +165,9 @@ trait DataComponent {
             x.aggregationInterval === sourceInterval && x.aggregationType === aggregationType
           }
           val insertAggregates: DBIO[_] = qSourceData.result.flatMap { sourceDatas: Seq[Aggregate] =>
+            log.info(s"Data: calculateSubAggregates ${alignedRange.from} -> ${alignedRange.to} " +
+              s"from ${sourceDatas.size} source items, aggregationType:$aggregationType, " +
+              s"sourceInterval:$sourceInterval, destinationInterval:$destinationInterval")
             case class NameType(name: String, aggregationType: AggregationType)
             val sourceDataByNameType = sourceDatas.groupBy(x => NameType(x.name, x.aggregationType))
             val destAggs: Seq[Aggregate] = sourceDataByNameType.toSeq.map {
