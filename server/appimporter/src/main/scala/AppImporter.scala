@@ -20,6 +20,7 @@ object AppImporter {
     case object All extends ImportType
     case object ElectricFuelInst extends ImportType
     case object ElectricFrequency extends ImportType
+    case object ElectricActualGeneration extends ImportType
   }
 
   def main(args: Array[String]): Unit = {
@@ -34,6 +35,8 @@ object AppImporter {
       object Flags extends FlagsBase {
         val disableElectricFuelInst = flag[Boolean](name = "disableElectricFuelInst", defaultValue = false)
         val disableElectricFrequency = flag[Boolean](name = "disableElectricFrequency", defaultValue = false)
+        val disableElectricActualGeneration =
+          flag[Boolean](name = "disableElectricActualGeneration", defaultValue = false)
         val enableOnly = flag[ImportType](name = "enableOnly", defaultValue = ImportType.All)
       }
       Flags // Early initialise
@@ -58,6 +61,10 @@ object AppImporter {
         scheduler.run(5.minutes, 3.5.minutes)(catchAll("fuelInst import error (past-only)") {
           importControl.fuelInst(true, 2.minutes)
         })
+        // Aggregate
+        scheduler.run(5.minutes, 30.seconds)(catchAll("fuelInst aggregate error") {
+          aggregateControl.fuelInst(10, 1.minute)
+        })
       }
 
       private def scheduleElectricFrequency(): Unit = {
@@ -70,8 +77,23 @@ object AppImporter {
           importControl.freq(true, 55.seconds)
         })
         // Aggregate
-        scheduler.run(/*1.hour, 10.minutes*/4.minutes, 0.seconds)(catchAll("frequency aggregate error") {
-          aggregateControl.frequency(10, 10.minutes)
+        scheduler.run(4.minutes, 0.seconds)(catchAll("frequency aggregate error") {
+          aggregateControl.frequency(10, 1.minute)
+        })
+      }
+
+      private def scheduleElectricActualGeneration(): Unit = {
+        // Every 10 minutes, 2 minute offset for real-time
+        // Every 10 minutes, 7 minute offset for past-only
+        scheduler.run(10.minutes, 2.minutes)(catchAll("actualGeneration import error(realtime)") {
+          importControl.actualGeneration(false, 2.minutes)
+        })
+        scheduler.run(10.minutes, 7.minutes)(catchAll("actualGeneration import error(past-only)") {
+          importControl.actualGeneration(true, 2.minutes)
+        })
+        // Aggregate
+        scheduler.run(30.minutes, 3.minutes)(catchAll("actualGeneration aggregate error") {
+          aggregateControl.actualGeneration(10, 1.minute)
         })
       }
 
@@ -96,6 +118,10 @@ object AppImporter {
         if (enabled(Flags.disableElectricFrequency, ImportType.ElectricFrequency)) {
           log.info("Scheduling ElectricFrequency")
           scheduleElectricFrequency()
+        }
+        if (enabled(Flags.disableElectricActualGeneration, ImportType.ElectricActualGeneration)) {
+          log.info("Scheduling ElectricActionGeneration")
+          scheduleElectricActualGeneration()
         }
         log.info("AppImporter imports scheduled")
       }

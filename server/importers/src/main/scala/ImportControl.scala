@@ -28,14 +28,19 @@ trait ImportControlComponent {
     // Always gets the latest data if possible
     // Otherwise gets past data, back to some fixed point
     // This method will block for DB and network things
-    def actualGeneration(timeout: Duration)(implicit ec: ExecutionContext): Unit = {
+    def actualGeneration(pastOnly: Boolean, timeout: Duration)(implicit ec: ExecutionContext): Unit = {
       val now: Instant = clock.nowUtc()
 
       val extremes = SimpleRangeOf(minActualGeneration, now.alignTo(30.minutes))
       val qMissing: DBIO[Seq[RangeOf[Instant]]] =
         data.missingRawProgress(RawDataType.Electric.actualGeneration, extremes)
       val qImport = qMissing.flatMap { missing: Seq[RangeOf[Instant]] =>
-        missing.lastOption match {
+        val useRange = if (pastOnly) {
+          missing.filter(_.to < extremes.to).lastOption
+        } else {
+          missing.lastOption
+        }
+        useRange match {
           case Some(range) =>
             // Import most recent data that isn't already imported
             assert((range.to - range.from) >= 30.minutes)
