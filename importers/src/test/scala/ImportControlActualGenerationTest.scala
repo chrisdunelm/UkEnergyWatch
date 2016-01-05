@@ -43,11 +43,11 @@ class ImportControlActualGenerationTest extends FunSuite with Matchers {
 
     // Perform first import
     App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 0, 35, 0).toInstantUtc
-    App.importControl.actualGeneration(5.seconds)
+    App.importControl.actualGeneration(false, 5.seconds)
 
     // Perform second import
     App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 1, 5, 0).toInstantUtc
-    App.importControl.actualGeneration(5.seconds)
+    App.importControl.actualGeneration(false, 5.seconds)
 
     // Check log
     App.log.msgs.count(_.contains("ImportControl: actualGeneration starting")) shouldBe 2
@@ -88,59 +88,6 @@ class ImportControlActualGenerationTest extends FunSuite with Matchers {
         DbTime(LocalDateTime.of(2015, 12, 1, 1, 0, 0).toInstantUtc)
       )
     )
-/*
-    // Check aggregations
-    val qAgg = App.db.aggregates.search(
-      LocalDateTime.of(2015, 12, 1, 0, 0, 0).toInstantUtc,
-      LocalDateTime.of(2015, 12, 1, 1, 0, 0).toInstantUtc
-    )
-    val aggData = App.db.executeAndWait(qAgg.result, 1.second)
-
-    aggData.filter(x =>
-      x.aggregationInterval == AggregationInterval.hour &&
-        x.aggregationType == AggregationType.Electric.generationUnit &&
-        x.name == "T_DRAXX-2"
-    ).map(_.value(AggregationFunction.minimum)) shouldBe Seq(644.908e6)
-    aggData.filter(x =>
-      x.aggregationInterval == AggregationInterval.hour &&
-        x.aggregationType == AggregationType.Electric.generationUnit &&
-        x.name == "T_DRAXX-2"
-    ).map(_.value(AggregationFunction.maximum)) shouldBe Seq(645.072e6)
-
-    aggData.filter(x =>
-      x.aggregationInterval == AggregationInterval.hour &&
-        x.aggregationType == AggregationType.Electric.tradingUnit &&
-        x.name == StaticData.TradingUnits.drax.name
-    ).map(x =>
-      (x.value(AggregationFunction.minimum), x.value(AggregationFunction.maximum))
-    ) shouldBe Seq((3221.904e6, 3226.02e6))
-
-    aggData.filter(x =>
-      x.aggregationInterval == AggregationInterval.hour &&
-        x.aggregationType == AggregationType.Electric.regionalGeneration &&
-        x.name == Region.uk.name
-    ).map(x =>
-      (x.value(AggregationFunction.minimum), x.value(AggregationFunction.maximum))
-    ) shouldBe Seq((26771.692e6, 26866.424e6))
-
-    aggData.filter(_.aggregationInterval == AggregationInterval.day) should have size 0
-
-    // Check aggregate progress
-    App.db.executeAndWait(App.db.aggregateProgresses.result, 1.second).map(_.id0).toSet shouldBe Set(
-      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.generationUnit,
-        DbTime(LocalDateTime.of(2015, 12, 1, 0, 0, 0).toInstantUtc),
-        DbTime(LocalDateTime.of(2015, 12, 1, 1, 0, 0).toInstantUtc)
-      ),
-      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.tradingUnit,
-        DbTime(LocalDateTime.of(2015, 12, 1, 0, 0, 0).toInstantUtc),
-        DbTime(LocalDateTime.of(2015, 12, 1, 1, 0, 0).toInstantUtc)
-      ),
-      AggregateProgress(AggregationInterval.hour, AggregationType.Electric.regionalGeneration,
-        DbTime(LocalDateTime.of(2015, 12, 1, 0, 0, 0).toInstantUtc),
-        DbTime(LocalDateTime.of(2015, 12, 1, 1, 0, 0).toInstantUtc)
-      )
-    )
- */
   }
 
   // TODO: Test importing backwards in time
@@ -158,10 +105,10 @@ class ImportControlActualGenerationTest extends FunSuite with Matchers {
 
     // Perform first import (later in time)
     App.clock.fakeInstant = LocalDateTime.of(2015, 12, 1, 1, 5, 0).toInstantUtc
-    App.importControl.actualGeneration(5.seconds)
+    App.importControl.actualGeneration(false, 5.seconds)
 
     // Perform second import (earlier in time)
-    App.importControl.actualGeneration(5.seconds)
+    App.importControl.actualGeneration(false, 5.seconds)
 
     // Check import raw data
     val qRaw = App.db.rawDatas.search(
