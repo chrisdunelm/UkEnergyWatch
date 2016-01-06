@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
   .aggregate(appimporter)
   .aggregate(oldfueltype)
 
-lazy val commonSettings = Seq(
+lazy val baseSettings = Seq(
   organization := "org.ukenergywatch",
   version := "0.0.1",
   scalaVersion := "2.11.7",
@@ -16,7 +16,10 @@ lazy val commonSettings = Seq(
     "-deprecation",
     "-feature"
   ),
-  resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+  resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+)
+
+lazy val commonSettings = baseSettings ++ Seq(
   libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick" % "3.1.0",
     "org.slf4j" % "slf4j-nop" % "1.6.4",
@@ -109,3 +112,47 @@ lazy val oldfueltype = (project in file("oldfueltype"))
   )
   .enablePlugins(JavaAppPackaging)
   .dependsOn(utils)
+
+lazy val www = crossProject.in(file("www"))
+  .settings(baseSettings: _*)
+  .settings(
+    name := "www",
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %%% "scalatags" % "0.5.3",
+      "me.chrons" %%% "boopickle" % "1.1.1"
+    )
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "org.scalatra" %% "scalatra" % "2.4.0",
+      "org.eclipse.jetty" % "jetty-webapp" % "9.2.14.v20151106",
+      "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided"
+    ),
+    libraryDependencies ++= Seq(
+      "org.seleniumhq.selenium" % "selenium-java" % "2.48.2" % "test"
+    )
+  )
+  .jvmConfigure(_
+    .dependsOn(db)
+    .dependsOn(utils)
+  )
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "org.scala-js" %%% "scalajs-dom" % "0.8.2"
+    ),
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %%% "utest" % "0.3.1" % "test"
+    )
+  )
+lazy val wwwJS = www.js
+lazy val wwwJVM = www.jvm.settings(
+  // Copy generated JS file to www server
+  resourceGenerators in Compile <+=
+    (resourceManaged in Compile, fastOptJS in (wwwJS, Compile)) map { (dir, jsIn) =>
+      // TODO: Copy sourcemap
+      val jsInFile = jsIn.data
+      val jsOutFile = dir / "js" / jsInFile.getName
+      IO.copyFile(jsInFile, jsOutFile)
+      Seq(jsOutFile)
+    }
+)
