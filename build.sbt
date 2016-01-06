@@ -126,6 +126,8 @@ lazy val www = crossProject.in(file("www"))
     libraryDependencies ++= Seq(
       "org.scalatra" %% "scalatra" % "2.4.0",
       "org.eclipse.jetty" % "jetty-webapp" % "9.2.14.v20151106",
+      "io.prometheus" % "simpleclient" % "0.0.11",
+      "io.prometheus" % "simpleclient_servlet" % "0.0.11",
       "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided"
     ),
     libraryDependencies ++= Seq(
