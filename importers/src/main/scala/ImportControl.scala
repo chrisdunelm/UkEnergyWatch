@@ -19,9 +19,10 @@ trait ImportControlComponent {
   class ImportControl {
     import db.driver.api._
 
+    // All of these as tested on 2016-01-06
     val minActualGeneration = LocalDate.of(2015, 1, 1).toInstant
-    val minFuelInst = LocalDate.of(2015, 1, 1).toInstant
-    val minFreq = LocalDate.of(2015, 1, 1).toInstant
+    val minFuelInst = LocalDate.of(2015, 8, 1).toInstant
+    val minFreq = LocalDate.of(2015, 8, 1).toInstant
 
     // Import some data
     // Call every five minutes, with a ~1 minute offset
