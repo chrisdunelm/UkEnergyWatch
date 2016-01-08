@@ -1,45 +1,60 @@
 package org.ukenergywatch.www
 
-import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.webapp.WebAppContext
-import org.eclipse.jetty.servlet.DefaultServlet
-import org.scalatra.servlet.ScalatraListener
-import io.prometheus.client.exporter.MetricsServlet
+import org.ukenergywatch.utils.FlagsComponent
 
 // TODO: Move this, make it actually do something
 import org.scalatra.ScalatraServlet
-object IndexServlet extends ScalatraServlet {
-  get("/") {
-    "Hello world!"
+import org.scalatra._
+trait CommonServletComponent {
+
+  object commonServlet extends ScalatraServlet
+      with ElectricSummary
+      with GraphTest
+  {
+    notFound {
+      val path = s"/webapp${request.getRequestURI}"
+      Option(getClass.getResourceAsStream(path)) match {
+        case Some(stream) =>
+          MimeType.fromFilename(path) match {
+            case Some(mimeType) =>
+              contentType = mimeType
+              Ok(stream)
+            case None =>
+              throw new Exception(s"Don't know mime-type of '$path'")
+          }
+        case None => resourceNotFound()
+      }
+    }
+    get("/") { "Hello World!" }
+    get("/ElectricSummary") { contentType="text/html"; electricSummary.view() }
+    get("/GraphTest") { contentType = "text/html"; Ok(graphTest.view()) }
   }
+
 }
 
 object Main {
 
-  object Metrics {
-    import io.prometheus.client.Gauge
-    val up = Gauge.build.name("up").help("Is this task up").register
+  val app = {
+    object App extends WwwServerScalatraComponent
+        with WwwServerFlagParamsComponent
+        with FlagsComponent
+        with CommonServletComponent
+    App
   }
 
   def main(args: Array[String]): Unit = {
     println("www main")
 
-    Metrics.up.set(1.0)
+    app.wwwServer.start()
 
-    // TODO: Componentise this!
-    val server = new Server(8080)
-    val context = new WebAppContext
-    context.setContextPath("/")
-    context.setResourceBase("src/main/webapp")
-    context.addEventListener(new ScalatraListener)
-    context.addServlet(classOf[MetricsServlet], "/metrics")
-    context.addServlet(classOf[DefaultServlet], "/")
-    server.setHandler(context)
+    println("In sbt, run using '~re-start'")
+    println("Enter 'exit' and press enter to exit")
+    var exit = false
+    while (!exit) {
+      exit = scala.io.StdIn.readLine() == "exit"
+    }
 
-    server.start()
-    println("Press enter to exit")
-    scala.io.StdIn.readLine()
-    server.stop()
+    app.wwwServer.stop()
   }
 
 }

@@ -119,6 +119,8 @@ lazy val www = crossProject.in(file("www"))
     name := "www",
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "scalatags" % "0.5.3",
+      "com.lihaoyi" %%% "autowire" % "0.2.5",
+      "com.lihaoyi" %%% "scalarx" % "0.2.8",
       "me.chrons" %%% "boopickle" % "1.1.1"
     )
   )
@@ -150,11 +152,13 @@ lazy val wwwJS = www.js
 lazy val wwwJVM = www.jvm.settings(
   // Copy generated JS file to www server
   resourceGenerators in Compile <+=
-    (resourceManaged in Compile, fastOptJS in (wwwJS, Compile)) map { (dir, jsIn) =>
-      // TODO: Copy sourcemap
-      val jsInFile = jsIn.data
-      val jsOutFile = dir / "js" / jsInFile.getName
-      IO.copyFile(jsInFile, jsOutFile)
-      Seq(jsOutFile)
+    (fastOptJS in (wwwJS, Compile), resourceManaged in Compile) map { (jsPath, resPath) =>
+      val jsFiles = Seq(jsPath.data, file(jsPath.data.getAbsolutePath + ".map"))
+      val outs = for (jsFile <- jsFiles) yield {
+        val out = resPath / "webapp" / "js" / jsFile.getName
+        IO.copyFile(jsFile, out)
+        out
+      }
+      outs
     }
-)
+).dependsOn(wwwJS)

@@ -4,6 +4,6 @@ import org.ukenergywatch.www._
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext): Unit = {
-    context.mount(IndexServlet, "/*")
+    context.mount(Main.app.commonServlet, "/*")
   }
 }
