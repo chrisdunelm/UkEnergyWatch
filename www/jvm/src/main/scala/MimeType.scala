@@ -6,6 +6,7 @@ object MimeType {
     "jpeg" -> "image/jpeg",
     "jpg" -> "image/jpeg",
     "js" -> "text/javascript",
+    "css" -> "text/css",
     "png" -> "image/png",
     "map" -> "application/octet-stream"
   )

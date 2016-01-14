@@ -1,41 +1,21 @@
 package org.ukenergywatch.www
 
-import scalatags.Text.all._
-
-case class Updateable()
-object Updateable {
-
-  class Builder[A](data: A) {
-    var nextId = 0
-    //var 
-
-    private def makeId(): String = {
-      val ret = s"_$nextId"
-      nextId += 1
-      ret
-    }
-
-    def apply(valueFn: A => Tag): Tag = {
-      val updateElementId = makeId()
-      valueFn(data)(id := updateElementId)
-    }
-
-  }
-
-  def builder[A](loadFn: () => A): Builder[A] = new Builder(loadFn())
-}
-
 trait ElectricSummary {
 
   object electricSummary {
-/*
+    import ElectricSummaryModel._
+
+    object Model extends ElectricSummaryModel with TextBundleSpec
+
+    import scalatags.Text.all._
+
     def loadData(): Data = {
-      Data(util.Random.nextInt())
+      Data(-1, "theword")
     }
- */
+
     def view(): String = {
-      "Not done yet"
-      /*val upd = Updateable.builder(loadData)
+      val data = loadData()
+      val frags = Model.fragments(data)
       "<!DOCTYPE html>" + html(
         head(
           script(src := "/js/www-fastopt.js")
@@ -43,10 +23,16 @@ trait ElectricSummary {
         body(
           h1("Electric Summary"),
           div(
-            "My number is: ", upd(data => span(data.aNumber)), "."
+            "My number is: ", frags(aNumber), "."
+          ),
+          div(
+            "My word is: '", frags(aWord), "'."
           )
+        ),
+        script(
+          "org.ukenergywatch.www.ElectricSummary().test();"
         )
-      )*/
+      )
     }
 
   }
