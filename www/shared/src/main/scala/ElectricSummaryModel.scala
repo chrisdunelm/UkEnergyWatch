@@ -5,6 +5,10 @@ object ElectricSummaryModel {
     aNumber: Int,
     aWord: String
   )
+  object Data {
+    import boopickle.DefaultBasic._
+    implicit val pickler: Pickler[Data] = PicklerGenerator.generatePickler[Data]
+  }
 
   val aNumber = Id("aNumber")
   val aWord = Id("aWord")
@@ -14,7 +18,7 @@ trait ElectricSummaryModel extends UpdateableModel[ElectricSummaryModel.Data] {
   import ElectricSummaryModel._
   import bundle.all._
 
-  def fragmentDescs = Seq[(Id, Data => Tag)](
+  protected def fragmentDescs = Seq[(Id, Data => Tag)](
     aNumber -> (data => span(data.aNumber.toString)),
     aWord -> (data => span(data.aWord))
   )

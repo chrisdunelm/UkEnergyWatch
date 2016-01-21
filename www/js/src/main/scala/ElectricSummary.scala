@@ -2,7 +2,10 @@ package org.ukenergywatch.www
 
 import scala.scalajs.js.annotation.JSExport
 
-// From here will remain in this file
+import autowire._
+import boopickle.DefaultBasic._
+import scala.concurrent.Future
+import scalajs.concurrent.JSExecutionContext.Implicits.runNow
 
 @JSExport
 object ElectricSummary {
@@ -11,8 +14,10 @@ object ElectricSummary {
 
   @JSExport
   def test(): Unit = {
-    val data = new ElectricSummaryModel.Data(42, "forty-two")
-    Model.update(data)
+    val data = ApiClient[Api].getElectricSummary().call()
+    data.foreach { data =>
+      Model.update(data)
+    }
   }
 
 }

@@ -7,6 +7,8 @@ lazy val root = (project in file("."))
   .aggregate(initmysql)
   .aggregate(appimporter)
   .aggregate(oldfueltype)
+  .aggregate(wwwJS)
+  .aggregate(wwwJVM)
 
 lazy val baseSettings = Seq(
   organization := "org.ukenergywatch",
@@ -119,8 +121,8 @@ lazy val www = crossProject.in(file("www"))
     name := "www",
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "scalatags" % "0.5.3",
-      "com.lihaoyi" %%% "autowire" % "0.2.5",
       "com.lihaoyi" %%% "scalarx" % "0.2.8",
+      "com.lihaoyi" %%% "autowire" % "0.2.5",
       "me.chrons" %%% "boopickle" % "1.1.1"
     )
   )
@@ -161,4 +163,7 @@ lazy val wwwJVM = www.jvm.settings(
       }
       outs
     }
-).dependsOn(wwwJS)
+).aggregate(wwwJS)
+// aggregate() makes changes to wwwJS re-compile/start wwwJVM
+// Can't use dependsOn() as that introduces an incorrect runtime dependency
+// There's probably a better way to do this.

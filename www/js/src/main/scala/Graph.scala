@@ -1,4 +1,4 @@
-package org.ukenergywatch.www
+/*package org.ukenergywatch.www
 
 import scala.scalajs.js
 import org.scalajs.dom
@@ -122,3 +122,4 @@ object Graph {
   }
 
 }
+ */
