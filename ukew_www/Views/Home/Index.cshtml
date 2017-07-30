@@ -1,0 +1,148 @@
+﻿@using UnitsNet
+@using Microsoft.AspNetCore.Html
+@using UnitsNet.Units
+@using Ukew.Utils
+
+@model ukew_www.Controllers.HomeController.IndexModel
+
+@{
+    ViewData["Title"] = "Electricity";
+}
+
+<div class="subtitle">
+Electricity Fuel Type - Instantaneous real-time data
+</div>
+
+<div class="data">
+    <table class="power">
+        <tr class="header"><td>Fuel type</td><td>Current Power</td><td>CO<sub>2</sub> emissions</td></td>
+        <tr class=
+        @foreach (var row in Model.Rows)
+        {
+            <tr>
+                <td>@row.Name</td>
+                <td>
+                    <span class="mw">@row.Power.ToString(PowerUnit.Megawatt, null, 0)</span>
+                    <span class="percent">@((row.Power / Model.Total.Power * 100.0).ToString("0.0")) %</span>
+                </td>
+                <td class="@(row.Co2.HasValue ? "" : "unknown")">@(row.Co2.HasValue ? row.Co2.Value.ToString(MassFlowUnit.KilogramPerSecond, null, 0) : "unknown")</td>
+            </tr>
+        }
+        <tr class="footer">
+            <td>Total</td>
+            <td>
+                <span class="mw">@Model.Total.Power.ToString(PowerUnit.Megawatt, null, 0)</span>
+                <span class="percent">100.0 %</span>
+            </td>
+            <td>
+                @Model.Total.Co2.Value.ToString(MassFlowUnit.KilogramPerSecond, null, 0)<br/>
+                @Model.Co2KgPerKwh.ToString("0.000") kg per kWh
+            </td>
+        </tr>
+    </table>
+    <div class="update">
+        Updated: @Model.UpdateTime.ToString("dd MMMM yyyy HH:mm:ss", null) (UK local time)
+    </div>
+</div>
+
+<div class="info">
+    <div class="infotitle">About</div>
+    <p>Electricity in the UK is generated from:</p>
+    <ul>
+        <li>Large power stations within the UK.</li>
+        <li>Electrical interconnects with France, Ireland and the Netherlands.</li>
+        <li>Small-scale generation within the UK. Generally this is wind, solar or hydro-electric generation
+            owned by private individuals or businesses.</li>
+    </ul>
+    <p>Large power stations can be categorised by which fuel they use to generate electricity, as shown in the table above.</p>
+    <br/>
+    <p>
+        <b>Combined Cycle Gas Turbine (CCGT):</b>
+        A CCGT power plant uses two seperate generation processes:
+        <i>(a)</i> A gas turbine powered by natural gas is directly connected to an electrical generator; and
+        <i>(b)</i> The hot waste gases from the gas turbine are used to generate steam to power a second electrical generator.
+        By combining these two processes in a single power plant the efficiency of the conversion of chemical energy
+        (in the fuel) to electrical energy can be increase to almost 60%, albeit at a modest increase in complexity and cost.
+        All recent gas-powered power stations will be CCGT, rather than Open Cycle Gas Turbine (OCGT).
+        Although a CCGT power plant is the most efficient design of fossil-fuel power station that exists,
+        they still emit large quantities of carbon dioxide, adding to the effects of climate change.
+    </p>
+    <p>
+        <b>Open Cycle Gas Turbine (OCGT):</b>
+        An OCGT power station is one of the simplest and cheapest power plants, powered by natural gas,
+        with a gas turbine connected to an electrical generater.
+        However, the waste gases from the gas turbine hold a considerable amount of heat energy that is thrown away,
+        unlike in a CCGT power plant. This waste of energy causes an OCGT to be inefficient.
+        There are very few OCGT power stations in the UK. Almost all gas powered plants are now the more efficient CCGT design.
+        As natural gas is a fossil fuel, an OCGT power plant emits large quantites of carbon dioxide, adding to the effects of climate change.
+    </p>
+    <p>
+        <b>Oil:</b>
+        Oil power stations burn fuel refined from crude oil.
+        In the UK there are very few purely oil-fired power stations, but there are a number of duel-fired power stations;
+        these are capable of burning oil and coal, or oil and gas.
+    </p>
+    <p>
+        <b>Coal:</b>
+        Coal power stations burn coal to boil water, producing steam which drives a steam turbine which is connected to an electrical generator.
+        These are the least efficient and most polluting of all types of power station in the UK and produce the most CO<sub>2</sub>
+        (and other pollutants) per unit of electricity of all fuels.
+    </p>
+    <p>
+        <b>Nuclear:</b>
+        Nuclear power stations generate electricity from heat generated from nuclear fission.
+        This generated no immediate atmospheric pollution, including generating no CO<sub>2</sub>;
+        however it does generate radioactive waste that is dangerous over periods of 100 to 10,000 years,
+        depending on the type of nuclear power station that generated them and what reprocessing has been performed.
+    </p>
+    <p>
+        <b>Wind:</b>
+        Wind power is a CO<sub>2</sub>-free power source which generates no atmospheric pollution at all during operation.
+    </p>
+    <p>
+        <b>Pumped Storage Hydro:</b>
+        Pumped-storage is used for storing electricity, and it is the only currently viable method of storing
+        useful amounts of electricity for use on the nation electricity grid.
+        Water is pumped from a lower reservoir to a higher reservoir during periods of low national electricity demand,
+        and then released to drive power-generating turbines from the high reservoir during times or high or rapidly rising electrical demand.
+    </p>
+    <p>
+        <b>Non Pumped Storage Hydro:</b>
+        Hydro-electricity is a CO<sub>2</sub>-free power source which generates no atmospheric pollution at all during operation.
+    </p>
+    <p>
+        <b>Interconnects:</b>
+        The UK national grid has four interconnects which allow importing and exporting electricity internationally.
+        These are used when UK electricity demand is significantly different to the demand of the connected country;
+        or when the current price of electricity in each country makes it beneficial to trade electricity.
+        <ul>
+            <li>A 2,000MW interconnect to France. 4x 500MW high-voltage direct-current cables between Sellindge (near Folkstone)
+                in England and Les Mandarins in France. The cables are 70km long, with 45km of that under the sea.
+                Began operating in 1986.</li>
+            <li>A 1,000MW interconnect to the Netherlands, consisting of one 260km high-voltage direct-current cable between
+                the Isle of Grain in England and Maasvlakte in the Netherlands. Began operating in 2011.</li>
+            <li>Two interconnects to Northern Ireland.</li>
+        </ul>
+    </p>
+    <br/>
+    <p><b>CO<sub>2</sub> Emissions</b></p>
+    <p>
+        Burning fossil fuels (coal, oil, gas) produces CO<sub>2</sub> (Carbon Dioxide).
+        The quantity of fossil fuels used needs to be reduced for many reasons:
+    </p>
+    <ul>
+        <li>The CO<sub>2</sub> produced contributes towards climate change; significantly disrupting life for future generations on our planet.</li>
+        <li>Many other pollutants apart from CO<sub>2</sub> are produced, especially from coal.</li>
+        <li>Fossil fuels are non-renewable - they will run out.</li>
+        <li>As fossil fuelds become scarcer, the techniques used for producing them become more 'dirty'.
+            More pollution is caused by mining the fossil fuel before the fuel is even used.</li>
+    </ul>
+    <p>
+        Notice that electricity generation in the UK produces between four and seven tonnes of CO<sub>2</sub>
+        every second (depending on the time of day).
+        This is approximately 200 million tonnes of CO<sub>2</sub> every year.
+    </p>
+    <p><i>This is a lot.</i></p>
+    <br/>
+    <p>This data updates every 5 minutes.</p>
+</div>

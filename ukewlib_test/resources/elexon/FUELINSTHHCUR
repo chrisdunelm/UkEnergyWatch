@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>200
+    </httpCode>
+    <errorType>Ok
+    </errorType>
+    <description>Success
+    </description>
+    <cappingApplied>No
+    </cappingApplied>
+    <cappingLimit>
+    </cappingLimit>
+    <queryString>serviceType=xml
+    </queryString>
+  </responseMetadata>
+  <responseHeader>
+    <recordType>HDR
+    </recordType>
+    <fileType>GENERATION BY FUEL TYPE CURRENT
+    </fileType>
+  </responseHeader>
+  <responseBody>
+    <total>
+      <currentTotalMW>34249
+      </currentTotalMW>
+      <currentTotalPercentage>100.0
+      </currentTotalPercentage>
+      <lastHalfHourTotalMW>34040
+      </lastHalfHourTotalMW>
+      <lastHalfHourTotalpercentage>100.0
+      </lastHalfHourTotalpercentage>
+      <last24HourTotalMWh>728635
+      </last24HourTotalMWh>
+      <last24HourTotalPercentage>100.0
+      </last24HourTotalPercentage>
+    </total>
+    <responseList>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>CCGT
+	</fuelType>
+	<currentMW>18384
+	</currentMW>
+	<currentPercentage>53.7
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>18324
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>53.8
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>384186
+	</last24HourMWh>
+	<last24HourPercentage>52.7
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>OCGT
+	</fuelType>
+	<currentMW>0
+	</currentMW>
+	<currentPercentage>0.0
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>0
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>0.0
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>0
+	</last24HourMWh>
+	<last24HourPercentage>0.0
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>OIL
+	</fuelType>
+	<currentMW>0
+	</currentMW>
+	<currentPercentage>0.0
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>0
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>0.0
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>0
+	</last24HourMWh>
+	<last24HourPercentage>0.0
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>COAL
+	</fuelType>
+	<currentMW>645
+	</currentMW>
+	<currentPercentage>1.9
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>644
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>1.9
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>18891
+	</last24HourMWh>
+	<last24HourPercentage>2.6
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>NUCLEAR
+	</fuelType>
+	<currentMW>6552
+	</currentMW>
+	<currentPercentage>19.1
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>6629
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>19.5
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>168729
+	</last24HourMWh>
+	<last24HourPercentage>23.2
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>WIND
+	</fuelType>
+	<currentMW>2714
+	</currentMW>
+	<currentPercentage>7.9
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>2572
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>7.6
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>28952
+	</last24HourMWh>
+	<last24HourPercentage>4.0
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>PS
+	</fuelType>
+	<currentMW>1193
+	</currentMW>
+	<currentPercentage>3.5
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>1196
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>3.5
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>7776
+	</last24HourMWh>
+	<last24HourPercentage>1.1
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>NPSHYD
+	</fuelType>
+	<currentMW>254
+	</currentMW>
+	<currentPercentage>0.7
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>257
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>0.8
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>4455
+	</last24HourMWh>
+	<last24HourPercentage>0.6
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>OTHER
+	</fuelType>
+	<currentMW>1443
+	</currentMW>
+	<currentPercentage>4.2
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>1444
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>4.2
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>41531
+	</last24HourMWh>
+	<last24HourPercentage>5.7
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>INTFR
+	</fuelType>
+	<currentMW>1997
+	</currentMW>
+	<currentPercentage>5.8
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>1996
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>5.9
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>47507
+	</last24HourMWh>
+	<last24HourPercentage>6.5
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>INTIRL
+	</fuelType>
+	<currentMW>78
+	</currentMW>
+	<currentPercentage>0.2
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>0
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>0.0
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>2840
+	</last24HourMWh>
+	<last24HourPercentage>0.4
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>INTNED
+	</fuelType>
+	<currentMW>989
+	</currentMW>
+	<currentPercentage>2.9
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>978
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>2.9
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>23768
+	</last24HourMWh>
+	<last24HourPercentage>3.3
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+      <item>
+	<recordType>FUELINSTHHCUR
+	</recordType>
+	<fuelType>INTEW
+	</fuelType>
+	<currentMW>0
+	</currentMW>
+	<currentPercentage>0.0
+	</currentPercentage>
+	<lastHalfHourLocalStartTime>2017-05-11 18:00
+	</lastHalfHourLocalStartTime>
+	<lastHalfHourLocalEndTime>2017-05-11 18:30
+	</lastHalfHourLocalEndTime>
+	<lastHalfHourMW>0
+	</lastHalfHourMW>
+	<lastHalfHourPercentage>0.0
+	</lastHalfHourPercentage>
+	<last24HourLocalStartTime>2017-05-10 18:30
+	</last24HourLocalStartTime>
+	<last24HourLocalEndTime>2017-05-11 18:30
+	</last24HourLocalEndTime>
+	<last24HourMWh>0
+	</last24HourMWh>
+	<last24HourPercentage>0.0
+	</last24HourPercentage>
+	<activeFlag>Y
+	</activeFlag>
+      </item>
+    </responseList>
+    <dataLastUpdated>2017-05-11 17:55:00
+    </dataLastUpdated>
+  </responseBody>
+</response>
