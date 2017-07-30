@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><response><responseMetadata><httpCode>403</httpCode><errorType>forbidden</errorType><description>An invalid API key has been passed</description><queryString>SettlementDate=2015-12-01,Period=1,NGCBMUnitID=null</queryString></responseMetadata></response>
