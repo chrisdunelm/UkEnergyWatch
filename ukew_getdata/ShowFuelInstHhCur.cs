@@ -17,6 +17,9 @@ namespace Ukew
         {
             [Option(Required = true, HelpText = "Absolute or relative directory path for fuel-instance half-hour storage")]
             public string DataDirectory { get; set; }
+
+            [Option(Required = false, HelpText = "Count of tail data items to show")]
+            public int Count { get; set; } = 10;
         }
 
         public ShowFuelInstHhCur(Options opts)
@@ -24,16 +27,18 @@ namespace Ukew
             var taskHelper = SystemTaskHelper.Instance;
             var dir = new SystemDirectory(taskHelper, opts.DataDirectory);
             _datastoreReader = new DataStoreReader<FuelInstHhCur.Data, FuelInstHhCur.Data>(taskHelper, dir);
+            _count = opts.Count;
         }
 
         private readonly DataStoreReader<FuelInstHhCur.Data, FuelInstHhCur.Data> _datastoreReader;
+        private readonly int _count;
 
         public async Task<int> Run()
         {
-            var count = (int)await _datastoreReader.CountAsync();
-            Console.WriteLine($"Fuelinst half-hour count: {count}");
-            Console.WriteLine("Latest 10 data readings:");
-            var data = await _datastoreReader.ReadAsync(count - 10, count);
+            var totalCount = (int)await _datastoreReader.CountAsync();
+            Console.WriteLine($"Fuelinst half-hour count: {totalCount}");
+            Console.WriteLine($"Latest {_count} data readings:");
+            var data = await _datastoreReader.ReadAsync(totalCount - _count, totalCount);
             string MW(Power p) => p.ToString(PowerUnit.Megawatt);
             data.ForEach(r =>
             {

@@ -14,11 +14,11 @@ namespace ukew_www
         [Option(Required = true, HelpText = "Absolute or relative directory path for fuel-instance half-hour storage")]
         public string FuelInstHhCurDataDirectory { get; set; }
 
-        [Option(Required = true, HelpText = "Runtime environment: 'Development', 'Staging', 'Production'")]
-        public string Environment { get; set; }
+        [Option(Required = false, HelpText = "Runtime environment: 'Development', 'Staging', 'Production'")]
+        public string Environment { get; set; } = "Development";
 
         [Option(Required = false, HelpText = "True to listen on all network interfaces, not just localhost")]
-        public bool NonLocalhost { get; set; }
+        public bool NonLocalhost { get; set; } = false;
     }
 
     public class Program
@@ -26,7 +26,11 @@ namespace ukew_www
         public static void Main(string[] args)
         {
             var cmdLineOptions = new CmdLineOptions();
-            var cmdLineResult = (Parsed<CmdLineOptions>)Parser.Default.ParseArguments<CmdLineOptions>(args);
+            var cmdLineResult = Parser.Default.ParseArguments<CmdLineOptions>(args) as Parsed<CmdLineOptions>;
+            if (cmdLineResult == null)
+            {
+                return;
+            }
 
             var hostBuilder = new WebHostBuilder()
                 .UseKestrel()

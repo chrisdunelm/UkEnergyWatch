@@ -19,6 +19,9 @@ namespace Ukew
 
             [Option(Required = true, HelpText = "Absolute or relative directory path for fuel-instance half-hour storage")]
             public string DataDirectory { get; set; }
+
+            [Option(Required = false, HelpText = "Perform an initial Get immediately, don't schedule a wait")]
+            public bool GetImmediately { get; set; } = false;
         }
 
         public GetFuelInstHhCur(Options opts)
@@ -29,24 +32,32 @@ namespace Ukew
             _fuelInstHhCur = new FuelInstHhCur(taskHelper, elexonDownloader);
             var dir = new SystemDirectory(taskHelper, opts.DataDirectory);
             _datastoreWriter = new DataStoreWriter<FuelInstHhCur.Data, FuelInstHhCur.Data>(taskHelper, dir);
+            _getImmediately = opts.GetImmediately;
         }
 
         private readonly Scheduler _scheduler;
         private readonly FuelInstHhCur _fuelInstHhCur;
         private readonly DataStoreWriter<FuelInstHhCur.Data, FuelInstHhCur.Data> _datastoreWriter;
+        private readonly bool _getImmediately;
 
         public async Task<int> Run()
         {
             // TODO: Logging
             Console.WriteLine("Starting GetFuelInstHhCur");
+            bool useScheduler = !_getImmediately;
             while (true)
             {
-                await _scheduler.ScheduleOne(Duration.FromMinutes(5), Duration.FromMinutes(1.8));
+                if (useScheduler)
+                {
+                    await _scheduler.ScheduleOne(Duration.FromMinutes(5), Duration.FromMinutes(1.8));
+                }
+                useScheduler = true;
                 Console.WriteLine("About to get data");
                 try
                 {
                     var data = await _fuelInstHhCur.GetAsync();
                     await _datastoreWriter.AppendAsync(data);
+                    Console.WriteLine($"Data downloaded OK @ {data.Update}");
                 }
                 catch (Exception e)
                 {
