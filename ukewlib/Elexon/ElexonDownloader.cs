@@ -23,7 +23,7 @@ namespace Ukew.Elexon
         public async Task<XDocument> GetXmlAsync(string reportName, IDictionary<string, string> getParams, CancellationToken ct = default(CancellationToken))
         {
             var paramString = getParams.Aggregate("", (acc, kv) => $"{acc}&{kv.Key}={kv.Value}");
-            var uri = $"https://api.bmreports.com/BMRS/{reportName}/v1?APIKey={_apiKey}{paramString}";
+            var uri = $"https://api.bmreports.com/BMRS/{reportName}/v1?APIKey={_apiKey}{paramString}&ServiceType=xml";
             var httpClient = new HttpClient();
             var response = await httpClient.GetByteArrayAsync(uri).ConfigureAwait(_taskHelper);
             var responseStream = new MemoryStream(response);

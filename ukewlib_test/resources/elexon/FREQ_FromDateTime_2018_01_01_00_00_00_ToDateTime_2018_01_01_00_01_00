@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>204
+    </httpCode>
+    <errorType>No Content
+    </errorType>
+    <description>Success But No data available
+    </description>
+    <queryString>FromDateTime=2018-01-01 00:00:00,ToDateTime=2018-01-01 00:01:00
+    </queryString>
+  </responseMetadata>
+</response>

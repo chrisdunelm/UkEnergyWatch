@@ -19,6 +19,11 @@ namespace Ukew.Elexon
             public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
         }
 
+        public class Writer : DataStoreWriter<Data, Data>
+        {
+            public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+        }
+
         public struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>
         {
             public Data(
@@ -195,7 +200,7 @@ namespace Ukew.Elexon
         private readonly ITaskHelper _taskHelper;
         private readonly IElexonDownloader _downloader;
 
-        private static InstantPattern s_updatePattern = InstantPattern.CreateWithInvariantCulture("yyyy'-'MM'-'dd' 'HH':'mm':'ss");
+        private static readonly InstantPattern s_updatePattern = InstantPattern.CreateWithInvariantCulture("yyyy'-'MM'-'dd' 'HH':'mm':'ss");
         public async Task<Data> GetAsync(CancellationToken ct = default(CancellationToken))
         {
             var xDoc = await _downloader.GetXmlAsync("FUELINSTHHCUR", new Dictionary<string, string>(), ct).ConfigureAwait(_taskHelper);

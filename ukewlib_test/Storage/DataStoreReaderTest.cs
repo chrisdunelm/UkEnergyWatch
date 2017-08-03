@@ -17,7 +17,7 @@ namespace Ukew.Storage
             TimeRunner.Run(async (time, th) =>
             {
                 var dir = new FakeDirectory();
-                var reader = new DataStoreReader<Data, DataFactory>(th, dir);
+                var reader = new Data.Reader(th, dir);
                 var data = await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th);
                 Assert.Empty(data);
             });
@@ -51,7 +51,7 @@ namespace Ukew.Storage
             TimeRunner.Run(async (time, th) =>
             {
                 var (dir, expected) = BuildData();
-                var reader = new DataStoreReader<Data, DataFactory>(th, dir);
+                var reader = new Data.Reader(th, dir);
                 var data = await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th);
                 Assert.Equal(expected, data);
             });
@@ -63,7 +63,7 @@ namespace Ukew.Storage
             TimeRunner.Run(async (time, th) =>
             {
                 var (dir, expected) = BuildData();
-                var reader = new DataStoreReader<Data, DataFactory>(th, dir);
+                var reader = new Data.Reader(th, dir);
                 async Task<Data[]> Read(int from, int to) =>
                     await (await reader.ReadAsync(from, to).ConfigureAwait(th)).ToArray().ConfigureAwait(th);
                 for (int start = 0; start < 5; start++)
@@ -82,7 +82,7 @@ namespace Ukew.Storage
             TimeRunner.Run(async (time, th) =>
             {
                 var (dir, _) = BuildData();
-                var reader = new DataStoreReader<Data, DataFactory>(th, dir);
+                var reader = new Data.Reader(th, dir);
                 Assert.Equal(5, await reader.CountAsync().ConfigureAwait(th));
             });
         }

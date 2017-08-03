@@ -16,8 +16,8 @@ namespace Ukew.Storage
             TimeRunner.Run(async (time, th) =>
             {
                 var dir = new FakeDirectory();
-                var writer = new DataStoreWriter<Data, DataFactory>(th, dir);
-                var reader = new DataStoreReader<Data, DataFactory>(th, dir);
+                var writer = new Data.Writer(th, dir);
+                var reader = new Data.Reader(th, dir);
                 Assert.Empty(await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
                 await writer.AppendAsync(new Data(1, 2, 3)).ConfigureAwait(th);
                 Assert.Equal(new [] { new Data(1, 2, 3) }, await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
@@ -36,8 +36,8 @@ namespace Ukew.Storage
                 var dir = new FakeDirectory(
                     ("seqid.00000001.version.1.elementsize.8.datastore", Bits.Empty.Concat(idBits).Concat(Bits.Empty.Add(1).AddFletcher16))
                 );
-                var writer = new DataStoreWriter<Data, DataFactory>(th, dir);
-                var reader = new DataStoreReader<Data, DataFactory>(th, dir);
+                var writer = new Data.Writer(th, dir);
+                var reader = new Data.Reader(th, dir);
                 Assert.Equal(new [] { new Data(1, null, null) }, await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
                 await writer.AppendAsync(new Data(4, 5, 6)).ConfigureAwait(th);
                 Assert.Equal(new [] { new Data(1, null, null), new Data(4, 5, 6) }, await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));

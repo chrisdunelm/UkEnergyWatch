@@ -28,6 +28,23 @@ namespace Ukew.Utils.Tasks
 
         public static TaskAwaitable ConfigureAwait(this Task task, ITaskHelper taskHelper) => taskHelper.ConfigureAwait(task);
 
+        public static TaskAwaitable<bool> ConfigureAwaitHideCancel(this Task task, ITaskHelper taskHelper)
+        {
+            async Task<bool> Inner()
+            {
+                try
+                {
+                    await task.ConfigureAwait(taskHelper);
+                    return false;
+                }
+                catch (OperationCanceledException)
+                {
+                    return true;
+                }
+            }
+            return Inner().ConfigureAwait(taskHelper);
+        }
+
         public static TaskAwaitable<T> ConfigureAwait<T>(this Task<T> task, ITaskHelper taskHelper) => taskHelper.ConfigureAwait(task);
 
         public static void Wait(this Task task, ITaskHelper taskHelper) => taskHelper.Wait(task);

@@ -45,8 +45,8 @@ namespace Ukew.Elexon
                 var dir = new FakeDirectory();
                 var fuelInstHhCur = new FuelInstHhCur(th, new FakeElexonDownloader());
                 var data = await fuelInstHhCur.GetAsync().ConfigureAwait(th);
-                var writer = new DataStoreWriter<FuelInstHhCur.Data, FuelInstHhCur.Data>(th, dir);
-                var reader = new DataStoreReader<FuelInstHhCur.Data, FuelInstHhCur.Data>(th, dir);
+                var writer = new FuelInstHhCur.Writer(th, dir);
+                var reader = new FuelInstHhCur.Reader(th, dir);
                 Assert.Equal(0, await reader.CountAsync().ConfigureAwait(th));
                 Assert.Equal(0, await (await reader.ReadAsync().ConfigureAwait(th)).Count().ConfigureAwait(th));
                 await writer.AppendAsync(data).ConfigureAwait(th);

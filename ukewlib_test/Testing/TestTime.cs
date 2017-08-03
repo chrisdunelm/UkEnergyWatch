@@ -388,9 +388,9 @@ namespace Ukew.Testing
             public TaskCompletionSource<int> Tcs { get; }
         }
 
-        public TestTime(int threadCount = 1)
+        public TestTime(int threadCount = 1, Instant? startInstant = null)
         {
-            _fakeClock = new FakeClock(Instant.FromUtc(2000, 1, 1, 0, 0));
+            _fakeClock = new FakeClock(startInstant ?? Instant.FromUtc(2000, 1, 1, 0, 0));
             _taskScheduler = new TestTaskScheduler(threadCount);
             TaskHelper = new TestTaskHelper(this);
         }

@@ -18,13 +18,13 @@ namespace Ukew.Applications
             _taskHelper = taskHelper;
             _scheduler = new Scheduler(time, taskHelper);
             _fuelInstHhCur = new FuelInstHhCur(taskHelper, downloader);
-            _datastoreWriter = new DataStoreWriter<FuelInstHhCur.Data, FuelInstHhCur.Data>(taskHelper, dir);
+            _datastoreWriter = new FuelInstHhCur.Writer(taskHelper, dir);
         }
 
-        private ITaskHelper _taskHelper;
-        private Scheduler _scheduler;
-        private FuelInstHhCur _fuelInstHhCur;
-        private DataStoreWriter<FuelInstHhCur.Data, FuelInstHhCur.Data> _datastoreWriter;
+        private readonly ITaskHelper _taskHelper;
+        private readonly Scheduler _scheduler;
+        private readonly FuelInstHhCur _fuelInstHhCur;
+        private readonly DataStoreWriter<FuelInstHhCur.Data, FuelInstHhCur.Data> _datastoreWriter;
 
         public async Task Start(CancellationToken ct)
         {

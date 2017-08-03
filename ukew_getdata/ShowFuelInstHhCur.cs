@@ -26,7 +26,7 @@ namespace Ukew
         {
             var taskHelper = SystemTaskHelper.Instance;
             var dir = new SystemDirectory(taskHelper, opts.DataDirectory);
-            _datastoreReader = new DataStoreReader<FuelInstHhCur.Data, FuelInstHhCur.Data>(taskHelper, dir);
+            _datastoreReader = new FuelInstHhCur.Reader(taskHelper, dir);
             _count = opts.Count;
         }
 

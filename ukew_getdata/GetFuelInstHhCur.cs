@@ -31,7 +31,7 @@ namespace Ukew
             var elexonDownloader = new ElexonDownloader(taskHelper, opts.ElexonApiKey);
             _fuelInstHhCur = new FuelInstHhCur(taskHelper, elexonDownloader);
             var dir = new SystemDirectory(taskHelper, opts.DataDirectory);
-            _datastoreWriter = new DataStoreWriter<FuelInstHhCur.Data, FuelInstHhCur.Data>(taskHelper, dir);
+            _datastoreWriter = new FuelInstHhCur.Writer(taskHelper, dir);
             _getImmediately = opts.GetImmediately;
         }
 

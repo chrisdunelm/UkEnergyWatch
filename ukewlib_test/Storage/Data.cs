@@ -2,6 +2,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using Ukew.Utils;
+using Ukew.Utils.Tasks;
 
 namespace Ukew.Storage
 {
@@ -28,6 +29,16 @@ namespace Ukew.Storage
 
     public class Data : IStorable<Data, DataFactory>, IEquatable<Data>
     {
+        public class Reader : DataStoreReader<Data, DataFactory>
+        {
+            public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+        }
+
+        public class Writer : DataStoreWriter<Data, DataFactory>
+        {
+            public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+        }
+
         public Data(int a, int? b, int? c) => (A, B, C) = (a, b, c);
         public int A { get; } // Versions 1, 2, 3
         public int? B { get; } // Versions 2, 3

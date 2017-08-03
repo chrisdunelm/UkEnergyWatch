@@ -10,7 +10,7 @@ using Ukew.Utils.Tasks;
 
 namespace Ukew.Storage
 {
-    public class DataStoreReader<T, TFactory> : DataStore where T : IStorable<T, TFactory> where TFactory : IStorableFactory<T>, new()
+    public abstract class DataStoreReader<T, TFactory> : DataStore where T : IStorable<T, TFactory> where TFactory : IStorableFactory<T>, new()
     {
         public DataStoreReader(ITaskHelper taskHelper, IDirectory dir)
         {
