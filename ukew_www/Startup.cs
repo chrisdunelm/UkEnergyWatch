@@ -38,7 +38,7 @@ namespace ukew_www
             // Add framework services.
             services.AddMvc();
 
-            // 
+            // Add custom services.
             services.AddSingleton<ITaskHelper>(SystemTaskHelper.Instance);
             services.AddSingleton<FuelInstHhCur.Reader>(ctx =>
             {
@@ -46,6 +46,13 @@ namespace ukew_www
                 var taskHelper = ctx.GetRequiredService<ITaskHelper>();
                 var dir = new SystemDirectory(taskHelper, cmdLineOptions.FuelInstHhCurDataDirectory);
                 return new FuelInstHhCur.Reader(taskHelper, dir);
+            });
+            services.AddSingleton<Freq.Reader>(ctx =>
+            {
+                var cmdLineOptions = ctx.GetRequiredService<CmdLineOptions>();
+                var taskHelper = ctx.GetRequiredService<ITaskHelper>();
+                var dir = new SystemDirectory(taskHelper, cmdLineOptions.FreqDataDirectory);
+                return new Freq.Reader(taskHelper, dir);
             });
 
             return services.BuildServiceProvider();

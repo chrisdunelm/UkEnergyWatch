@@ -28,7 +28,7 @@ namespace Ukew.Applications
                     await th.Delay(NodaTime.Duration.FromMinutes(3)).ConfigureAwait(th);
                     cts.Cancel();
                 });
-                await fetcher.Start(cts.Token).ConfigureAwaitHideCancel(th);
+                await fetcher.Start(false, cts.Token).ConfigureAwaitHideCancel(th);
 
                 var reader = new Freq.Reader(th, dir);
                 Assert.Equal((60 + 2) * 4, await reader.CountAsync().ConfigureAwait(th));

@@ -6,8 +6,8 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
@@ -34,6 +34,10 @@ div.subtitle {
 div.data {
     display: table;
     margin: 0 auto;
+}
+
+table.power {
+    width: 100%;
 }
 
 /* Cell spacing */

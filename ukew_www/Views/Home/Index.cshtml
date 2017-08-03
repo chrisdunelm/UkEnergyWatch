@@ -7,6 +7,8 @@
 
 @{
     ViewData["Title"] = "Electricity";
+    var powerData = @Model.FuelInstHhCurData;
+    var freqData = @Model.FrequencyData;
 }
 
 <div class="subtitle">
@@ -16,14 +18,13 @@ Electricity Fuel Type - Instantaneous real-time data
 <div class="data">
     <table class="power">
         <tr class="header"><td>Fuel type</td><td>Current Power</td><td>CO<sub>2</sub> emissions</td></td>
-        <tr class=
-        @foreach (var row in Model.Rows)
+        @foreach (var row in powerData.Rows)
         {
             <tr>
                 <td>@row.Name</td>
                 <td>
                     <span class="mw">@row.Power.ToString(PowerUnit.Megawatt, null, 0)</span>
-                    <span class="percent">@((row.Power / Model.Total.Power * 100.0).ToString("0.0")) %</span>
+                    <span class="percent">@((row.Power / powerData.Total.Power * 100.0).ToString("0.0")) %</span>
                 </td>
                 <td class="@(row.Co2.HasValue ? "" : "unknown")">@(row.Co2.HasValue ? row.Co2.Value.ToString(MassFlowUnit.KilogramPerSecond, null, 0) : "unknown")</td>
             </tr>
@@ -31,17 +32,33 @@ Electricity Fuel Type - Instantaneous real-time data
         <tr class="footer">
             <td>Total</td>
             <td>
-                <span class="mw">@Model.Total.Power.ToString(PowerUnit.Megawatt, null, 0)</span>
+                <span class="mw">@powerData.Total.Power.ToString(PowerUnit.Megawatt, null, 0)</span>
                 <span class="percent">100.0 %</span>
             </td>
             <td>
-                @Model.Total.Co2.Value.ToString(MassFlowUnit.KilogramPerSecond, null, 0)<br/>
-                @Model.Co2KgPerKwh.ToString("0.000") kg per kWh
+                @powerData.Total.Co2.Value.ToString(MassFlowUnit.KilogramPerSecond, null, 0)<br/>
+                @powerData.Co2KgPerKwh.ToString("0.000") kg per kWh
             </td>
         </tr>
     </table>
     <div class="update">
-        Updated: @Model.UpdateTime.ToString("dd MMMM yyyy HH:mm:ss", null) (UK local time)
+        Updated: @powerData.UpdateTime.ToString("dd MMMM yyyy HH:mm:ss", null) (UK local time)
+    </div>
+</div>
+
+<br/>
+
+<div class="subtitle">
+    Electricity Grid Frequency - Instantaneous real-time data
+</div>
+
+<div class="data">
+    <table class="power">
+        <tr class="header"><td>Grid Frequency</td></tr>
+        <tr><td>@freqData.Frequency.ToString(FrequencyUnit.Hertz, null, 3)</td></tr>
+    </table>
+    <div class="update">
+        Updated: @freqData.UpdateTime.ToString("dd MMMM yyyy HH:mm:ss", null) (UK local time)
     </div>
 </div>
 

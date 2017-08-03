@@ -14,6 +14,9 @@ namespace ukew_www
         [Option(Required = true, HelpText = "Absolute or relative directory path for fuel-instance half-hour storage")]
         public string FuelInstHhCurDataDirectory { get; set; }
 
+        [Option(Required = true, HelpText = "Absolute or relative directory path for grid frequency storage")]
+        public string FreqDataDirectory { get; set; }
+
         [Option(Required = false, HelpText = "Runtime environment: 'Development', 'Staging', 'Production'")]
         public string Environment { get; set; } = "Development";
 

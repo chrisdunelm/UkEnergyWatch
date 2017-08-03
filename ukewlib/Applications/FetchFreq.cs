@@ -27,11 +27,16 @@ namespace Ukew.Applications
         private readonly Freq.Reader _reader;
         private readonly Freq.Writer _writer;
 
-        public async Task Start(CancellationToken ct = default(CancellationToken))
+        public async Task Start(bool startImmediately, CancellationToken ct = default(CancellationToken))
         {
+            bool wait = !startImmediately;
             while (true)
             {
-                await _scheduler.ScheduleOne(Duration.FromMinutes(2), Duration.FromSeconds(4), ct).ConfigureAwait(_taskHelper);
+                if (wait)
+                {
+                    await _scheduler.ScheduleOne(Duration.FromMinutes(2), Duration.FromSeconds(4), ct).ConfigureAwait(_taskHelper);
+                }
+                wait = true;
                 var count = (int)await _reader.CountAsync(ct).ConfigureAwait(_taskHelper);
                 Instant now = _time.GetCurrentInstant();
                 Instant from;

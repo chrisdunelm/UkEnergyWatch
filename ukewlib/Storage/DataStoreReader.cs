@@ -58,9 +58,9 @@ namespace Ukew.Storage
             }
             else
             {
-                var rangedFromIndex = fromIndex.InRange(0, count);
-                var rangedToIndex = toIndex.InRange(0, count);
-                var fromFileIndex = indexedFiles.BinarySearch(rangedFromIndex, (x, i) => i < x.FromIndex ? -1 : i >= x.ToIndex ? 1 : 0);
+                int rangedFromIndex = fromIndex.InRange(0, count);
+                int rangedToIndex = toIndex.InRange(0, count);
+                int fromFileIndex = indexedFiles.BinarySearch(rangedFromIndex, (x, i) => i < x.FromIndex ? -1 : i >= x.ToIndex ? 1 : 0);
                 return new Enumerable(_taskHelper, _dir, indexedFiles.Skip(fromFileIndex).ToImmutableArray(), rangedFromIndex, rangedToIndex);
             }
         }
