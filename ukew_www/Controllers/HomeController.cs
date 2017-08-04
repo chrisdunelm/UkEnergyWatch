@@ -72,6 +72,7 @@ namespace ukew_www.Controllers
         private readonly FuelInstHhCur.Reader _fuelInstHhCurReader;
         private readonly Freq.Reader _freqReader;
 
+        [HttpGet("/")]
         public async Task<IActionResult> Index()
         {
             var count = (int)await _fuelInstHhCurReader.CountAsync();

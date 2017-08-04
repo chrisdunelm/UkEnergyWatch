@@ -1,4 +1,5 @@
 using System;
+using NodaTime;
 
 namespace Ukew.Utils
 {
@@ -20,6 +21,16 @@ namespace Ukew.Utils
             {
                 return fn();
             }
+        }
+
+        private static DateTimeZone s_tzLondon = DateTimeZoneProviders.Tzdb["Europe/London"];
+
+        public static LocalDate SettlementDate(this Instant instant) => instant.InZone(s_tzLondon).Date;
+
+        public static int SettlementPeriod(this Instant instant)
+        {
+            var duration = instant - s_tzLondon.AtStartOfDay(instant.SettlementDate()).ToInstant();
+            return (int)duration.TotalMinutes / 30 + 1;
         }
     }
 }
