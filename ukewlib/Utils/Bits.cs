@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace Ukew.Utils
 {
-    public struct Bits
+    public struct Bits : IReadOnlyList<byte>
     {
         // Everything big-endian
 
@@ -16,7 +18,7 @@ namespace Ukew.Utils
 
         public int Count => _bytes.Length;
 
-        public Bits Add(int v) => new Bits(_bytes.AddRange(new byte[]
+        public Bits AddInt(int v) => new Bits(_bytes.AddRange(new byte[]
             {
                 (byte)(v >> 24),
                 (byte)((v >> 16) & 0xff),
@@ -30,12 +32,12 @@ namespace Ukew.Utils
             ((int)bytes[offset + 2] << 8) |
             (int)bytes[offset + 3];
 
-        public Bits Add(int? v) => new Bits(_bytes.Add(v.HasValue ? (byte)1 : (byte)0)).Add(v ?? 0);
+        public Bits AddIntN(int? v) => new Bits(_bytes.Add(v.HasValue ? (byte)1 : (byte)0)).AddInt(v ?? 0);
 
         public static int? GetIntN(IReadOnlyList<byte> bytes, int offset) =>
             bytes[offset] != 0 ? GetInt(bytes, offset + 1) : (int?)null;
 
-        public Bits Add(uint v) => new Bits(_bytes.AddRange(new byte[]
+        public Bits AddUInt(uint v) => new Bits(_bytes.AddRange(new byte[]
             {
                 (byte)(v >> 24),
                 (byte)((v >> 16) & 0xff),
@@ -49,7 +51,7 @@ namespace Ukew.Utils
             ((uint)bytes[offset + 2] << 8) |
             (uint)bytes[offset + 3];
 
-        public Bits Add(ushort v) => new Bits(_bytes.AddRange(new byte[]
+        public Bits AddUShort(ushort v) => new Bits(_bytes.AddRange(new byte[]
             {
                 (byte)(v >> 8),
                 (byte)(v & 0xff),
@@ -59,10 +61,25 @@ namespace Ukew.Utils
             ((ushort)bytes[offset + 0] << 8) |
             (ushort)bytes[offset + 1]);
 
+        public Bits AddShort(short v) => new Bits(_bytes.AddRange(new byte[]
+            {
+                (byte)(v >> 8),
+                (byte)(v & 0xff),
+            }));
+
+        public static short GetShort(IReadOnlyList<byte> bytes, int offset) => (short)(
+            ((ushort)bytes[offset + 0] << 8) |
+            (ushort)bytes[offset + 1]);
+
         public Bits AddFletcher16 => new Bits(_bytes.AddRange(FletcherChecksum.Calc16Bytes(_bytes)));
 
         public Bits Concat(ImmutableArray<byte> bytes) => new Bits(_bytes.AddRange(bytes));
 
-        public static implicit operator ImmutableArray<byte> (Bits bits) => bits._bytes;
+        public byte this[int index] => _bytes[index];
+
+        public IEnumerator<byte> GetEnumerator() => _bytes.Skip(0).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public static implicit operator ImmutableArray<byte>(Bits bits) => bits._bytes;
     }
 }

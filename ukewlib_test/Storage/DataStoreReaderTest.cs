@@ -31,9 +31,9 @@ namespace Ukew.Storage
             var e = Bits.Empty;
             var idBits = e.Concat(ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2));
             var dir = new FakeDirectory(
-                (version1, e.Concat(idBits).Concat(e.Add(100).AddFletcher16).Concat(idBits).Concat(e.Add(101).AddFletcher16)),
-                (version2, e.Concat(idBits).Concat(e.Add(200).Add((int?)201).AddFletcher16).Concat(idBits).Concat(e.Add(300).Add((int?)301).AddFletcher16)),
-                (version3, e.Concat(idBits).Concat(e.Add(400).Add((int?)401).Add((int?)402).AddFletcher16))
+                (version1, e.Concat(idBits).Concat(e.AddInt(100).AddFletcher16).Concat(idBits).Concat(e.AddInt(101).AddFletcher16)),
+                (version2, e.Concat(idBits).Concat(e.AddInt(200).AddIntN((int?)201).AddFletcher16).Concat(idBits).Concat(e.AddInt(300).AddIntN((int?)301).AddFletcher16)),
+                (version3, e.Concat(idBits).Concat(e.AddInt(400).AddIntN((int?)401).AddIntN((int?)402).AddFletcher16))
             );
             var expected = new[] {
                 new Data(100, null, null),

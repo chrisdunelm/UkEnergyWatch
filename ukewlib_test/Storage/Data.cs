@@ -22,9 +22,9 @@ namespace Ukew.Storage
         }
 
         public ImmutableArray<byte> Store(Data item) => Bits.Empty
-                .Add(item.A)
-                .Add(item.B)
-                .Add(item.C);
+                .AddInt(item.A)
+                .AddIntN(item.B)
+                .AddIntN(item.C);
     }
 
     public class Data : IStorable<Data, DataFactory>, IEquatable<Data>

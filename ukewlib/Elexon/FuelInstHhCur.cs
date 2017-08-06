@@ -152,20 +152,20 @@ namespace Ukew.Elexon
             }
 
             ImmutableArray<byte> IStorableFactory<Data>.Store(Data item) => Bits.Empty
-                .Add(item._updateUnixSeconds)
-                .Add(item._ccgtMw)
-                .Add(item._ocgtMw)
-                .Add(item._oilMw)
-                .Add(item._coalMw)
-                .Add(item._nuclearMw)
-                .Add(item._windMw)
-                .Add(item._psMw)
-                .Add(item._npshydMw)
-                .Add(item._otherMw)
-                .Add(item._intFrMw)
-                .Add(item._intIrlMw)
-                .Add(item._intNedMw)
-                .Add(item._intEwMw);
+                .AddUInt(item._updateUnixSeconds)
+                .AddUShort(item._ccgtMw)
+                .AddUShort(item._ocgtMw)
+                .AddUShort(item._oilMw)
+                .AddUShort(item._coalMw)
+                .AddUShort(item._nuclearMw)
+                .AddUShort(item._windMw)
+                .AddUShort(item._psMw)
+                .AddUShort(item._npshydMw)
+                .AddUShort(item._otherMw)
+                .AddUShort(item._intFrMw)
+                .AddUShort(item._intIrlMw)
+                .AddUShort(item._intNedMw)
+                .AddUShort(item._intEwMw);
 
             public static bool operator ==(Data a, Data b) =>
                 a._updateUnixSeconds == b._updateUnixSeconds &&

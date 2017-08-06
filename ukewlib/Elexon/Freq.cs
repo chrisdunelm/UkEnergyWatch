@@ -46,8 +46,8 @@ namespace Ukew.Elexon
             int IStorableFactory<Data>.CurrentVersion => 1;
 
             ImmutableArray<byte> IStorableFactory<Data>.Store(Data item) => Bits.Empty
-                .Add(item._updateUnixSeconds)
-                .Add(item._freqMicroHz);
+                .AddUInt(item._updateUnixSeconds)
+                .AddUInt(item._freqMicroHz);
 
             Data IStorableFactory<Data>.Load(int version, ImmutableArray<byte> bytes)
             {
@@ -105,7 +105,7 @@ namespace Ukew.Elexon
                         var update = s_updatePattern.Parse($"{date} {time}").Value;
                         var frequency = Frequency.FromHertz(double.Parse(item.Element("frequency").Value.Trim()));
                         return new Data(update, frequency);
-                    }).ToImmutableArray();
+                    }).ToImmutableList();
                 default:
                     throw new InvalidOperationException($"Bad data. HTTP code = {httpCode}");
             }
