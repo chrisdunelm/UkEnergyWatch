@@ -31,26 +31,26 @@ namespace Ukew.Elexon
                 : this(BmUnitIds.Hash(bmUnitId), (uint)timeFrom.ToUnixTimeSeconds(), (short)levelFrom.Megawatts,
                     (ushort)(timeTo - timeFrom).TotalSeconds, (short)levelTo.Megawatts) { }
 
-            private FpnData(uint bmUnitIdHash, uint timeFromUnixSeconds, short levelFromMw, ushort timeDeltaSeconds, short levelToMw)
+            private FpnData(uint bmUnitIdHash, uint timeFromUnixSeconds, short levelFromMw, uint timeToUnixSeconds, short levelToMw)
             {
                 _bmUnitIdHash = bmUnitIdHash;
                 _timeFromUnixSeconds = timeFromUnixSeconds;
                 _levelFromMw = levelFromMw;
-                _timeDeltaSeconds = timeDeltaSeconds;
+                _timeToUnixSeconds = timeToUnixSeconds;
                 _levelToMw = levelToMw;
             }
 
             private readonly uint _bmUnitIdHash;
             private readonly uint _timeFromUnixSeconds;
             private readonly short _levelFromMw;
-            private readonly ushort _timeDeltaSeconds;
+            private readonly uint _timeToUnixSeconds;
             private readonly short _levelToMw;
 
             public uint BmUnitIdHash => _bmUnitIdHash;
             public string BmUnitId => BmUnitIds.Lookup(_bmUnitIdHash);
             public Instant TimeFrom => Instant.FromUnixTimeSeconds(_timeFromUnixSeconds);
             public Power LevelFrom => Power.FromMegawatts(_levelFromMw);
-            public Instant TimeTo => Instant.FromUnixTimeSeconds(_timeFromUnixSeconds + _timeDeltaSeconds);
+            public Instant TimeTo => Instant.FromUnixTimeSeconds(_timeToUnixSeconds);
             public Power LevelTo => Power.FromMegawatts(_levelToMw);
 
             int IStorableFactory<FpnData>.CurrentVersion => 1;
@@ -59,7 +59,7 @@ namespace Ukew.Elexon
                 .AddUInt(item._bmUnitIdHash)
                 .AddUInt(item._timeFromUnixSeconds)
                 .AddShort(item._levelFromMw)
-                .AddUShort(item._timeDeltaSeconds)
+                .AddUInt(item._timeToUnixSeconds)
                 .AddShort(item._levelToMw);
 
             FpnData IStorableFactory<FpnData>.Load(int version, ImmutableArray<byte> bytes)
@@ -68,7 +68,7 @@ namespace Ukew.Elexon
                 {
                     case 1:
                         return new FpnData(Bits.GetUInt(bytes, 0),
-                            Bits.GetUInt(bytes, 4), Bits.GetShort(bytes, 8), Bits.GetUShort(bytes, 10), Bits.GetShort(bytes, 12));
+                            Bits.GetUInt(bytes, 4), Bits.GetShort(bytes, 8), Bits.GetUInt(bytes, 10), Bits.GetShort(bytes, 14));
                     default:
                         throw new Exception($"Unknown version: {version}");
                 }
@@ -76,9 +76,9 @@ namespace Ukew.Elexon
 
             public static bool operator ==(FpnData a, FpnData b) =>
                 a._bmUnitIdHash == b._bmUnitIdHash && a._timeFromUnixSeconds == b._timeFromUnixSeconds &&
-                a._levelFromMw == b._levelFromMw && a._timeDeltaSeconds == b._timeDeltaSeconds && a._levelToMw == b._levelToMw;
+                a._levelFromMw == b._levelFromMw && a._timeToUnixSeconds == b._timeToUnixSeconds && a._levelToMw == b._levelToMw;
             public override int GetHashCode() =>
-                (int)(_bmUnitIdHash ^ _timeFromUnixSeconds ^ _levelFromMw ^ _timeDeltaSeconds ^ ((int)_levelToMw) << 16);
+                (int)(_bmUnitIdHash ^ _timeFromUnixSeconds ^ _levelFromMw ^ _timeToUnixSeconds ^ ((int)_levelToMw) << 16);
 
             public override bool Equals(object obj) => (obj is FpnData other) && this == other;
             public bool Equals(FpnData other) => this == other;
