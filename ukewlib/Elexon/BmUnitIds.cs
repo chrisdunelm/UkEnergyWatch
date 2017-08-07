@@ -14,7 +14,7 @@ namespace Ukew.Elexon
                 hash *= 1099511628211UL;
                 hash ^= s[i];
             }
-            return (uint)(hash | (hash >> 32));
+            return (uint)(hash ^ (hash >> 32));
         }
 
         public static string Lookup(uint hash) =>
