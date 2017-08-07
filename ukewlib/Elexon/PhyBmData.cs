@@ -29,7 +29,7 @@ namespace Ukew.Elexon
         {
             public FpnData(string bmUnitId, Instant timeFrom, Power levelFrom, Instant timeTo, Power levelTo)
                 : this(BmUnitIds.Hash(bmUnitId), (uint)timeFrom.ToUnixTimeSeconds(), (short)levelFrom.Megawatts,
-                    (ushort)(timeTo - timeFrom).TotalSeconds, (short)levelTo.Megawatts) { }
+                    (uint)timeTo.ToUnixTimeSeconds(), (short)levelTo.Megawatts) { }
 
             private FpnData(uint bmUnitIdHash, uint timeFromUnixSeconds, short levelFromMw, uint timeToUnixSeconds, short levelToMw)
             {
