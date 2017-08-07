@@ -16,7 +16,6 @@ namespace Ukew.Applications
             _scheduler = new Scheduler(time, taskHelper);
             _phyBmData = new PhyBmData(taskHelper, downloader);
             _writer = new PhyBmData.FpnWriter(taskHelper, dir);
-
         }
 
         private readonly ITaskHelper _taskHelper;
