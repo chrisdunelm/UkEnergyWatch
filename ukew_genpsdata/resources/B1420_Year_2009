@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>200</httpCode>
+    <errorType>Ok</errorType>
+    <description>Success</description>
+    <cappingApplied>No</cappingApplied>
+    <cappingLimit>1000</cappingLimit>
+    <queryString>Year=2009</queryString>
+  </responseMetadata>
+  <responseBody>
+    <dataItem>B1420</dataItem>
+    <responseList>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052681</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_EDINW-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W10000EDINW-1N</registeredResourceEICCode>
+        <nominal>42</nominal>
+        <nGCBMUnitID>EDINW-1</nGCBMUnitID>
+        <registeredResourceName>EDINW-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-08-20</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052681</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000EDINWA</registeredResourceEICCode>
+        <voltageLimit>132</voltageLimit>
+        <nominal>42</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>EDINW</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-08-20</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052631</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_SVRP-20</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000SVRP-207</registeredResourceEICCode>
+        <nominal>425</nominal>
+        <nGCBMUnitID>SVRP-20</nGCBMUnitID>
+        <registeredResourceName>SVRP-20</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-11-13</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052631</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_SVRP-10</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000SVRP-10A</registeredResourceEICCode>
+        <nominal>425</nominal>
+        <nGCBMUnitID>SVRP-10</nGCBMUnitID>
+        <registeredResourceName>SVRP-10</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-11-13</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052631</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN00000SVRP6</registeredResourceEICCode>
+        <voltageLimit>275</voltageLimit>
+        <nominal>850</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>SVRP</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-11-13</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052628</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_TDBNW-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000TDBNW-1W</registeredResourceEICCode>
+        <nominal>28</nominal>
+        <nGCBMUnitID>TDBNW-1</nGCBMUnitID>
+        <registeredResourceName>TDBNW-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-07-30</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052628</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000TDBNWM</registeredResourceEICCode>
+        <voltageLimit>0</voltageLimit>
+        <nominal>28</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>TDBNW</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-07-30</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052627</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000GRGBW9</registeredResourceEICCode>
+        <voltageLimit>400</voltageLimit>
+        <nominal>668</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>GRGBW</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-11-25</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052627</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_GRGBW-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000GRGBW-1V</registeredResourceEICCode>
+        <nominal>334</nominal>
+        <nGCBMUnitID>GRGBW-1</nGCBMUnitID>
+        <registeredResourceName>GRGBW-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-11-25</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052627</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_GRGBW-2</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000GRGBW-2T</registeredResourceEICCode>
+        <nominal>167</nominal>
+        <nGCBMUnitID>GRGBW-2</nGCBMUnitID>
+        <registeredResourceName>GRGBW-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-11-25</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052627</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_GRGBW-3</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000GRGBW-3R</registeredResourceEICCode>
+        <nominal>167</nominal>
+        <nGCBMUnitID>GRGBW-3</nGCBMUnitID>
+        <registeredResourceName>GRGBW-3</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-11-25</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052590</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_CRYRW-2</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000CRYRW-2L</registeredResourceEICCode>
+        <nominal>200</nominal>
+        <nGCBMUnitID>CRYRW-2</nGCBMUnitID>
+        <registeredResourceName>CRYRW-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-12-11</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052590</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000CRYRBT</registeredResourceEICCode>
+        <voltageLimit>132</voltageLimit>
+        <nominal>200</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>CRYRB</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-12-11</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052532</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000GNFSWJ</registeredResourceEICCode>
+        <voltageLimit>400</voltageLimit>
+        <nominal>165</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>GNFSW</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-07-01</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052532</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_GNFSW-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000GNFSW-1H</registeredResourceEICCode>
+        <nominal>100</nominal>
+        <nGCBMUnitID>GNFSW-1</nGCBMUnitID>
+        <registeredResourceName>GNFSW-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-07-01</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052532</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2009</year>
+        <bMUnitID>T_GNFSW-2</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000GNFSW-2F</registeredResourceEICCode>
+        <nominal>65</nominal>
+        <nGCBMUnitID>GNFSW-2</nGCBMUnitID>
+        <registeredResourceName>GNFSW-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2009-07-01</implementationDate>
+      </item>
+    </responseList>
+  </responseBody>
+</response>

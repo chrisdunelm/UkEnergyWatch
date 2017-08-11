@@ -20,21 +20,21 @@ namespace Ukew.Elexon
                 var data = await phy.GetAsync(new LocalDate(2017, 8, 6), 1).ConfigureAwait(th);
                 Assert.Equal(1031, data.Count);
                 Assert.Equal(Power.FromMegawatts(-225), data[0].LevelFrom);
-                var fpn0 = new PhyBmData.FpnData("2__ABGAS000",
+                var fpn0 = new PhyBmData.FpnData("EAS-BGS01",
                     Instant.FromUtc(2017, 8, 5, 23, 0), Power.FromMegawatts(-225),
                     Instant.FromUtc(2017, 8, 5, 23, 30), Power.FromMegawatts(-225));
                 Assert.Equal(fpn0, data[0]);
-                var fpnLast = new PhyBmData.FpnData("T__MYELT001",
+                var fpnLast = new PhyBmData.FpnData("RHAMD-1",
                     Instant.FromUtc(2017, 8, 5, 23, 0), Power.FromMegawatts(-2),
                     Instant.FromUtc(2017, 8, 5, 23, 30), Power.FromMegawatts(-2));
                 Assert.Equal(fpnLast, data.Last());
-                var whilw1 = data.Where(x => x.BmUnitIdHash == BmUnitIds.Hash("T_WHILW-1")).ToImmutableList();
+                var whilw1 = data.Where(x => x.ResourceNameHash == EicIds.Hash("WHILW-1")).ToImmutableList();
                 Assert.Equal(2, whilw1.Count);
-                var whilw1Fpn0 = new PhyBmData.FpnData("T_WHILW-1",
+                var whilw1Fpn0 = new PhyBmData.FpnData("WHILW-1",
                     Instant.FromUtc(2017, 8, 5, 23, 0), Power.FromMegawatts(25),
                     Instant.FromUtc(2017, 8, 5, 23, 1), Power.FromMegawatts(14));
                 Assert.Equal(whilw1Fpn0, whilw1[0]);
-                var whilw1Fpn1 = new PhyBmData.FpnData("T_WHILW-1",
+                var whilw1Fpn1 = new PhyBmData.FpnData("WHILW-1",
                     Instant.FromUtc(2017, 8, 5, 23, 1), Power.FromMegawatts(14),
                     Instant.FromUtc(2017, 8, 5, 23, 30), Power.FromMegawatts(14));
                 Assert.Equal(whilw1Fpn1, whilw1[1]);

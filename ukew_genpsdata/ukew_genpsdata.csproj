@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
+    <PackageReference Include="System.Interactive.Async" Version="3.1.1" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    <PackageReference Include="NodaTime" Version="2.0.1" />
+    <PackageReference Include="UnitsNet" Version="3.62.0" />
+    <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
+    <PackageReference Include="ExcelDataReader" Version="3.1.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.3.0" />
+    <ProjectReference Include="..\ukewlib\ukewlib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="resources\**\*" />
+  </ItemGroup>
+</Project>

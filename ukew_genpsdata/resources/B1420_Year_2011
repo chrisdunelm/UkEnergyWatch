@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>200</httpCode>
+    <errorType>Ok</errorType>
+    <description>Success</description>
+    <cappingApplied>No</cappingApplied>
+    <cappingLimit>1000</cappingLimit>
+    <queryString>Year=2011</queryString>
+  </responseMetadata>
+  <responseBody>
+    <dataItem>B1420</dataItem>
+    <responseList>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052537</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2011</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000LARYWP</registeredResourceEICCode>
+        <voltageLimit>400</voltageLimit>
+        <nominal>720</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>LARYW</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2011-11-15</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052537</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2011</year>
+        <bMUnitID>T_LARYW-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000LARYO-1Z</registeredResourceEICCode>
+        <nominal>180</nominal>
+        <nGCBMUnitID>LARYO-1</nGCBMUnitID>
+        <registeredResourceName>LARYO-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2011-11-15</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052537</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2011</year>
+        <bMUnitID>T_LARYW-2</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000LARYO-2X</registeredResourceEICCode>
+        <nominal>180</nominal>
+        <nGCBMUnitID>LARYO-2</nGCBMUnitID>
+        <registeredResourceName>LARYO-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2011-11-15</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052537</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2011</year>
+        <bMUnitID>T_LARYW-3</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000LARYO-3V</registeredResourceEICCode>
+        <nominal>180</nominal>
+        <nGCBMUnitID>LARYO-3</nGCBMUnitID>
+        <registeredResourceName>LARYO-3</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2011-11-15</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052537</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2011</year>
+        <bMUnitID>T_LARYW-4</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000LARYO-4T</registeredResourceEICCode>
+        <nominal>180</nominal>
+        <nGCBMUnitID>LARYO-4</nGCBMUnitID>
+        <registeredResourceName>LARYO-4</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2011-11-15</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052517</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2011</year>
+        <bMUnitID>T_BAGTD-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000BAGTD-1S</registeredResourceEICCode>
+        <nominal>10</nominal>
+        <nGCBMUnitID>BAGTD-1</nGCBMUnitID>
+        <registeredResourceName>BAGTD-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000847</documentID>
+        <implementationDate>2011-01-12</implementationDate>
+      </item>
+    </responseList>
+  </responseBody>
+</response>

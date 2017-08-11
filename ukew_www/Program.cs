@@ -17,6 +17,9 @@ namespace ukew_www
         [Option(Required = true, HelpText = "Absolute or relative directory path for grid frequency storage")]
         public string FreqDataDirectory { get; set; }
 
+        [Option(Required = true, HelpText = "Absolute or relative directory path for Physical FPN storage")]
+        public string FpnDataDirectory { get; set; }
+
         [Option(Required = false, HelpText = "Runtime environment: 'Development', 'Staging', 'Production'")]
         public string Environment { get; set; } = "Development";
 
@@ -28,7 +31,6 @@ namespace ukew_www
     {
         public static void Main(string[] args)
         {
-            var cmdLineOptions = new CmdLineOptions();
             var cmdLineResult = Parser.Default.ParseArguments<CmdLineOptions>(args) as Parsed<CmdLineOptions>;
             if (cmdLineResult == null)
             {

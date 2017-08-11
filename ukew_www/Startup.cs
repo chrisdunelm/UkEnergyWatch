@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ukew.Elexon;
 using Ukew.Storage;
+using Ukew.Utils;
 using Ukew.Utils.Tasks;
 
 namespace ukew_www
@@ -39,6 +40,7 @@ namespace ukew_www
             services.AddMvc();
 
             // Add custom services.
+            services.AddSingleton<ITime>(SystemTime.Instance);
             services.AddSingleton<ITaskHelper>(SystemTaskHelper.Instance);
             services.AddSingleton<FuelInstHhCur.Reader>(ctx =>
             {
@@ -53,6 +55,13 @@ namespace ukew_www
                 var taskHelper = ctx.GetRequiredService<ITaskHelper>();
                 var dir = new SystemDirectory(taskHelper, cmdLineOptions.FreqDataDirectory);
                 return new Freq.Reader(taskHelper, dir);
+            });
+            services.AddSingleton<PhyBmData.FpnReader>(ctx =>
+            {
+                var cmdLineOptions = ctx.GetRequiredService<CmdLineOptions>();
+                var taskHelper = ctx.GetRequiredService<ITaskHelper>();
+                var dir = new SystemDirectory(taskHelper, cmdLineOptions.FpnDataDirectory);
+                return new PhyBmData.FpnReader(taskHelper, dir);
             });
 
             return services.BuildServiceProvider();

@@ -15,11 +15,17 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    @RenderSection("Header", required: false)
 </head>
 <body>
     <div class="container body-content">
         <div class="title">
             UK Energy Watch
+        </div>
+        <div class="menu">
+            <a href="/">Summary</a>@* Comment here required to remove gap between spans
+          *@<a href="/powerstations">Power Stations</a>
+            <a class="right" href="/contact" >Contact</a>
         </div>
         @RenderBody()
     </div>

@@ -17,18 +17,64 @@ textarea {
     max-width: 280px;
 }
 
+.hidden {
+    display: none;
+}
+
+label.revealer {
+    width: 100%;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+label.revealer:hover {
+    color: blue;
+    text-decoration: dashed underline;
+}
+
 div.title {
     font-size: 200%;
     font-style: italic;
     padding: 10px;
-    margin-bottom: 10px;
     background-color: lightblue;
     text-align: center;
+}
+
+div.menu {
+    border-top: 1px solid white;
+    background-color: lightblue;
+    margin-bottom: 10px;
+}
+
+div.menu a {
+    display: inline-block;
+    padding: 10px;
+    border-right: 1px solid white;
+}
+
+div.menu a.right {
+    float: right;
+    border-right: 0;
+    border-left: 1px solid white;
+}
+
+div.menu a:hover {
+    background-color: yellow;
 }
 
 div.subtitle {
     font-size: 150%;
     margin-bottom: 5px;
+}
+
+div.subnote {
+    margin-left: 2em;
+    margin-bottom: 5px;
+    font-style: italic;
+}
+
+div.subnote em {
+    font-weight: bold;
 }
 
 div.data {
@@ -54,6 +100,7 @@ table.power td ~ td {
 table.power tr.header {
     border-bottom: 2px solid black;
     font-weight: bold;
+    background-color: lightcyan;
 }
 
 /* Footer formatting */
@@ -64,16 +111,16 @@ table.power tr.footer {
 }
 
 /* Highlight hovered row, except header row */
-table.power tr ~ tr:hover {
+table.power tr.highlight:hover {
     background-color: yellow !important;
 }
 
 /* Background alternate colours, 'even' doesn't seem to work in Chrome */
-table.power tr:nth-child(odd) {
+table.power tr.row1 {
     background-color: #eee;
 }
 
-table.power td.unknown {
+table.power .unknown {
     font-style: italic;
 }
 
@@ -81,15 +128,27 @@ table.power span.mw {
     text-align: left;
 }
 
-table.power span.percent {
+table.power span.percent, table.power span.maxpower {
     text-align: right;
     float: right;
     margin-left: 2em;
     font-style: italic;
 }
 
+table.power div.genunit {
+    text-align: right;
+    float: right;
+    font-style: italic;
+}
+
 div.update {
     font-style: italic;
+}
+
+div.smallupdate {
+    font-style: italic;
+    font-size: 80%;
+    text-align: right;
 }
 
 div.info {
@@ -111,4 +170,12 @@ div.info p {
 
 div.info ul {
     margin: 1px;
+}
+
+div.email {
+    padding: 15px;
+}
+
+div.email span {
+    font-family: monospace;
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>200</httpCode>
+    <errorType>Ok</errorType>
+    <description>Success</description>
+    <cappingApplied>No</cappingApplied>
+    <cappingLimit>1000</cappingLimit>
+    <queryString>Year=2002</queryString>
+  </responseMetadata>
+  <responseBody>
+    <dataItem>B1420</dataItem>
+    <responseList>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052527</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2002</year>
+        <bMUnitID>T_BAGE-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W000000BAGE-1L</registeredResourceEICCode>
+        <nominal>520</nominal>
+        <nGCBMUnitID>BAGE-1</nGCBMUnitID>
+        <registeredResourceName>BAGE-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2002-02-14</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052527</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2002</year>
+        <bMUnitID>T_BAGE-2</bMUnitID>
+        <registeredResourceEICCode>
+        48W000000BAGE-2J</registeredResourceEICCode>
+        <nominal>32</nominal>
+        <nGCBMUnitID>BAGE-2</nGCBMUnitID>
+        <registeredResourceName>BAGE-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2002-02-14</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052527</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2002</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN00000BAGE8</registeredResourceEICCode>
+        <voltageLimit>275</voltageLimit>
+        <nominal>552</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>BAGE</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2002-02-14</implementationDate>
+      </item>
+    </responseList>
+  </responseBody>
+</response>

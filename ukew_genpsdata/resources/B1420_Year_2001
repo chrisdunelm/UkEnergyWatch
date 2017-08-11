@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>200</httpCode>
+    <errorType>Ok</errorType>
+    <description>Success</description>
+    <cappingApplied>No</cappingApplied>
+    <cappingLimit>1000</cappingLimit>
+    <queryString>Year=2001</queryString>
+  </responseMetadata>
+  <responseBody>
+    <dataItem>B1420</dataItem>
+    <responseList>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052516</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2001</year>
+        <bMUnitID>T_SCCL-4</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000SCCLD-1G</registeredResourceEICCode>
+        <nominal>999</nominal>
+        <nGCBMUnitID>SCCLD-1</nGCBMUnitID>
+        <registeredResourceName>SCCLD-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000847</documentID>
+        <implementationDate>2001-03-31</implementationDate>
+      </item>
+    </responseList>
+  </responseBody>
+</response>

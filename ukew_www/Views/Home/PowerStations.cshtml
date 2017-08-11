@@ -1,0 +1,88 @@
+@using UnitsNet
+@using Microsoft.AspNetCore.Html
+@using UnitsNet.Units
+@using Ukew.Utils
+
+@model ukew_www.Controllers.HomeController.PowerStationsModel
+
+@{
+    ViewData["Title"] = "Power Stations";
+    var fpnData = @Model.FpnData;
+}
+
+@section Header
+{
+    <style type="text/css">
+        @foreach (var ps in fpnData.PowerStationsByFuel.SelectMany(x => x))
+        {
+            <text>
+                .reveal@(ps.CssId) { display: none; }
+                #box@(ps.CssId):checked ~ table .reveal@(ps.CssId) { display: table-row; }
+            </text>
+        }
+    </style>
+}
+
+<div class="subtitle">
+Electricity Power Stations - real-time data
+</div>
+<div class="subnote">
+    <em>Important:</em> This data is the <em>predicted</em> power generation, not the actual generation.
+    Every power generator is required to provide this data one hour before each settlement period.
+    This will usually be accurate, but won't take into account any unpredicted events (e.g. generator failure)
+    that occur after this time.
+    <br/>
+    <br/>
+    <em>Warning:</em> This page is work-in-progress, and contains errors and mistakes.
+</div>
+<br/>
+<div class="data">
+    @foreach (var ps in fpnData.PowerStationsByFuel.SelectMany(x => x))
+    {
+        <input class="hidden" type="checkbox" id="box@(ps.CssId)"/>
+    }
+    <table class="power">
+        @foreach (var fuelGroup in fpnData.PowerStationsByFuel)
+        {
+            <tr class="header">
+                <td>Power Station - @fuelGroup.Key</td><td>Resource Name</td><td>Current Power</td><td>CO<sub>2</sub> emissions</td>
+            </tr>
+            @foreach (var t in fuelGroup.Select((x, i) => Tuple.Create(x, i)))
+            {
+                var ps = t.Item1;
+                var evenOdd = t.Item2 & 1;
+                <tr class="row@(evenOdd) highlight">
+                    <td><label class="revealer" style="height:100%" for="box@(ps.CssId)">@ps.UnderlyingPowerStation.AssetName</label></td>
+                    <td>@ps.UnderlyingPowerStation.RegisteredResourceName</td>
+                    <td>
+                        <div>
+                            <span class="@(ps.CurrentGeneration.HasValue ? "" : "unknown")">@(ps.CurrentGeneration?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
+                            <span class="maxpower">installed:
+                                <span class="@(ps.UnderlyingPowerStation.InstalledCapacity.HasValue ? "" : "unknown")">@(ps.UnderlyingPowerStation.InstalledCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
+                            </span>
+                        </div>
+                        <div class="smallupdate">
+                            @(ps.UpdateTime?.ToString("dd MMMM yyyy HH:mm:ss", null) ?? "unknown") (UK local time)
+                        </div>
+                    </td>
+                    <td class="@(ps.Co2.HasValue ? "" : "unknown")">@(ps.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ?? "unknown")</td>
+                </tr>
+                @foreach (var genUnit in ps.GeneratingUnits)
+                {
+                    <tr class="reveal@(ps.CssId) row@(evenOdd)">
+                        <td colspan="2"><div class="genunit">
+                            @genUnit.UnderlyingGenerationUnit.RegisteredResourceName (@genUnit.UnderlyingGenerationUnit.BmUnitId)
+                        </div></td>
+                        <td>
+                            <span class="@(genUnit.CurrentGeneration.HasValue ? "" : "unknown")">@(genUnit.CurrentGeneration?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
+                            <span class="maxpower">nominal:
+                                <span class="@(genUnit.UnderlyingGenerationUnit.MaxCapacity.HasValue ? "" : "unknown")">@(genUnit.UnderlyingGenerationUnit.MaxCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
+                            </span>
+                        </td>
+                        <td class="@(genUnit.Co2.HasValue ? "" : "unknown")">@(genUnit.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ??  "unknown")</td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>

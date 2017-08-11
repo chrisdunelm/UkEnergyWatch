@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<response>
+  <responseMetadata>
+    <httpCode>200</httpCode>
+    <errorType>Ok</errorType>
+    <description>Success</description>
+    <cappingApplied>No</cappingApplied>
+    <cappingLimit>1000</cappingLimit>
+    <queryString>Year=2014</queryString>
+  </responseMetadata>
+  <responseBody>
+    <dataItem>B1420</dataItem>
+    <responseList>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052639</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000HMGTOR</registeredResourceEICCode>
+        <voltageLimit>400</voltageLimit>
+        <nominal>219</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>HMGTO</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2014-06-21</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052639</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000HMGTO-10</registeredResourceEICCode>
+        <nominal>108</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>HMGTO-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2014-06-21</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052639</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000HMGTO-2Z</registeredResourceEICCode>
+        <nominal>111</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>HMGTO-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2014-06-21</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052598</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>T_WTMSO-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000WTMSO-1M</registeredResourceEICCode>
+        <nominal>210</nominal>
+        <nGCBMUnitID>WTMSO-1</nGCBMUnitID>
+        <registeredResourceName>WTMSO-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2014-03-27</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052598</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000WTMSOT</registeredResourceEICCode>
+        <voltageLimit>275</voltageLimit>
+        <nominal>210</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>WTMSO</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2014-03-27</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052538</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000TULWBN</registeredResourceEICCode>
+        <voltageLimit>132</voltageLimit>
+        <nominal>25</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>TULWB</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2014-01-10</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052538</timeSeriesID>
+        <powerSystemResourceType>
+        Generation</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>E_TULWW-2</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000TULWW-2S</registeredResourceEICCode>
+        <nominal>25</nominal>
+        <nGCBMUnitID>TULWW-2</nGCBMUnitID>
+        <registeredResourceName>TULWW-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000849</documentID>
+        <implementationDate>2014-01-10</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00052518</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>E__MDRX001</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000DRAXD-1K</registeredResourceEICCode>
+        <nominal>60</nominal>
+        <nGCBMUnitID>DRAXD-1</nGCBMUnitID>
+        <registeredResourceName>DRAXD-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000847</documentID>
+        <implementationDate>2014-01-14</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Modification</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00002115</timeSeriesID>
+        <powerSystemResourceType>"Fossil
+        Gas"</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000LNMTH-1R</registeredResourceEICCode>
+        <nominal>133</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>LNMTH-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000142</documentID>
+        <implementationDate>2014-07-03</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Modification</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00002115</timeSeriesID>
+        <powerSystemResourceType>"Fossil
+        Gas"</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000LNMTH-2P</registeredResourceEICCode>
+        <nominal>133</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>LNMTH-2</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000142</documentID>
+        <implementationDate>2014-07-03</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Production unit</businessType>
+        <processType>Modification</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00002115</timeSeriesID>
+        <powerSystemResourceType>"Fossil
+        Gas"</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000LNMTH-3N</registeredResourceEICCode>
+        <nominal>133</nominal>
+        <nGCBMUnitID>NA</nGCBMUnitID>
+        <registeredResourceName>LNMTH-3</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000142</documentID>
+        <implementationDate>2014-07-03</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00002003</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>E_MANXENR-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W000MANXENR-12</registeredResourceEICCode>
+        <nominal>67</nominal>
+        <nGCBMUnitID>MANXENR-1</nGCBMUnitID>
+        <registeredResourceName>MANXENR-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000105</documentID>
+        <implementationDate>2014-11-10</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00002003</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000MANXE0</registeredResourceEICCode>
+        <nominal>67</nominal>
+        <nGCBMUnitID>MANXE</nGCBMUnitID>
+        <registeredResourceName>MANXE</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000105</documentID>
+        <implementationDate>2014-11-10</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00002001</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>T_EGGPS-D</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000EGGPD-1J</registeredResourceEICCode>
+        <nominal>55</nominal>
+        <nGCBMUnitID>EGGPD-1</nGCBMUnitID>
+        <registeredResourceName>EGGPD-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000105</documentID>
+        <implementationDate>2014-11-10</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00002001</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000EGGPS5</registeredResourceEICCode>
+        <nominal>55</nominal>
+        <nGCBMUnitID>EGGPS</nGCBMUnitID>
+        <registeredResourceName>EGGPS</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000105</documentID>
+        <implementationDate>2014-11-10</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00001999</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>T_BPGRD-1</bMUnitID>
+        <registeredResourceEICCode>
+        48W00000BPGRD-17</registeredResourceEICCode>
+        <nominal>120</nominal>
+        <nGCBMUnitID>BPGRD-1</nGCBMUnitID>
+        <registeredResourceName>BPGRD-1</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000105</documentID>
+        <implementationDate>2014-11-10</implementationDate>
+      </item>
+      <item>
+        <documentType>Configuration document</documentType>
+        <businessType>Consumption unit</businessType>
+        <processType>Creation</processType>
+        <timeSeriesID>NGET-EMFIP-CONF-TS-00001999</timeSeriesID>
+        <powerSystemResourceType>Load</powerSystemResourceType>
+        <year>2014</year>
+        <bMUnitID>NA</bMUnitID>
+        <registeredResourceEICCode>
+        48WSTN0000BPGRD2</registeredResourceEICCode>
+        <nominal>120</nominal>
+        <nGCBMUnitID>BPGRD</nGCBMUnitID>
+        <registeredResourceName>BPGRD</registeredResourceName>
+        <activeFlag>Y</activeFlag>
+        <documentID>NGET-EMFIP-CONF-00000105</documentID>
+        <implementationDate>2014-11-10</implementationDate>
+      </item>
+    </responseList>
+  </responseBody>
+</response>

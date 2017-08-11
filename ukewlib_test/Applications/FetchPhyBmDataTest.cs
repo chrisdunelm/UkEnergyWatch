@@ -31,8 +31,8 @@ namespace Ukew.Applications
 
                 var reader = new PhyBmData.FpnReader(th, dir);
                 Assert.Equal(1031 + 1023, await reader.CountAsync().ConfigureAwait(th));
-                var cldcwIdHash = BmUnitIds.Hash("T_CLDCW-1");
-                var cldcwTask = (await reader.ReadAsync().ConfigureAwait(th)).Where(x => x.BmUnitIdHash == cldcwIdHash);
+                var cldcwIdHash = EicIds.Hash("CLDCW-1");
+                var cldcwTask = (await reader.ReadAsync().ConfigureAwait(th)).Where(x => x.ResourceNameHash == cldcwIdHash);
                 var cldcw = await cldcwTask.ToList().ConfigureAwait(th);
                 Assert.Equal(4, cldcw.Count);
                 Assert.Equal(new [] { 13.0, 11.0, 11.0, 9.0 }, cldcw.Select(x => x.LevelTo.Megawatts));

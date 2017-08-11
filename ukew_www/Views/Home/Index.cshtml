@@ -18,9 +18,11 @@ Electricity Fuel Type - Instantaneous real-time data
 <div class="data">
     <table class="power">
         <tr class="header"><td>Fuel type</td><td>Current Power</td><td>CO<sub>2</sub> emissions</td></td>
-        @foreach (var row in powerData.Rows)
+        @foreach (var t in powerData.Rows.Select((x, i) => Tuple.Create(x, i)))
         {
-            <tr>
+            var row = t.Item1;
+            var evenOdd = t.Item2 & 1;
+            <tr class="row@(evenOdd) highlight">
                 <td>@row.Name</td>
                 <td>
                     <span class="mw">@row.Power.ToString(PowerUnit.Megawatt, null, 0)</span>
@@ -55,12 +57,14 @@ Electricity Fuel Type - Instantaneous real-time data
 <div class="data">
     <table class="power">
         <tr class="header"><td>Grid Frequency</td></tr>
-        <tr><td>@freqData.Frequency.ToString(FrequencyUnit.Hertz, null, 3)</td></tr>
+        <tr class="highlight"><td>@freqData.Frequency.ToString(FrequencyUnit.Hertz, null, 3)</td></tr>
     </table>
     <div class="update">
         Updated: @freqData.UpdateTime.ToString("dd MMMM yyyy HH:mm:ss", null) (UK local time)
     </div>
 </div>
+
+<br/>
 
 <div class="info">
     <div class="infotitle">About</div>

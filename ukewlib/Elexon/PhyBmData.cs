@@ -27,36 +27,48 @@ namespace Ukew.Elexon
 
         public struct FpnData : IStorable<FpnData, FpnData>, IStorableFactory<FpnData>, IEquatable<FpnData>
         {
-            public FpnData(string bmUnitId, Instant timeFrom, Power levelFrom, Instant timeTo, Power levelTo)
-                : this(BmUnitIds.Hash(bmUnitId), (uint)timeFrom.ToUnixTimeSeconds(), (short)levelFrom.Megawatts,
+            public FpnData(string resourceName, Instant timeFrom, Power levelFrom, Instant timeTo, Power levelTo)
+                : this(EicIds.Hash(resourceName), (uint)timeFrom.ToUnixTimeSeconds(), (short)levelFrom.Megawatts,
                     (uint)timeTo.ToUnixTimeSeconds(), (short)levelTo.Megawatts) { }
 
-            private FpnData(uint bmUnitIdHash, uint timeFromUnixSeconds, short levelFromMw, uint timeToUnixSeconds, short levelToMw)
+            private FpnData(uint resourceNameHash, uint timeFromUnixSeconds, short levelFromMw, uint timeToUnixSeconds, short levelToMw)
             {
-                _bmUnitIdHash = bmUnitIdHash;
+                _resourceNameHash = resourceNameHash;
                 _timeFromUnixSeconds = timeFromUnixSeconds;
                 _levelFromMw = levelFromMw;
                 _timeToUnixSeconds = timeToUnixSeconds;
                 _levelToMw = levelToMw;
             }
 
-            private readonly uint _bmUnitIdHash;
+            private readonly uint _resourceNameHash;
             private readonly uint _timeFromUnixSeconds;
             private readonly short _levelFromMw;
             private readonly uint _timeToUnixSeconds;
             private readonly short _levelToMw;
 
-            public uint BmUnitIdHash => _bmUnitIdHash;
-            public string BmUnitId => BmUnitIds.Lookup(_bmUnitIdHash);
+            public uint ResourceNameHash => _resourceNameHash;
+            public string ResourceName => EicIds.LookupResourceNameHash(_resourceNameHash)?.RegisteredResourceName ?? $"0x{ResourceNameHash:x8}";
             public Instant TimeFrom => Instant.FromUnixTimeSeconds(_timeFromUnixSeconds);
             public Power LevelFrom => Power.FromMegawatts(_levelFromMw);
             public Instant TimeTo => Instant.FromUnixTimeSeconds(_timeToUnixSeconds);
             public Power LevelTo => Power.FromMegawatts(_levelToMw);
 
+            public Power? LevelAt(Instant t)
+            {
+                if (t >= TimeFrom && t < TimeTo)
+                {
+                    return LevelFrom + ((LevelTo - LevelFrom) * ((t - TimeFrom) / (TimeTo - TimeFrom)));
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
             int IStorableFactory<FpnData>.CurrentVersion => 1;
 
             ImmutableArray<byte> IStorableFactory<FpnData>.Store(FpnData item) => Bits.Empty
-                .AddUInt(item._bmUnitIdHash)
+                .AddUInt(item._resourceNameHash)
                 .AddUInt(item._timeFromUnixSeconds)
                 .AddShort(item._levelFromMw)
                 .AddUInt(item._timeToUnixSeconds)
@@ -75,17 +87,17 @@ namespace Ukew.Elexon
             }
 
             public static bool operator ==(FpnData a, FpnData b) =>
-                a._bmUnitIdHash == b._bmUnitIdHash && a._timeFromUnixSeconds == b._timeFromUnixSeconds &&
+                a._resourceNameHash == b._resourceNameHash && a._timeFromUnixSeconds == b._timeFromUnixSeconds &&
                 a._levelFromMw == b._levelFromMw && a._timeToUnixSeconds == b._timeToUnixSeconds && a._levelToMw == b._levelToMw;
             public override int GetHashCode() =>
-                (int)(_bmUnitIdHash ^ _timeFromUnixSeconds ^ _levelFromMw ^ _timeToUnixSeconds ^ ((int)_levelToMw) << 16);
+                (int)(_resourceNameHash ^ _timeFromUnixSeconds ^ _levelFromMw ^ _timeToUnixSeconds ^ ((int)_levelToMw) << 16);
 
             public override bool Equals(object obj) => (obj is FpnData other) && this == other;
             public bool Equals(FpnData other) => this == other;
             public static bool operator !=(FpnData a, FpnData b) => !(a == b);
 
             public override string ToString() =>
-                $"{{ BmUnitIdHash:0x{BmUnitIdHash:x8}, TimeFrom:{TimeFrom}, LevelFrom:{LevelFrom}, TimeTo:{TimeTo}, LevelTo:{LevelTo} }}";
+                $"{{ BmUnitIdHash:0x{ResourceNameHash:x8}, TimeFrom:{TimeFrom}, LevelFrom:{LevelFrom}, TimeTo:{TimeTo}, LevelTo:{LevelTo} }}";
         }
 
         public PhyBmData(ITaskHelper taskHelper, IElexonDownloader downloader)
@@ -117,12 +129,12 @@ namespace Ukew.Elexon
                     var fpnItems = responseList.Elements("item").Where(item => item.Element("recordType").Value.Trim() == "PN");
                     return fpnItems.Select(item =>
                     {
-                        var bmUnitId = item.Element("bmUnitID").Value.Trim();
+                        var resourceName = item.Element("ngcBMUnitName").Value.Trim();
                         var timeFrom = s_timePattern.Parse(item.Element("timeFrom").Value.Trim()).Value;
                         var levelFrom = Power.FromMegawatts(double.Parse(item.Element("pnLevelFrom").Value.Trim()));
                         var timeTo = s_timePattern.Parse(item.Element("timeTo").Value.Trim()).Value;
                         var levelTo = Power.FromMegawatts(double.Parse(item.Element("pnLevelTo").Value.Trim()));
-                        return new FpnData(bmUnitId, timeFrom, levelFrom, timeTo, levelTo);
+                        return new FpnData(resourceName, timeFrom, levelFrom, timeTo, levelTo);
                     }).ToImmutableList();
                 default:
                     throw new InvalidOperationException($"Bad data. HTTP code = {httpCode}");
