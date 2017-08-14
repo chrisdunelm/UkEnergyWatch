@@ -17,7 +17,7 @@ textarea {
     max-width: 280px;
 }
 
-.hidden {
+.x {
     display: none;
 }
 
@@ -82,6 +82,22 @@ div.data {
     margin: 0 auto;
 }
 
+.button {
+    border: 1px solid black;
+    padding: 0 2px;
+    background-color: lightyellow;
+    font-style: italic;
+    font-weight: normal;
+    cursor: pointer;
+}
+.button:hover {
+    background-color: yellow;
+}
+
+.right {
+    float: right;
+}
+
 table.power {
     width: 100%;
 }
@@ -97,6 +113,11 @@ table.power td ~ td {
 }
 
 /* Header formatting */
+table.power tr.headertop {
+    border-top: 1px solid black;
+    font-weight: bold;
+    background-color: lightcyan;
+}
 table.power tr.header {
     border-bottom: 2px solid black;
     font-weight: bold;
@@ -115,7 +136,7 @@ table.power tr.highlight:hover {
     background-color: yellow !important;
 }
 
-/* Background alternate colours, 'even' doesn't seem to work in Chrome */
+/* Background alternate colours */
 table.power tr.row1 {
     background-color: #eee;
 }
@@ -135,7 +156,7 @@ table.power span.percent, table.power span.maxpower {
     font-style: italic;
 }
 
-table.power div.genunit {
+table.power .genunit {
     text-align: right;
     float: right;
     font-style: italic;
@@ -143,12 +164,14 @@ table.power div.genunit {
 
 div.update {
     font-style: italic;
+    font-weight: normal;
 }
 
-div.smallupdate {
+.smallupdate {
+    white-space: nowrap;
     font-style: italic;
-    font-size: 80%;
-    text-align: right;
+    font-weight: normal;
+    font-size: 90%;
 }
 
 div.info {

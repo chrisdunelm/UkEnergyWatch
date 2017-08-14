@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ukew.Utils;
 using UnitsNet;
 
 namespace Ukew.Elexon
@@ -56,6 +57,24 @@ namespace Ukew.Elexon
             public IEnumerable<string> GenerationUnitRegisteredResourceNames { get; } // Derived from EIC xls
         }
 
+        public class PowerStationInfo
+        {
+            public PowerStationInfo(string registeredResourceName, Location location, string officialUrl, string wikipediaUrl, string imageUrl)
+            {
+                RegisteredResourceName = registeredResourceName;
+                Location = location;
+                OfficalUrl = officialUrl;
+                WikipediaUrl = wikipediaUrl;
+                ImageUrl = imageUrl;
+            }
+
+            public string RegisteredResourceName { get; }
+            public Location Location { get; }
+            public string OfficalUrl { get; }
+            public string WikipediaUrl { get; }
+            public string ImageUrl { get; }
+        }
+
         public class GenerationUnit
         {
             public GenerationUnit(
@@ -108,11 +127,14 @@ namespace Ukew.Elexon
             // Needs to be in a static ctor, to force correct initialized order.
             GenerationUnitsByResourceNameHash = GenerationUnits.ToDictionary(x => x.RegisteredResourceNameHash);
             GenerationUnitsByResourceName = GenerationUnits.ToDictionary(x => x.RegisteredResourceName);
+            PowerStationInfosByResourceName = PowerStationInfos.ToDictionary(x => x.RegisteredResourceName);
         }
 
         public static Dictionary<uint, GenerationUnit> GenerationUnitsByResourceNameHash { get; }
 
         public static Dictionary<string, GenerationUnit> GenerationUnitsByResourceName { get; }
+
+        public static Dictionary<string, PowerStationInfo> PowerStationInfosByResourceName { get; }
 
         public static GenerationUnit LookupResourceNameHash(uint hash) =>
             GenerationUnitsByResourceNameHash.TryGetValue(hash, out var ret) ? ret : null;
@@ -130,7 +152,7 @@ namespace Ukew.Elexon
             // Coal
             "LOAN", "FERR", "RUGPS",
             // Ocgt
-            "FERR-G", "LITT-G",
+            "FERR-G", "LITT-G", "BARKB",
             // Oil
             "LITT-D", "GRAI",
             // Biomass

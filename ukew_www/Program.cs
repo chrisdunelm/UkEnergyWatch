@@ -20,6 +20,9 @@ namespace ukew_www
         [Option(Required = true, HelpText = "Absolute or relative directory path for Physical FPN storage")]
         public string FpnDataDirectory { get; set; }
 
+        [Option(Required = true, HelpText = "Absolute or relative directory path for B1610 (actual per-unit generation) storage")]
+        public string B1610DataDirectory { get; set; }
+
         [Option(Required = false, HelpText = "Runtime environment: 'Development', 'Staging', 'Production'")]
         public string Environment { get; set; } = "Development";
 

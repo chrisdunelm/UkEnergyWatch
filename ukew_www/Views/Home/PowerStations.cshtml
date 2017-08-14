@@ -1,3 +1,4 @@
+@using NodaTime
 @using UnitsNet
 @using Microsoft.AspNetCore.Html
 @using UnitsNet.Units
@@ -7,17 +8,19 @@
 
 @{
     ViewData["Title"] = "Power Stations";
-    var fpnData = @Model.FpnData;
+    var genData = @Model.GenData;
 }
 
 @section Header
 {
     <style type="text/css">
-        @foreach (var ps in fpnData.PowerStationsByFuel.SelectMany(x => x))
+        #box_fpn:checked ~ table .reveal_fpn { display: table-row; }
+        #box_b1610:checked ~ table .reveal_b1610 { display: table-row; }
+        @foreach (var ps in genData.PowerStationsByFuel.SelectMany(x => x))
         {
             <text>
-                .reveal@(ps.CssId) { display: none; }
-                #box@(ps.CssId):checked ~ table .reveal@(ps.CssId) { display: table-row; }
+                #box_fpn:checked ~ #box@(ps.CssId):checked ~ table .reveal@(ps.CssId)_fpn { display: table-row; }
+                #box_b1610:checked ~ #box@(ps.CssId):checked ~ table .reveal@(ps.CssId)_b1610 { display: table-row; }
             </text>
         }
     </style>
@@ -27,59 +30,96 @@
 Electricity Power Stations - real-time data
 </div>
 <div class="subnote">
-    <em>Important:</em> This data is the <em>predicted</em> power generation, not the actual generation.
-    Every power generator is required to provide this data one hour before each settlement period.
-    This will usually be accurate, but won't take into account any unpredicted events (e.g. generator failure)
-    that occur after this time.
-    <br/>
+    <em>Important:</em> This data is either predicted and up to date; or actual and one week out of date.
     <br/>
     <em>Warning:</em> This page is work-in-progress, and contains errors and mistakes.
 </div>
 <br/>
 <div class="data">
-    @foreach (var ps in fpnData.PowerStationsByFuel.SelectMany(x => x))
+    <input class="x" type="radio" id="box_fpn" name="fpnb1610" checked="yes"/>
+    <input class="x" type="radio" id="box_b1610" name="fpnb1610"/>
+    @foreach (var ps in genData.PowerStationsByFuel.SelectMany(x => x))
     {
-        <input class="hidden" type="checkbox" id="box@(ps.CssId)"/>
+        <input class="x" type="checkbox" id="box@(ps.CssId)"/>
     }
     <table class="power">
-        @foreach (var fuelGroup in fpnData.PowerStationsByFuel)
+        @foreach (var fuelGroup in genData.PowerStationsByFuel)
         {
-            <tr class="header">
-                <td>Power Station - @fuelGroup.Key</td><td>Resource Name</td><td>Current Power</td><td>CO<sub>2</sub> emissions</td>
+            var fpnTime = fuelGroup.Select(x => x.FpnGeneration.UpdateTime).OrderByDescending(x => x?.ToInstant()).FirstOrDefault();
+            var b1610Time = fuelGroup.Select(x => x.B1610Generation.UpdateTime).OrderByDescending(x => x?.ToInstant()).FirstOrDefault();
+            <tr class="header x reveal_fpn">
+                <td>Power Station - @fuelGroup.Key</td>
+                <td>
+                    <div>Predicted Power <label class="button right" for="box_b1610">Show Actual</label></div>
+                    <div class="smallupdate">@(fpnTime?.ToString("dd' 'MMMM' 'yyyy' 'HH':'mm':'ss' (UK local time)'", null) ?? "unknown")</div>
+                </td>
+                <td>CO<sub>2</sub> emissions</td>
+            </tr>
+            <tr class="header x reveal_b1610">
+                <td>Power Station - @fuelGroup.Key</td>
+                <td>
+                    <div>Actual Power <label class="button right" for="box_fpn">Show Predicted</label></div>
+                    <div class="smallupdate">@(b1610Time?.ToString("dd' 'MMMM' 'yyyy' 'HH':'mm':'ss' (UK local time)'", null) ?? "unknown")</div>
+                </td>
+                <td>CO<sub>2</sub> emissions</td>
             </tr>
             @foreach (var t in fuelGroup.Select((x, i) => Tuple.Create(x, i)))
             {
                 var ps = t.Item1;
                 var evenOdd = t.Item2 & 1;
-                <tr class="row@(evenOdd) highlight">
-                    <td><label class="revealer" style="height:100%" for="box@(ps.CssId)">@ps.UnderlyingPowerStation.AssetName</label></td>
-                    <td>@ps.UnderlyingPowerStation.RegisteredResourceName</td>
-                    <td>
-                        <div>
-                            <span class="@(ps.CurrentGeneration.HasValue ? "" : "unknown")">@(ps.CurrentGeneration?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
-                            <span class="maxpower">installed:
-                                <span class="@(ps.UnderlyingPowerStation.InstalledCapacity.HasValue ? "" : "unknown")">@(ps.UnderlyingPowerStation.InstalledCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
-                            </span>
-                        </div>
-                        <div class="smallupdate">
-                            @(ps.UpdateTime?.ToString("dd MMMM yyyy HH:mm:ss", null) ?? "unknown") (UK local time)
-                        </div>
+                <tr class="row@(evenOdd) x reveal_fpn highlight">
+                    <td><label class="revealer" for="box@(ps.CssId)">
+                        @ps.UnderlyingPowerStation.AssetName (@ps.UnderlyingPowerStation.RegisteredResourceName)
+                    </label></td>
+                    <td class="@(ps.FpnGeneration.Power.HasValue ? "" : "unknown")">
+                        @(ps.FpnGeneration.Power?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
+                        <span class="maxpower">
+                            installed: @(ps.UnderlyingPowerStation.InstalledCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
+                        </span>
                     </td>
-                    <td class="@(ps.Co2.HasValue ? "" : "unknown")">@(ps.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ?? "unknown")</td>
+                    <td class="@(ps.FpnGeneration.Co2.HasValue ? "" : "unknown")">
+                        @(ps.FpnGeneration.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ?? "unknown")
+                    </td>
+                </tr>
+                <tr class="row@(evenOdd) x reveal_b1610 highlight">
+                    <td><label class="revealer" for="box@(ps.CssId)">
+                        @ps.UnderlyingPowerStation.AssetName (@ps.UnderlyingPowerStation.RegisteredResourceName)
+                    </label></td>
+                    <td class="@(ps.B1610Generation.Power.HasValue ? "" : "unknown")">
+                        @(ps.B1610Generation.Power?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
+                        <span class="maxpower">
+                            installed: @(ps.UnderlyingPowerStation.InstalledCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
+                        </span>
+                    </td>
+                    <td class="@(ps.B1610Generation.Co2.HasValue ? "" : "unknown")">
+                        @(ps.B1610Generation.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ?? "unknown")
+                    </td>
                 </tr>
                 @foreach (var genUnit in ps.GeneratingUnits)
                 {
-                    <tr class="reveal@(ps.CssId) row@(evenOdd)">
-                        <td colspan="2"><div class="genunit">
-                            @genUnit.UnderlyingGenerationUnit.RegisteredResourceName (@genUnit.UnderlyingGenerationUnit.BmUnitId)
-                        </div></td>
-                        <td>
-                            <span class="@(genUnit.CurrentGeneration.HasValue ? "" : "unknown")">@(genUnit.CurrentGeneration?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
-                            <span class="maxpower">nominal:
-                                <span class="@(genUnit.UnderlyingGenerationUnit.MaxCapacity.HasValue ? "" : "unknown")">@(genUnit.UnderlyingGenerationUnit.MaxCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")</span>
+                    <tr class="row@(evenOdd) x reveal@(ps.CssId)_fpn">
+                        <td class="genunit">@genUnit.UnderlyingGenerationUnit.RegisteredResourceName</td>
+                        <td class="@(genUnit.FpnGeneration.Power.HasValue ? "" : "unknown")">
+                            @(genUnit.FpnGeneration.Power?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
+                            <span class="maxpower">
+                                nominal: @(genUnit.UnderlyingGenerationUnit.MaxCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
                             </span>
                         </td>
-                        <td class="@(genUnit.Co2.HasValue ? "" : "unknown")">@(genUnit.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ??  "unknown")</td>
+                        <td class="@(genUnit.FpnGeneration.Co2.HasValue ? "" : "unknown")">
+                            @(genUnit.FpnGeneration.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ?? "unknown")
+                        </td>
+                    </tr>
+                    <tr class="row@(evenOdd) x reveal@(ps.CssId)_b1610">
+                        <td class="genunit">@genUnit.UnderlyingGenerationUnit.RegisteredResourceName</td>
+                        <td class="@(genUnit.B1610Generation.Power.HasValue ? "" : "unknown")">
+                            @(genUnit.B1610Generation.Power?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
+                            <span class="maxpower">
+                                nominal: @(genUnit.UnderlyingGenerationUnit.MaxCapacity?.ToString(PowerUnit.Megawatt, null, 0) ?? "unknown")
+                            </span>
+                        </td>
+                        <td class="@(genUnit.B1610Generation.Co2.HasValue ? "" : "unknown")">
+                            @(genUnit.B1610Generation.Co2?.ToString(MassFlowUnit.KilogramPerSecond, null, 0) ?? "unknown")
+                        </td>
                     </tr>
                 }
             }

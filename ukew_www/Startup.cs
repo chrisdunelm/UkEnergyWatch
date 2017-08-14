@@ -63,6 +63,14 @@ namespace ukew_www
                 var dir = new SystemDirectory(taskHelper, cmdLineOptions.FpnDataDirectory);
                 return new PhyBmData.FpnReader(taskHelper, dir);
             });
+            services.AddSingleton<B1610.Reader>(ctx =>
+            {
+                var cmdLineOptions = ctx.GetRequiredService<CmdLineOptions>();
+                var taskHelper = ctx.GetRequiredService<ITaskHelper>();
+                var dir = new SystemDirectory(taskHelper, cmdLineOptions.B1610DataDirectory);
+                return new B1610.Reader(taskHelper, dir);
+            });
+            services.AddSingleton<B1610Seen>();
 
             return services.BuildServiceProvider();
         }

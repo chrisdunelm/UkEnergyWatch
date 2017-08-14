@@ -65,27 +65,32 @@ namespace ukew_www.Controllers
 
         public class PowerStationsModel
         {
-            public class FpnModel
+            public class GenModel
             {
+                public class Generation
+                {
+                    public Power? Power { get; set; }
+                    public ZonedDateTime? UpdateTime { get; set; }
+                    public MassFlow? Co2 { get; set; }
+                }
+
                 public class GeneratingUnit
                 {
                     public EicIds.GenerationUnit UnderlyingGenerationUnit { get; set; }
-                    public Power? CurrentGeneration { get; set; }
-                    public ZonedDateTime? UpdateTime { get; set; }
-                    public MassFlow? Co2 { get; set; }
+                    public Generation FpnGeneration { get; set; }
+                    public Generation B1610Generation { get; set; }
                 }
 
                 public class PowerStation
                 {
                     public EicIds.PowerStation UnderlyingPowerStation { get; set; }
-                    public Power? CurrentGeneration { get; set; }
-                    public ZonedDateTime? UpdateTime { get; set; }
+                    public Generation FpnGeneration { get; set; }
+                    public Generation B1610Generation { get; set; }
                     public IEnumerable<GeneratingUnit> GeneratingUnits { get; set; }
-                    public MassFlow? Co2 { get; set; }
                     public string CssId { get; set; }
                 }
 
-                public FpnModel(IEnumerable<IGrouping<EicIds.FuelType, PowerStation>> powerStationsByFuel)
+                public GenModel(IEnumerable<IGrouping<EicIds.FuelType, PowerStation>> powerStationsByFuel)
                 {
                     PowerStationsByFuel = powerStationsByFuel;
                 }
@@ -93,29 +98,33 @@ namespace ukew_www.Controllers
                 public IEnumerable<IGrouping<EicIds.FuelType, PowerStation>> PowerStationsByFuel { get; }
             }
 
-            public PowerStationsModel(FpnModel fpnData)
+            public PowerStationsModel(GenModel genData)
             {
-                FpnData = fpnData;
+                GenData = genData;
             }
 
-            public FpnModel FpnData { get; }
+            public GenModel GenData { get; }
         }
 
-        public HomeController(ITime time, FuelInstHhCur.Reader fuelInstHhCurReader, Freq.Reader freqReader, PhyBmData.FpnReader fpnReader)
+        public HomeController(ITime time, FuelInstHhCur.Reader fuelInstHhCurReader, Freq.Reader freqReader,
+            PhyBmData.FpnReader fpnReader, B1610.Reader b1610Reader, B1610Seen b1610Seen)
         {
             _time = time;
             _fuelInstHhCurReader = fuelInstHhCurReader;
             _freqReader = freqReader;
             _fpnReader = fpnReader;
+            _b1610Reader = b1610Reader;
+            _b1610Seen = b1610Seen;
         }
 
         private readonly ITime _time;
         private readonly FuelInstHhCur.Reader _fuelInstHhCurReader;
         private readonly Freq.Reader _freqReader;
         private readonly PhyBmData.FpnReader _fpnReader;
+        private readonly B1610.Reader _b1610Reader;
+        private readonly B1610Seen _b1610Seen;
 
         private static readonly DateTimeZone s_tzLondon = DateTimeZoneProviders.Tzdb["Europe/London"];
-
 
         [HttpGet("/")]
         public async Task<IActionResult> Index()
@@ -155,32 +164,35 @@ namespace ukew_www.Controllers
         [HttpGet("/powerstations")]
         public async Task<IActionResult> PowerStations()
         {
-            var model = new PowerStationsModel(await MakeFpnModel());
+            var model = new PowerStationsModel(await MakeGenModel());
             return View(model);
         }
 
-        private async Task<PowerStationsModel.FpnModel> MakeFpnModel()
+        private async Task<PowerStationsModel.GenModel> MakeGenModel()
         {
-            var count = (int)await _fpnReader.CountAsync();
-            var fpnData = await (await _fpnReader.ReadAsync(count - 2000, count)).ToList();
-            fpnData.Reverse();
-            var resourceNamesToFind = new HashSet<string>(EicIds.GenerationUnits.Select(x => x.RegisteredResourceName));
-            var genUnitPower = new Dictionary<string, (Power power, Instant update)>();
+            var fpnCount = (int)await _fpnReader.CountAsync();
+            var fpnData = await (await _fpnReader.ReadAsync(fpnCount - 2000, fpnCount)).ToList();
+            var b1610Count = (int)await _b1610Reader.CountAsync();
+            var b1610Data = await (await _b1610Reader.ReadAsync(b1610Count - 1000, b1610Count)).ToList();
+            var allResourceNames = new HashSet<string>(EicIds.GenerationUnits.Select(x => x.RegisteredResourceName));
+            var genUnitFpn = new Dictionary<string, (Power power, Instant update)>();
+            var genUnitB1610 = new Dictionary<string, (Power power, Instant update)>();
             Instant now = _time.GetCurrentInstant();
-            foreach (var fpn in fpnData)
+            foreach (var fpn in fpnData.Where(x => now >= x.TimeFrom))
             {
-                if (resourceNamesToFind.Contains(fpn.ResourceName))
+                Power? level = fpn.LevelAt(now);
+                genUnitFpn[fpn.ResourceName] = (level ?? fpn.LevelTo, level != null ? now : fpn.TimeTo);
+            }
+            foreach (var b1610 in b1610Data)
+            {
+                genUnitB1610[b1610.ResourceName] = (b1610.Power, b1610.SettlementPeriodStart + NodaTime.Duration.FromMinutes(30));
+            }
+            var lastInstant = b1610Data.Select(x => x.SettlementPeriodStart).Max();
+            foreach (var b1610 in _b1610Seen.AllResourceNames)
+            {
+                if (!genUnitB1610.ContainsKey(b1610))
                 {
-                    if (now >= fpn.TimeFrom)
-                    {
-                        Power? level = fpn.LevelAt(now);
-                        genUnitPower.Add(fpn.ResourceName, (level ?? fpn.LevelTo, level != null ? now : fpn.TimeTo));
-                        resourceNamesToFind.Remove(fpn.ResourceName);
-                        if (resourceNamesToFind.Count == 0)
-                        {
-                            break;
-                        }
-                    }
+                    genUnitB1610.Add(b1610, (Power.Zero, lastInstant));
                 }
             }
 
@@ -217,26 +229,41 @@ namespace ukew_www.Controllers
                     var psGenUnits = powerStation.GenerationUnitRegisteredResourceNames
                         .Select(resourceName =>
                         {
-                            var genUnit = EicIds.GenerationUnitsByResourceName[resourceName];
-                            var haveData = genUnitPower.ContainsKey(resourceName);
-                            var curGen = haveData ? genUnitPower[resourceName].power : (Power?)null;
-                            return new PowerStationsModel.FpnModel.GeneratingUnit
+                            PowerStationsModel.GenModel.Generation MakeGen(Dictionary<string, (Power power, Instant update)> data)
                             {
-                                UnderlyingGenerationUnit = genUnit,
-                                CurrentGeneration = curGen,
-                                UpdateTime = haveData ? genUnitPower[resourceName].update.InZone(s_tzLondon) : (ZonedDateTime?)null,
-                                Co2 = haveData ? curGen.Value.CalculateCo2(co2KgPerJoule) : (MassFlow?)null,
+                                var haveData = data.TryGetValue(resourceName, out var data1);
+                                return new PowerStationsModel.GenModel.Generation
+                                {
+                                    Power = haveData ? data1.power : (Power?)null,
+                                    UpdateTime = haveData ? data1.update.InZone(s_tzLondon) : (ZonedDateTime?)null,
+                                    Co2 = haveData ? data1.power.CalculateCo2(co2KgPerJoule) : (MassFlow?)null,
+                                };
+                            }
+                            return new PowerStationsModel.GenModel.GeneratingUnit
+                            {
+                                UnderlyingGenerationUnit = EicIds.GenerationUnitsByResourceName[resourceName],
+                                FpnGeneration = MakeGen(genUnitFpn),
+                                B1610Generation = MakeGen(genUnitB1610),
                             };
                         })
                         .ToList();
-                    var haveAllData = psGenUnits.All(x => x.CurrentGeneration.HasValue);
-                    return new PowerStationsModel.FpnModel.PowerStation
+                    PowerStationsModel.GenModel.Generation MakePsGen(Func<PowerStationsModel.GenModel.GeneratingUnit, PowerStationsModel.GenModel.Generation> fn, bool needsAll)
+                    {
+                        var genUnitData = psGenUnits.Select(fn).ToList();
+                        var allGenUnitsHaveData = needsAll ? genUnitData.All(x => x.Power != null) : genUnitData.Any(x => x.Power != null);
+                        return new PowerStationsModel.GenModel.Generation
+                        {
+                            Power = allGenUnitsHaveData ? genUnitData.Aggregate(Power.Zero, (total, x) => total + (x.Power ?? Power.Zero)) : (Power?)null,
+                            UpdateTime = allGenUnitsHaveData ? genUnitData.FirstOrDefault(x => x.UpdateTime.HasValue)?.UpdateTime : (ZonedDateTime?)null,
+                            Co2 = allGenUnitsHaveData ? genUnitData.Aggregate(MassFlow.Zero, (total, x) => total + (x.Co2 ?? MassFlow.Zero)) : (MassFlow?)null,
+                        };
+                    }
+                    return new PowerStationsModel.GenModel.PowerStation
                     {
                         UnderlyingPowerStation = powerStation,
-                        CurrentGeneration = haveAllData ? psGenUnits.Aggregate(Power.Zero, (total, x) => total + x.CurrentGeneration.Value) : (Power?)null,
-                        UpdateTime = haveAllData ? psGenUnits.OrderBy(x => x.UpdateTime.Value.ToInstant()).First().UpdateTime : (ZonedDateTime?)null,
+                        FpnGeneration = MakePsGen(x => x.FpnGeneration, true),
+                        B1610Generation = MakePsGen(x => x.B1610Generation, false),
                         GeneratingUnits = psGenUnits,
-                        Co2 = haveAllData ? psGenUnits.Aggregate(MassFlow.Zero, (total, x) => total + x.Co2.Value) : (MassFlow?)null,
                         CssId = $"__ps_{psIndex}",
                     };
                 })
@@ -244,7 +271,7 @@ namespace ukew_www.Controllers
                 .GroupBy(x => x.UnderlyingPowerStation.FuelType)
                 .OrderBy(x => fuelTypeOrder[x.Key])
                 .ToList();
-            return new PowerStationsModel.FpnModel(ret);
+            return new PowerStationsModel.GenModel(ret);
         }
 
         [HttpGet("/contact")]
