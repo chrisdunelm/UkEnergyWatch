@@ -32,5 +32,11 @@ namespace Ukew.Utils
             var duration = instant - s_tzLondon.AtStartOfDay(instant.SettlementDate()).ToInstant();
             return (int)duration.TotalMinutes / 30 + 1;
         }
+
+        public static Instant SettlementPeriodStart(this (LocalDate, int) dateAndPeriod)
+        {
+            var (date, period) = dateAndPeriod;
+            return date.AtStartOfDayInZone(s_tzLondon).ToInstant() + Duration.FromMinutes(30) * (period - 1);
+        }
     }
 }

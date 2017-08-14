@@ -135,6 +135,8 @@ namespace Ukew.Elexon
             "LITT-D", "GRAI",
             // Biomass
             // Pumped Storage
+            // Other
+            "IRNPS",
         };
     }
 }

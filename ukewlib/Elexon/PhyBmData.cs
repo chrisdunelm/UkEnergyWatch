@@ -97,7 +97,7 @@ namespace Ukew.Elexon
             public static bool operator !=(FpnData a, FpnData b) => !(a == b);
 
             public override string ToString() =>
-                $"{{ BmUnitIdHash:0x{ResourceNameHash:x8}, TimeFrom:{TimeFrom}, LevelFrom:{LevelFrom}, TimeTo:{TimeTo}, LevelTo:{LevelTo} }}";
+                $"{{ ResourceNmeHash:0x{ResourceNameHash:x8}, TimeFrom:{TimeFrom}, LevelFrom:{LevelFrom}, TimeTo:{TimeTo}, LevelTo:{LevelTo} }}";
         }
 
         public PhyBmData(ITaskHelper taskHelper, IElexonDownloader downloader)
@@ -110,6 +110,7 @@ namespace Ukew.Elexon
         private readonly IElexonDownloader _downloader;
 
         private static readonly InstantPattern s_timePattern = InstantPattern.CreateWithInvariantCulture("yyyy'-'MM'-'dd' 'HH':'mm':'ss");
+
         public async Task<IReadOnlyList<FpnData>> GetAsync(
             LocalDate settlementDate, int settlementPeriod, CancellationToken ct = default(CancellationToken))
         {
