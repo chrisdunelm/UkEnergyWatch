@@ -74,7 +74,7 @@ namespace Ukew.Elexon
             public static bool operator !=(Data a, Data b) => !(a == b);
 
             public override string ToString() =>
-            $"{{ ResourceNmeHash:0x{ResourceNameHash:x8}, SettlementPeriodStart:{SettlementPeriodStart}, Power:{Power} }}";
+            $"{{ ResourceName:{ResourceName} (0x{ResourceNameHash:x8}), SettlementPeriodStart:{SettlementPeriodStart}, Power:{Power} }}";
         }
 
         public B1610(ITaskHelper taskHelper, IElexonDownloader downloader)

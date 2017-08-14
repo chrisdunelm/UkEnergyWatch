@@ -97,7 +97,7 @@ namespace Ukew.Elexon
             public static bool operator !=(FpnData a, FpnData b) => !(a == b);
 
             public override string ToString() =>
-                $"{{ ResourceNmeHash:0x{ResourceNameHash:x8}, TimeFrom:{TimeFrom}, LevelFrom:{LevelFrom}, TimeTo:{TimeTo}, LevelTo:{LevelTo} }}";
+                $"{{ ResourceName:{ResourceName} (0x{ResourceNameHash:x8}), TimeFrom:{TimeFrom}, LevelFrom:{LevelFrom}, TimeTo:{TimeTo}, LevelTo:{LevelTo} }}";
         }
 
         public PhyBmData(ITaskHelper taskHelper, IElexonDownloader downloader)
