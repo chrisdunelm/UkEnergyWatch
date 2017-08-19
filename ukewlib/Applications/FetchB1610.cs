@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NodaTime;
@@ -15,6 +16,7 @@ namespace Ukew.Applications
             _time = time;
             _scheduler = new Scheduler(time, taskHelper);
             _b1610 = new B1610(taskHelper, downloader);
+            _reader = new B1610.Reader(taskHelper, dir);
             _writer = new B1610.Writer(taskHelper, dir);
         }
 
@@ -22,23 +24,27 @@ namespace Ukew.Applications
         private readonly ITime _time;
         private readonly Scheduler _scheduler;
         private readonly B1610 _b1610;
+        private readonly B1610.Reader _reader;
         private readonly B1610.Writer _writer;
 
-        public async Task Start(bool startImmediately, CancellationToken ct = default(CancellationToken))
+        public async Task Start(CancellationToken ct = default(CancellationToken))
         {
-            bool wait = !startImmediately;
             while (true)
             {
-                if (wait)
+                int count = (int)await _reader.CountAsync().ConfigureAwait(_taskHelper);
+                var items = await (await _reader.ReadAsync(count - 500, ct: ct).ConfigureAwait(_taskHelper)).ToList().ConfigureAwait(_taskHelper);
+                var lastTime = items.Any() ? items.Max(x => x.SettlementPeriodStart) : _time.GetCurrentInstant() - Duration.FromDays(10);
+                var fetchTime = lastTime + Duration.FromMinutes(30);
+                var data = await _b1610.GetAsync(fetchTime.SettlementDate(), fetchTime.SettlementPeriod(), ct).ConfigureAwait(_taskHelper);
+                if (data.Count == 0)
                 {
-                    await _scheduler.ScheduleOne(Duration.FromMinutes(30), Duration.FromMinutes(13), ct).ConfigureAwait(_taskHelper);
+                    await _scheduler.ScheduleOne(Duration.FromMinutes(30), Duration.FromMinutes(2.5), ct).ConfigureAwait(_taskHelper);
                 }
-                wait = true;
-                // Fetch the settlement data/period just over 1 week ago.
-                // I'm not entirely sure when the data is released. It's definitely roughly 1 week behind.
-                Instant fetchTime = _time.GetCurrentInstant() - Duration.FromDays(7) - Duration.FromMinutes(30);
-                var data = await _b1610.GetAsync(fetchTime.SettlementDate(), fetchTime.SettlementPeriod(), ct);
-                await _writer.AppendAsync(data, ct);
+                else
+                {
+                    await _writer.AppendAsync(data, ct).ConfigureAwait(_taskHelper);
+                    await _scheduler.ScheduleOne(Duration.FromMinutes(5), Duration.FromMinutes(2.5), ct).ConfigureAwait(_taskHelper);
+                }
             }
         }
     }

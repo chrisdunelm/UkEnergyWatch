@@ -25,11 +25,11 @@ namespace Ukew.Applications
                 var cts = new CancellationTokenSource();
                 Task unused = th.Run(async () =>
                 {
-                    await th.Delay(NodaTime.Duration.FromMinutes(60)).ConfigureAwait(th);
+                    await th.Delay(NodaTime.Duration.FromMinutes(5)).ConfigureAwait(th);
                     cts.Cancel();
                 });
 
-                await fetcher.Start(false, cts.Token).ConfigureAwaitHideCancel(th);
+                await fetcher.Start(cts.Token).ConfigureAwaitHideCancel(th);
 
                 var reader = new B1610.Reader(th, dir);
                 Assert.Equal(100 + 103, await reader.CountAsync().ConfigureAwait(th));
@@ -37,7 +37,7 @@ namespace Ukew.Applications
                     await (await reader.ReadAsync(0, 1)).First());
                 Assert.Equal(new B1610.Data("GRGBW-1", Instant.FromUtc(2017, 7, 31, 23, 30), Power.FromKilowatts(43_390)),
                     await (await reader.ReadAsync(100 + 103 - 1, 100 + 103)).First());
-            }, startInstant: NodaTime.Instant.FromUtc(2017, 8, 7, 23, 30));
+            }, startInstant: NodaTime.Instant.FromUtc(2017, 8, 10, 22, 30));
         }
     }
 }

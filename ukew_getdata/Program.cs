@@ -136,9 +136,6 @@ namespace Ukew
 
             [Option(Required = true, HelpText = "Absolute or relative directory path for B1610 data storage")]
             public string DataDirectory { get; set; }
-
-            [Option(Required = false, HelpText = "Perform an initial Get immediately, don't schedule a wait")]
-            public bool GetImmediately { get; set; } = false;
         }
 
         static async Task<int> GetB1610(GetB1610Options opts)
@@ -147,7 +144,7 @@ namespace Ukew
             var downloader = new ElexonDownloader(taskHelper, opts.ElexonApiKey);
             var dir = new SystemDirectory(taskHelper, opts.DataDirectory);
             var fetch = new FetchB1610(taskHelper, downloader, dir, SystemTime.Instance);
-            await fetch.Start(opts.GetImmediately);
+            await fetch.Start();
             return 0;
         }
 
