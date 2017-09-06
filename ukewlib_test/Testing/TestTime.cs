@@ -455,7 +455,11 @@ namespace Ukew.Testing
                 {
                     throw new SchedulerException("Real time has reached timeout. Probably caused by recusive task creation.");
                 }
-                if (mainTask.IsCompleted)
+                if (mainTask.IsCompleted && mainTask.Result.IsCompleted)
+                {
+                    return mainTask.Result.Result;
+                }
+                /*if (mainTask.IsCompleted)
                 {
                     if (mainTask.Exception != null)
                     {
@@ -469,7 +473,7 @@ namespace Ukew.Testing
                         }
                         return mainTask.Result.Result;
                     }
-                }
+                }*/
                 // Cancel Tasks, or move to next clock time
                 var tasksToComplete = new List<TaskCompletionSource<int>>();
                 lock (_lock)

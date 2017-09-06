@@ -71,6 +71,15 @@ namespace Ukew.Utils
             ((ushort)bytes[offset + 0] << 8) |
             (ushort)bytes[offset + 1]);
 
+        public Bits AddByte(byte v) => new Bits(_bytes.Add(v));
+
+        public static byte GetByte(IReadOnlyList<byte> bytes, int offset) => bytes[offset];
+
+        public Bits AddBytes(ImmutableArray<byte> bytes) => new Bits(_bytes.AddRange(bytes));
+
+        public static ImmutableArray<byte> GetBytes(IReadOnlyList<byte> bytes, int offset, int arrayLength) =>
+            bytes.Skip(offset).Take(arrayLength).ToImmutableArray();
+
         public Bits AddFletcher16 => new Bits(_bytes.AddRange(FletcherChecksum.Calc16Bytes(_bytes)));
 
         public Bits Concat(ImmutableArray<byte> bytes) => new Bits(_bytes.AddRange(bytes));

@@ -106,7 +106,7 @@ namespace Ukew.Storage
                     Dispose();
                     _filesIndex += 1;
                     var file = _files[_filesIndex];
-                    _fileStream = await _taskHelper.ConfigureAwait(_dir.ReadAsync(file.FileName.Id, ct));
+                    _fileStream = await _dir.ReadAsync(file.FileName.Id, ct).ConfigureAwait(_taskHelper);
                     _fileStream.Seek((_index - file.FromIndex) * file.FileName.ElementSize, SeekOrigin.Begin);
                     _readBuffer = new byte[file.FileName.ElementSize];
                 }
@@ -120,9 +120,9 @@ namespace Ukew.Storage
                 {
                     throw new InvalidDataException("Invalid ID bytes");
                 }
-                var bytes = _readBuffer.Skip(2).Take(byteCount - 4).ToImmutableArray();
+                var bytes = ImmutableArray.Create(_readBuffer, 2, byteCount - 4);
                 var calcChecksum = FletcherChecksum.Calc16Bytes(bytes);
-                if (!calcChecksum.SequenceEqual(_readBuffer.Skip(byteCount - 2)))
+                if (calcChecksum[0] != _readBuffer[byteCount - 2] || calcChecksum[1] != _readBuffer[byteCount - 1])
                 {
                     throw new InvalidDataException("Invalid data checksum");
                 }

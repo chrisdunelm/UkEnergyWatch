@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ukew
+namespace Ukew.Storage
 {
     public interface IDirectory
     {

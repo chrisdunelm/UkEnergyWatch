@@ -45,6 +45,8 @@ namespace Ukew.Storage
             public int Version { get; }
             public int ElementSize { get; }
 
+            public long ElementCount => Length / ElementSize;
+
             public override string ToString() => $"{{ Id:'{Id}', Length:{Length}, SeqId:{SeqId}, Version:{Version}, ElementSize:{ElementSize} }}";
         }
     }

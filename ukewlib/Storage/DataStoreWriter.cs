@@ -24,20 +24,25 @@ namespace Ukew.Storage
         private readonly IDirectory _dir;
         private readonly TFactory _factory;
 
-        private Task<FileName> _appendFileNameTask;
+        private Task<(long count, FileName filename)> _appendFileNameTask;
+        private long _writeIndex;
         private string _appendFileId;
 
-        private async Task<FileName> AppendFileName(CancellationToken ct) =>
-            (await _dir.ListFilesAsync(ct).ConfigureAwait(_taskHelper))
+        private async Task<(long count, FileName filename)> AppendFileName(CancellationToken ct)
+        {
+            var files = (await _dir.ListFilesAsync(ct).ConfigureAwait(_taskHelper))
                 .Select(x => new FileName(x))
                 .OrderByDescending(x => x.SeqId)
-                .FirstOrDefault();
+                .ToList();
+            return (files.Sum(x => x.ElementCount), files.FirstOrDefault());
+        }
 
         // Not thread-safe
-        public async Task AppendAsync(IEnumerable<T> items, CancellationToken ct = default(CancellationToken))
+        public async Task<long> AppendAsync(IEnumerable<T> items, CancellationToken ct = default(CancellationToken))
         {
             var builder = ImmutableArray.CreateBuilder<byte>();
             int byteLength = -1;
+            int itemCount = 0;
             foreach (var item in items)
             {
                 builder.Add(ID_BYTE_1);
@@ -49,16 +54,17 @@ namespace Ukew.Storage
                 {
                     byteLength = builder.Count;
                 }
+                itemCount += 1;
             }
-            if (byteLength == -1)
+            if (itemCount == 0)
             {
                 // No items to store, so return.
-                return;
+                return -1;
             }
             var bytes = builder.ToImmutableArray();
             if (_appendFileNameTask != null)
             {
-                FileName fileName = await _appendFileNameTask.ConfigureAwait(_taskHelper);
+                var (count, fileName) = await _appendFileNameTask.ConfigureAwait(_taskHelper);
                 int seqId = -1;
                 if (fileName == null)
                 {
@@ -79,12 +85,16 @@ namespace Ukew.Storage
                 {
                     fileName = new FileName(seqId, _factory.CurrentVersion, byteLength);
                 }
+                _writeIndex = count;
                 _appendFileId = fileName.Id;
                 _appendFileNameTask = null;
             }
             await _dir.AppendAsync(_appendFileId, bytes, ct).ConfigureAwait(_taskHelper);
+            long writeIndex = _writeIndex;
+            _writeIndex += itemCount;
+            return writeIndex;
         }
 
-        public Task AppendAsync(T item, CancellationToken ct = default(CancellationToken)) => AppendAsync(new[] { item }, ct);
+        public Task<long> AppendAsync(T item, CancellationToken ct = default(CancellationToken)) => AppendAsync(new[] { item }, ct);
     }
 }

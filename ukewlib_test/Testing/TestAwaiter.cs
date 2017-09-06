@@ -23,6 +23,7 @@ namespace Ukew.Testing
         public bool IsCompleted => _task.IsCompleted;
         public void GetResult()
         {
+            //_task.Wait();
             try
             {
                 _task.Wait();
@@ -52,6 +53,7 @@ namespace Ukew.Testing
         public bool IsCompleted => _task.IsCompleted;
         public T GetResult()
         {
+            //return _task.Result;
             try
             {
                 return _task.Result;

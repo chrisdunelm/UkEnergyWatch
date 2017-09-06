@@ -28,6 +28,9 @@ namespace ukew_www
 
         [Option(Required = false, HelpText = "True to listen on all network interfaces, not just localhost")]
         public bool NonLocalhost { get; set; } = false;
+
+        [Option(Required = false, HelpText = "Absolute or relative directory path for access log. Defaults to ./logs")]
+        public string AccessLogDirectory { get; set; } = "./logs";
     }
 
     public class Program
