@@ -1,0 +1,2334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soap:Body>
+    <GetInstantaneousFlowDataResponse xmlns="http://www.NationalGrid.com/EDP/UI/">
+
+      <GetInstantaneousFlowDataResult>
+        <ReportName xmlns="http://www.NationalGrid.com/EDP/BusinessEntities/Public">
+        Instantaneous Flow Report</ReportName>
+        <PublishedTime xmlns="http://www.NationalGrid.com/EDP/BusinessEntities/Public">
+        2017-09-15T07:35:01</PublishedTime>
+        <EDPReportPage xmlns="http://www.NationalGrid.com/EDP/BusinessEntities/Public">
+
+          <PageName>page1</PageName>
+          <CurrentGasDay>2017-09-15T00:00:00</CurrentGasDay>
+          <EDPEnergyGraphTableCollection>
+            <EDPEnergyGraphTableBE>
+              <EDPEnergyGraphTableName>
+              table1</EDPEnergyGraphTableName>
+              <ItemPosition>1</ItemPosition>
+              <EDPObjectCollection>
+                <EDPObjectBE>
+                  <EDPObjectName>ALDBROUGH</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>AVONMOUTH</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BACTON BBL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BACTON IC</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BACTON PERENCO</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BACTON SEAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>5.72763</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>5.72763</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>5.72763</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>5.72763</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>5.72763</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>5.72763</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BACTON SHELL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>10.49</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>10.49</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>10.49</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>10.49</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>10.49</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>10.49</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BARROW SOUTH</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>DYNEVOR ARMS</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>EASINGTON
+                  DIMLINGTON</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>6.94438</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>6.94438</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>6.94438</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>6.94438</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>6.94438</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>6.94209</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>EASINGTON LANGELED</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>56.77821</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>56.2179</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>56.48638</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>56.46693</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>56.27626</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>56.79767</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>EASINGTON ROUGH</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>GLENMAVIS</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>GRAIN NTS 1</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>GRAIN NTS 2</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>HILLTOP</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>HOLE HOUSE FARM</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>HOLFORD</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>HORNSEA</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>MILFORD HAVEN -
+                  DRAGON</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>MILFORD HAVEN - SOUTH
+                  HOOK</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>9.24697</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>9.37881</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>9.37881</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>9.2726</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>9.37514</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>9.37514</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>PARTINGTON</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>ST FERGUS MOBIL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>18.98192</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>18.98192</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>18.98192</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>18.98192</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>18.98192</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>18.91325</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>ST FERGUS NSMP</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>28.56049</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>28.45502</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>28.45502</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>28.45502</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>28.56049</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>28.46381</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>ST FERGUS SHELL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>19.44829</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>19.44829</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>19.44829</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>19.44829</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>19.44829</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>19.44829</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>STUBLACH</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>13.36301</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>13.26825</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>13.21675</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>13.27855</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>13.16114</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>13.29709</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>TEESSIDE BP</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>5.58169</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>5.58169</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>5.62454</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>5.50423</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>5.56851</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>5.70694</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>TEESSIDE PX</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>4.98347</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>4.9637</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>4.93733</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>4.97359</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>4.94722</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>4.93733</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>THEDDLETHORPE</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+              </EDPObjectCollection>
+              <Description>Zone Supply</Description>
+            </EDPEnergyGraphTableBE>
+            <EDPEnergyGraphTableBE>
+              <EDPEnergyGraphTableName>
+              table2</EDPEnergyGraphTableName>
+              <ItemPosition>2</ItemPosition>
+              <EDPObjectCollection>
+                <EDPObjectBE>
+                  <EDPObjectName>AVONMOUTH LNG</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BACTON IPs
+                  Terminal</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0.00824</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BACTON UKCS
+                  Terminal</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>16.21763</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>16.21763</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>16.21763</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>16.21763</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>16.21763</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>16.21763</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>BARROW TERMINAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>DYNEVOR LNG</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>EASINGTON TERMINAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>63.72259</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>63.16228</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>63.43076</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>63.41131</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>63.22065</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>63.73976</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>GLENMAVIS LNG</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>ISLE OF GRAIN
+                  TERMINAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>2.02171</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>2.02171</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>2.02171</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>2.02995</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>2.02995</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>2.02995</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>MILFORD HAVEN
+                  TERMINAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>9.38613</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>9.37881</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>9.37881</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>9.2726</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>9.2726</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>9.37514</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>PARTINGTON LNG</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>0</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>ST FERGUS TERMINAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>66.99071</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>66.88524</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>66.88524</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>66.88524</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>66.99071</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>66.82536</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>TEESSIDE TERMINAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>10.56516</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>10.54539</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>10.56187</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>10.47782</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>10.51572</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>10.64427</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+                <EDPObjectBE>
+                  <EDPObjectName>THEDDLETHORPE
+                  TERMINAL</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>5.26</FlowRate>
+                      <QualityIndicator />
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+              </EDPObjectCollection>
+              <Description>Terminal Supply</Description>
+            </EDPEnergyGraphTableBE>
+            <EDPEnergyGraphTableBE>
+              <EDPEnergyGraphTableName>
+              table3</EDPEnergyGraphTableName>
+              <ItemPosition>3</ItemPosition>
+              <EDPObjectCollection>
+                <EDPObjectBE>
+                  <EDPObjectName>TOTAL SUPPLY</EDPObjectName>
+                  <EnergyDataList>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:24:00</ApplicableAt>
+                      <FlowRate>190.29191</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:26:00</ApplicableAt>
+                      <FlowRate>189.43901</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:28:00</ApplicableAt>
+                      <FlowRate>189.64649</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:30:00</ApplicableAt>
+                      <FlowRate>189.4879</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:32:00</ApplicableAt>
+                      <FlowRate>189.34132</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                    <EDPEnergyDataBE>
+                      <ApplicableAt>
+                      2017-09-15T07:34:00</ApplicableAt>
+                      <FlowRate>190.03944</FlowRate>
+                      <QualityIndicator>E</QualityIndicator>
+                      <ScheduleTime>
+                      2017-09-15T07:36:00</ScheduleTime>
+                    </EDPEnergyDataBE>
+                  </EnergyDataList>
+                </EDPObjectBE>
+              </EDPObjectCollection>
+              <Description>Total Supply</Description>
+            </EDPEnergyGraphTableBE>
+          </EDPEnergyGraphTableCollection>
+        </EDPReportPage>
+      </GetInstantaneousFlowDataResult>
+    </GetInstantaneousFlowDataResponse>
+  </soap:Body>
+</soap:Envelope>

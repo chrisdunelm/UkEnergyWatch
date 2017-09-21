@@ -128,6 +128,19 @@ namespace Ukew.Storage
                 .Where(x => x.Item2 != null);
         }
 
+        public async Task<string> GetAsync(long index)
+        {
+            var raw = await _reader.ReadAsync((int)index).ConfigureAwait(_taskHelper);
+            var full = ImmutableArray<byte>.Empty;
+            await raw.TakeWhile(item =>
+            {
+                var part = item.Bytes.TakeWhile(b => b != TerminationByte).ToImmutableArray();
+                full = full.AddRange(part);
+                return !(part.Length < item.Bytes.Length);
+            }).ToArray();
+            return Encoding.UTF8.GetString(full.ToArray());
+        }
+
         private Task<long> AddInternalAsync(string value)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(value);

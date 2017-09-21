@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Ukew.Utils.Tasks;
@@ -23,14 +25,13 @@ namespace Ukew.Testing
         public bool IsCompleted => _task.IsCompleted;
         public void GetResult()
         {
-            //_task.Wait();
             try
             {
                 _task.Wait();
             }
             catch (AggregateException e)
             {
-                throw e.InnerException ?? e;
+                ExceptionDispatchInfo.Capture(e.InnerExceptions.FirstOrDefault() ?? e).Throw();
             }
         }
     }
@@ -60,7 +61,8 @@ namespace Ukew.Testing
             }
             catch (AggregateException e)
             {
-                throw e.InnerException ?? e;
+                ExceptionDispatchInfo.Capture(e.InnerExceptions.FirstOrDefault() ?? e).Throw();
+                throw; // Will never get here, but compiler needs it.
             }
         }
     }

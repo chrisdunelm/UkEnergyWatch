@@ -27,6 +27,9 @@ namespace Ukew.Storage
                 Assert.Equal(1, index2);
                 var all2 = await (await strings.AllStrings().ConfigureAwait(th)).ToList().ConfigureAwait(th);
                 Assert.Equal(new[] { (0L, "a"), (1L, "b") }, all2);
+
+                Assert.Equal("a", await strings.GetAsync(index1));
+                Assert.Equal("b", await strings.GetAsync(index2));
             });
         }
 
@@ -53,6 +56,9 @@ namespace Ukew.Storage
                 Assert.Equal(expectedIndex2, index2);
                 var all2 = await (await strings.AllStrings().ConfigureAwait(th)).ToList().ConfigureAwait(th);
                 Assert.Equal(new[] { (0L, s1), (expectedIndex2, s2) }, all2);
+
+                Assert.Equal(s1, await strings.GetAsync(index1));
+                Assert.Equal(s2, await strings.GetAsync(index2));
             });
         }
 
@@ -76,6 +82,7 @@ namespace Ukew.Storage
 
                     var all = await (await strings.AllStrings().ConfigureAwait(th)).ToList().ConfigureAwait(th);
                     Assert.Equal(expected, all);
+                    Assert.Equal(s, await strings.GetAsync(index));
                 }
             });
         }

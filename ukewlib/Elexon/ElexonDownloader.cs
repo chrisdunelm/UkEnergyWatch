@@ -24,10 +24,12 @@ namespace Ukew.Elexon
         {
             var paramString = getParams.Aggregate("", (acc, kv) => $"{acc}&{kv.Key}={kv.Value}");
             var uri = $"https://api.bmreports.com/BMRS/{reportName}/v1?APIKey={_apiKey}{paramString}&ServiceType=xml";
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetByteArrayAsync(uri).ConfigureAwait(_taskHelper);
-            var responseStream = new MemoryStream(response);
-            return XDocument.Load(responseStream);
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetByteArrayAsync(uri).ConfigureAwait(_taskHelper);
+                var responseStream = new MemoryStream(response);
+                return XDocument.Load(responseStream);
+            }
         }
     }
 }
