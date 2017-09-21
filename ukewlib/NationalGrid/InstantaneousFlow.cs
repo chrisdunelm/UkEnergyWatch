@@ -34,7 +34,7 @@ namespace Ukew.NationalGrid
             TotalSupply = 3,
         }
 
-        public struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>
+        public struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>, IStringMap<Data>
         {
             public Data(Instant update, SupplyType type, ushort nameIndex, Flow flowRate)
                 : this((uint)update.ToUnixTimeSeconds(), (byte)type, nameIndex, (uint)(flowRate.CubicMetersPerHour * 24.0)) { }
@@ -58,6 +58,9 @@ namespace Ukew.NationalGrid
             public Flow FlowRate => Flow.FromCubicMetersPerHour(((double)_flowRateCubicMetresPerDay) / 24.0);
 
             public Task<string> NameAsync(Strings strings) => strings.GetAsync(_nameIndex);
+
+            Data IStringMap<Data>.CloneWithStrings(IReadOnlyList<long> indexes) =>
+                new Data(_updateUnixSeconds, _type, (ushort)indexes[0], _flowRateCubicMetresPerDay);
 
             int IStorableFactory<Data>.CurrentVersion => 1;
 
@@ -119,7 +122,7 @@ namespace Ukew.NationalGrid
             return s_dateTimePattern.Parse(dateTime).Value;
         }
 
-        public async Task<IEnumerable<Data>> GetInstantaneousFlowDataAsync(Strings strings, CancellationToken ct = default(CancellationToken))
+        public async Task<IReadOnlyList<Strings.Map<Data>>> GetInstantaneousFlowDataAsync(CancellationToken ct = default(CancellationToken))
         {
             var uri = "http://energywatch.natgrid.co.uk/EDP-PublicUI/PublicPI/InstantaneousFlowWebService.asmx";
             var soapAction = "http://www.NationalGrid.com/EDP/UI/GetInstantaneousFlowData";
@@ -139,7 +142,7 @@ namespace Ukew.NationalGrid
                     default: throw new ArgumentOutOfRangeException(nameof(graphTableEl));
                 }
             }
-            List<(Instant update, SupplyType SupplyType, string objName, Flow flow)> datas = collection.Elements(s_nsEntities + "EDPEnergyGraphTableBE")
+            return collection.Elements(s_nsEntities + "EDPEnergyGraphTableBE")
                 .SelectMany(graphTableEl =>
                 {
                     var supplyType = GetSupplyType(graphTableEl);
@@ -158,16 +161,10 @@ namespace Ukew.NationalGrid
                     var update = s_dateTimePattern.Parse(applicableAt).Value;
                     var flowRate = CompactWhitespace(x.energy.Element(s_nsEntities + "FlowRate").Value);
                     var flow = Flow.FromCubicMetersPerHour(double.Parse(flowRate) * 1e6 / 24);
-                    return (update, x.supplyType, x.objName, flow);
+                    var data = new Data(update, x.supplyType, 0, flow);
+                    return new Strings.Map<Data>(data, x.objName);
                 })
                 .ToList();
-            var result = new List<Data>();
-            foreach (var data in datas)
-            {
-                var nameIndex = await strings.AddOrGetIndexAsync(data.objName);
-                result.Add(new Data(data.update, data.SupplyType, (ushort)nameIndex, data.flow));
-            }
-            return result;
         }
     }
 }

@@ -16,6 +16,28 @@ namespace Ukew.Storage
         public const int PartLengthV1 = 64;
         public const byte TerminationByte = 0xff; // 0xff is never valid in UTF8
 
+        public class Map<T> where T : IStringMap<T>
+        {
+            public Map(T data, params string[] strings)
+            {
+                Data = data;
+                Strings = strings;
+            }
+
+            public T Data { get; }
+            public IReadOnlyList<string> Strings { get; }
+
+            public async Task<T> WriteStringsAsync(ITaskHelper taskHelper, Strings strings)
+            {
+                var indexes = new List<long>();
+                foreach (var s in Strings)
+                {
+                    indexes.Add(await strings.AddOrGetIndexAsync(s).ConfigureAwait(taskHelper));
+                }
+                return Data.CloneWithStrings(indexes);
+            }
+        }
+
         public class Reader : DataStoreReader<Data, Data>
         {
             public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "strings") { }
@@ -178,6 +200,20 @@ namespace Ukew.Storage
                 return index;
             }
             return await AddInternalAsync(value).ConfigureAwait(_taskHelper);
+        }
+    }
+
+    public static class StringsExtensions
+    {
+        public static async Task<IReadOnlyList<T>> WriteStringsAsync<T>(this IReadOnlyList<Strings.Map<T>> datas,
+            ITaskHelper taskHelper, Strings strings) where T : IStringMap<T>
+        {
+            var result = new List<T>();
+            foreach (var data in datas)
+            {
+                result.Add(await data.WriteStringsAsync(taskHelper, strings).ConfigureAwait(taskHelper));
+            }
+            return result;
         }
     }
 }
