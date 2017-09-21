@@ -17,12 +17,12 @@ namespace Ukew.Elexon
     {
         public class FpnReader : DataStoreReader<FpnData, FpnData>
         {
-            public FpnReader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+            public FpnReader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "fpndata") { }
         }
 
         public class FpnWriter : DataStoreWriter<FpnData, FpnData>
         {
-            public FpnWriter(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+            public FpnWriter(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "fpndata") { }
         }
 
         public struct FpnData : IStorable<FpnData, FpnData>, IStorableFactory<FpnData>, IEquatable<FpnData>

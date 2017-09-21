@@ -31,12 +31,12 @@ namespace Ukew.Storage
     {
         public class Reader : DataStoreReader<Data, DataFactory>
         {
-            public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+            public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "data") { }
         }
 
         public class Writer : DataStoreWriter<Data, DataFactory>
         {
-            public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+            public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "data") { }
         }
 
         public Data(int a, int? b, int? c) => (A, B, C) = (a, b, c);

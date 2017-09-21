@@ -25,9 +25,9 @@ namespace Ukew.Storage
 
         private (IDirectory, Data[]) BuildData()
         {
-            var version1 = "seqid.00000001.version.1.elementsize.8.datastore";
-            var version2 = "seqid.00000002.version.2.elementsize.d.datastore";
-            var version3 = "seqid.00000003.version.3.elementsize.12.datastore";
+            var version1 = "data.seqid.00000001.version.1.elementsize.8.datastore";
+            var version2 = "data.seqid.00000002.version.2.elementsize.d.datastore";
+            var version3 = "data.seqid.00000003.version.3.elementsize.12.datastore";
             var e = Bits.Empty;
             var idBits = e.Concat(ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2));
             var dir = new FakeDirectory(

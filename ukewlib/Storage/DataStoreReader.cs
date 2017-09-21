@@ -12,14 +12,16 @@ namespace Ukew.Storage
 {
     public abstract class DataStoreReader<T, TFactory> : DataStore where T : IStorable<T, TFactory> where TFactory : IStorableFactory<T>, new()
     {
-        public DataStoreReader(ITaskHelper taskHelper, IDirectory dir)
+        public DataStoreReader(ITaskHelper taskHelper, IDirectory dir, string prefix)
         {
             _taskHelper = taskHelper;
             _dir = dir;
+            _prefix = prefix;
         }
 
         private ITaskHelper _taskHelper;
         private IDirectory _dir;
+        private string _prefix;
 
         private class FileIndex
         {
@@ -35,6 +37,7 @@ namespace Ukew.Storage
             var files = await _dir.ListFilesAsync(ct).ConfigureAwait(_taskHelper);
             return files
                 .Select(x => new FileName(x))
+                .Where(x => x.Prefix == _prefix)
                 .OrderBy(x => x.SeqId)
                 .Aggregate(ImmutableList<FileIndex>.Empty, (result, fileName) =>
                 {

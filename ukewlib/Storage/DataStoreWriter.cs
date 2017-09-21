@@ -11,10 +11,11 @@ namespace Ukew.Storage
 {
     public abstract class DataStoreWriter<T, TFactory> : DataStore where T : IStorable<T, TFactory> where TFactory : IStorableFactory<T>, new()
     {
-        public DataStoreWriter(ITaskHelper taskHelper, IDirectory dir)
+        public DataStoreWriter(ITaskHelper taskHelper, IDirectory dir, string prefix)
         {
             _taskHelper = taskHelper;
             _dir = dir;
+            _prefix = prefix;
             _factory = Singletons<TFactory>.Instance;
             // Find last file, and check to see if it's version-compatible
             _appendFileNameTask = _taskHelper.Run(() => AppendFileName(CancellationToken.None));
@@ -22,6 +23,7 @@ namespace Ukew.Storage
 
         private readonly ITaskHelper _taskHelper;
         private readonly IDirectory _dir;
+        private readonly string _prefix;
         private readonly TFactory _factory;
 
         private Task<(long count, FileName filename)> _appendFileNameTask;
@@ -32,6 +34,7 @@ namespace Ukew.Storage
         {
             var files = (await _dir.ListFilesAsync(ct).ConfigureAwait(_taskHelper))
                 .Select(x => new FileName(x))
+                .Where(x => x.Prefix == _prefix)
                 .OrderByDescending(x => x.SeqId)
                 .ToList();
             return (files.Sum(x => x.ElementCount), files.FirstOrDefault());
@@ -83,7 +86,7 @@ namespace Ukew.Storage
                 }
                 if (seqId >= 0)
                 {
-                    fileName = new FileName(seqId, _factory.CurrentVersion, byteLength);
+                    fileName = new FileName(_prefix, seqId, _factory.CurrentVersion, byteLength);
                 }
                 _writeIndex = count;
                 _appendFileId = fileName.Id;

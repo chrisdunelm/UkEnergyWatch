@@ -34,7 +34,7 @@ namespace Ukew.Storage
             {
                 var idBits = ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2);
                 var dir = new FakeDirectory(
-                    ("seqid.00000001.version.1.elementsize.8.datastore", Bits.Empty.Concat(idBits).Concat(Bits.Empty.AddInt(1).AddFletcher16))
+                    ("data.seqid.00000001.version.1.elementsize.8.datastore", Bits.Empty.Concat(idBits).Concat(Bits.Empty.AddInt(1).AddFletcher16))
                 );
                 var writer = new Data.Writer(th, dir);
                 var reader = new Data.Reader(th, dir);

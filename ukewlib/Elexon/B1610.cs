@@ -17,12 +17,12 @@ namespace Ukew.Elexon
     {
         public class Reader : DataStoreReader<Data, Data>
         {
-            public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+            public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "b1610") { }
         }
 
         public class Writer : DataStoreWriter<Data, Data>
         {
-            public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir) { }
+            public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "b1610") { }
         }
 
         public struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>
