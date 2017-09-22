@@ -47,9 +47,12 @@ namespace Ukew.Applications
                 {
                     await _taskHelper.Delay(Duration.FromMinutes(0.2)).ConfigureAwait(_taskHelper);
                 }
-                var datas0 = await _flow.GetInstantaneousFlowDataAsync(ct).ConfigureAwait(_taskHelper);
-                var datas1 = await datas0.WriteStringsAsync(_taskHelper, _strings).ConfigureAwait(_taskHelper);
-                await _writer.AppendAsync(datas1, ct).ConfigureAwait(_taskHelper);
+                if (tries >= 0)
+                {
+                    var datas0 = await _flow.GetInstantaneousFlowDataAsync(ct).ConfigureAwait(_taskHelper);
+                    var datas1 = await datas0.WriteStringsAsync(_taskHelper, _strings).ConfigureAwait(_taskHelper);
+                    await _writer.AppendAsync(datas1, ct).ConfigureAwait(_taskHelper);
+                }
             }
         }
     }

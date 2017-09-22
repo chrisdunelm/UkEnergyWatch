@@ -38,7 +38,7 @@ namespace Ukew.Applications
                 var cts = new CancellationTokenSource();
                 Task unused = th.Run(async () =>
                 {
-                    await th.Delay(NodaTime.Duration.FromMinutes(15)).ConfigureAwait(th);
+                    await th.Delay(NodaTime.Duration.FromMinutes(60)).ConfigureAwait(th);
                     cts.Cancel();
                 });
                 await fetcher.Start(false, cts.Token).ConfigureAwaitHideCancel(th);
