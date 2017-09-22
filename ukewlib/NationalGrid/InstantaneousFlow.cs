@@ -91,12 +91,16 @@ namespace Ukew.NationalGrid
             public static bool operator !=(Data a, Data b) => !(a == b);
 
             public override string ToString() => $"{{ Update:{Update}, Type:{Type}, NameIndex:{NameIndex}, Flow:{FlowRate} }}";
+
+            public string ToString(Strings strings) =>
+                $"{{ Update:{Update}, Type:{Type}, Name:{NameAsync(strings).Result} (index:{NameIndex}), Flow:{FlowRate} }}";
         }
 
         private static readonly XNamespace s_ns = XNamespace.Get("http://www.NationalGrid.com/EDP/UI/");
         private static readonly XNamespace s_nsEntities = XNamespace.Get("http://www.NationalGrid.com/EDP/BusinessEntities/Public");
-        private static readonly InstantPattern s_dateTimePattern = InstantPattern.CreateWithInvariantCulture("uuuu'-'MM'-'dd'T'HH':'mm':'ss");
+        private static readonly LocalDateTimePattern s_dateTimePattern = LocalDateTimePattern.CreateWithInvariantCulture("uuuu'-'MM'-'dd'T'HH':'mm':'ss");
         private static readonly Regex s_compactWhitespaceRx = new Regex("\\s+");
+        private static readonly DateTimeZone s_tzLondon = DateTimeZoneProviders.Tzdb["Europe/London"];
 
         public InstantaneousFlow(ITaskHelper taskHelper, ISoapDownloader soapDownloader)
         {
@@ -107,10 +111,10 @@ namespace Ukew.NationalGrid
         private readonly ITaskHelper _taskHelper;
         private readonly ISoapDownloader _soapDownloader;
 
-        private string CompactWhitespace(string s)
-        {
-            return s_compactWhitespaceRx.Replace(s, " ").Trim();
-        }
+        private string CompactWhitespace(string s) => s_compactWhitespaceRx.Replace(s, " ").Trim();
+
+        private Instant LocalToInstant(string dateTime) =>
+            s_dateTimePattern.Parse(dateTime).Value.InZoneLeniently(s_tzLondon).ToInstant();
 
         public async Task<Instant> GetLatestPublicationTimeAsync(CancellationToken ct = default(CancellationToken))
         {
@@ -118,8 +122,8 @@ namespace Ukew.NationalGrid
             var soapAction = "http://www.NationalGrid.com/EDP/UI/GetLatestPublicationTime";
             var requestSoapBody = "<GetLatestPublicationTime xmlns=\"http://www.NationalGrid.com/EDP/UI/\"/>";
             var responseSoapBody = await _soapDownloader.GetSoapAsync(uri, soapAction, requestSoapBody, ct);
-            var dateTime = responseSoapBody.Element(s_ns + "GetLatestPublicationTimeResult").Value.Trim();
-            return s_dateTimePattern.Parse(dateTime).Value;
+            var dateTime = CompactWhitespace(responseSoapBody.Element(s_ns + "GetLatestPublicationTimeResult").Value);
+            return LocalToInstant(dateTime);
         }
 
         public async Task<IReadOnlyList<Strings.Map<Data>>> GetInstantaneousFlowDataAsync(CancellationToken ct = default(CancellationToken))
@@ -158,7 +162,7 @@ namespace Ukew.NationalGrid
                 .Select(x =>
                 {
                     var applicableAt = CompactWhitespace(x.energy.Element(s_nsEntities + "ApplicableAt").Value);
-                    var update = s_dateTimePattern.Parse(applicableAt).Value;
+                    var update = LocalToInstant(applicableAt);
                     var flowRate = CompactWhitespace(x.energy.Element(s_nsEntities + "FlowRate").Value);
                     var flow = Flow.FromCubicMetersPerHour(double.Parse(flowRate) * 1e6 / 24);
                     var data = new Data(update, x.supplyType, 0, flow);
