@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CommandLine;
 using Microsoft.AspNetCore.Hosting;
@@ -22,6 +23,9 @@ namespace ukew_www
 
         [Option(Required = true, HelpText = "Absolute or relative directory path for B1610 (actual per-unit generation) storage")]
         public string B1610DataDirectory { get; set; }
+
+        [Option(Required = true, HelpText = "Absolute or relative directory path for gas-flow storage")]
+        public string GasFlowDataDirectory { get; set; }
 
         [Option(Required = false, HelpText = "Runtime environment: 'Development', 'Staging', 'Production'")]
         public string Environment { get; set; } = "Development";
@@ -56,6 +60,11 @@ namespace ukew_www
             {
                 hostBuilder = hostBuilder.UseUrls("http://*:5000");
             }
+            hostBuilder.ConfigureServices(services =>
+                {
+
+                })
+                .UseSetting(WebHostDefaults.ApplicationKey, typeof(Startup).GetTypeInfo().Assembly.FullName);
             
             var host = hostBuilder.Build();
 

@@ -19,7 +19,12 @@ namespace Ukew.NationalGrid
     {
         public class Reader : DataStoreReader<Data, Data>
         {
-            public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "instantaneousflow") { }
+            public Reader(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "instantaneousflow")
+            {
+                Strings = new Strings(taskHelper, dir);
+            }
+
+            public Strings Strings { get; }
         }
 
         public class Writer : DataStoreWriter<Data, Data>

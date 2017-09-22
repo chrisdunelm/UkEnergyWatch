@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ukew.Elexon;
+using Ukew.NationalGrid;
 using Ukew.Storage;
 using Ukew.Utils;
 using Ukew.Utils.Tasks;
@@ -72,6 +73,13 @@ namespace ukew_www
                 return new B1610.Reader(taskHelper, dir);
             });
             services.AddSingleton<B1610Seen>();
+            services.AddSingleton<InstantaneousFlow.Reader>(ctx =>
+            {
+                var cmdLineOptions = ctx.GetRequiredService<CmdLineOptions>();
+                var taskHelper = ctx.GetRequiredService<ITaskHelper>();
+                var dir = new SystemDirectory(taskHelper, cmdLineOptions.GasFlowDataDirectory);
+                return new InstantaneousFlow.Reader(taskHelper, dir);
+            });
 
             return services.BuildServiceProvider();
         }

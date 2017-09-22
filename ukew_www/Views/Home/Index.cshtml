@@ -9,6 +9,7 @@
     ViewData["Title"] = "Electricity";
     var powerData = @Model.FuelInstHhCurData;
     var freqData = @Model.FrequencyData;
+    var gasFlowData = @Model.GasFlowData;
 }
 
 <div class="subtitle">
@@ -66,8 +67,43 @@ Electricity Fuel Type - Instantaneous real-time data
 
 <br/>
 
+<div class="subtitle">
+    Gas in-flow - Instantaneous real-time data
+</div>
+<div class="data">
+    <table class="power">
+        <tr class="header"><td>Terminal</td><td>Current gas in-flow</td><td>CO<sub>2</sub> emissions</td></td>
+        @foreach (var t in gasFlowData.Rows.Select((x, i) => Tuple.Create(x, i)))
+        {
+            var row = t.Item1;
+            var evenOdd = t.Item2 & 1;
+            <tr class="row@(evenOdd) highlight">
+                <td>@row.Name</td>
+                <td>
+                    <span class="mw">@row.GasFlow.ToString(FlowUnit.CubicMeterPerSecond, null, 1)</span>
+                    <span class="percent">(@((row.GasFlow.CubicMetersPerHour * 24 / 1e6).ToString("0.00")) Mm³/day)</span>
+                </td>
+                <td>-</td>
+            </tr>
+        }
+        <tr class="footer">
+            <td>Total</td>
+            <td>
+                <span class="mw">@gasFlowData.Total.GasFlow.ToString(FlowUnit.CubicMeterPerSecond, null, 1)</span>
+                <span class="percent">(@((gasFlowData.Total.GasFlow.CubicMetersPerHour * 24 / 1e6).ToString("0.00")) Mm³/day)</span>
+            </td>
+            <td>-</td>
+        </tr>
+    </table>
+    <div class="update">
+        Updated: @gasFlowData.UpdateTime.ToString("dd MMMM yyyy HH:mm:ss", null) (UK local time)
+    </div>
+</div>
+
+<br/>
+
 <div class="info">
-    <div class="infotitle">About</div>
+    <div class="infotitle">About - Electricity</div>
     <p>Electricity in the UK is generated from:</p>
     <ul>
         <li>Large power stations within the UK.</li>

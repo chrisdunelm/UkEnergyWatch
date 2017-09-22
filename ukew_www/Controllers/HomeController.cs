@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using Ukew.Elexon;
+using Ukew.NationalGrid;
 using Ukew.Utils;
+using Ukew.Utils.Tasks;
 using UnitsNet;
 
 namespace ukew_www.Controllers
@@ -53,14 +55,43 @@ namespace ukew_www.Controllers
                 public ZonedDateTime UpdateTime { get; }
             }
 
-            public IndexModel(FuelInstHhCurModel fuelInstHhCurData, FrequencyModel frequencyData)
+            public class GasFlowModel
+            {
+                public class Row
+                {
+                    public Row(string name, Flow gasFlow, MassFlow co2)
+                    {
+                        Name = name;
+                        GasFlow = gasFlow;
+                        Co2 = co2;
+                    }
+                    public string Name { get; }
+                    public Flow GasFlow { get; }
+                    public MassFlow Co2 { get; }
+                }
+
+                public GasFlowModel(IEnumerable<Row> rows, Row total, ZonedDateTime updateTime)
+                {
+                    Rows = rows;
+                    Total = total;
+                    UpdateTime = updateTime;
+                }
+
+                public IEnumerable<Row> Rows { get; }
+                public Row Total { get; }
+                public ZonedDateTime UpdateTime { get; }
+            }
+
+            public IndexModel(FuelInstHhCurModel fuelInstHhCurData, FrequencyModel frequencyData, GasFlowModel gasFlowData)
             {
                 FuelInstHhCurData = fuelInstHhCurData;
                 FrequencyData = frequencyData;
+                GasFlowData = gasFlowData;
             }
 
             public FuelInstHhCurModel FuelInstHhCurData { get; }
             public FrequencyModel FrequencyData { get; }
+            public GasFlowModel GasFlowData { get; }
         }
 
         public class PowerStationsModel
@@ -107,7 +138,7 @@ namespace ukew_www.Controllers
         }
 
         public HomeController(ITime time, FuelInstHhCur.Reader fuelInstHhCurReader, Freq.Reader freqReader,
-            PhyBmData.FpnReader fpnReader, B1610.Reader b1610Reader, B1610Seen b1610Seen)
+            PhyBmData.FpnReader fpnReader, B1610.Reader b1610Reader, B1610Seen b1610Seen, InstantaneousFlow.Reader gasFlowReader)
         {
             _time = time;
             _fuelInstHhCurReader = fuelInstHhCurReader;
@@ -115,6 +146,7 @@ namespace ukew_www.Controllers
             _fpnReader = fpnReader;
             _b1610Reader = b1610Reader;
             _b1610Seen = b1610Seen;
+            _gasFlowReader = gasFlowReader;
         }
 
         private readonly ITime _time;
@@ -123,11 +155,21 @@ namespace ukew_www.Controllers
         private readonly PhyBmData.FpnReader _fpnReader;
         private readonly B1610.Reader _b1610Reader;
         private readonly B1610Seen _b1610Seen;
+        private readonly InstantaneousFlow.Reader _gasFlowReader;
 
         private static readonly DateTimeZone s_tzLondon = DateTimeZoneProviders.Tzdb["Europe/London"];
 
         [HttpGet("/")]
         public async Task<IActionResult> Index()
+        {
+            var fuelInstHhCurData = await GetIndexFuelInstHhCurDataAsync();
+            var frequencyData = await GetIndexFrequencyDataAsync();
+            var gasFlowData = await GetIndexGasFlowDataAsync();
+            var model = new IndexModel(fuelInstHhCurData, frequencyData, gasFlowData);
+            return View(model);
+        }
+
+        private async Task<IndexModel.FuelInstHhCurModel> GetIndexFuelInstHhCurDataAsync()
         {
             var count = (int)await _fuelInstHhCurReader.CountAsync();
             var data = await _fuelInstHhCurReader.ReadAsync(count - 1, count);
@@ -152,13 +194,34 @@ namespace ukew_www.Controllers
             var total = new IndexModel.FuelInstHhCurModel.Row("Total", latestData.Total, totalCo2);
             var co2KgPerKwh = totalCo2.KilogramsPerHour / latestData.Total.Kilowatts;
             var updateTime = latestData.Update.InZone(s_tzLondon);
-            var fuelInstHhCurData = new IndexModel.FuelInstHhCurModel(rows, total, co2KgPerKwh, updateTime);
+            return new IndexModel.FuelInstHhCurModel(rows, total, co2KgPerKwh, updateTime);
+        }
+
+        private async Task<IndexModel.FrequencyModel> GetIndexFrequencyDataAsync()
+        {
             var freqCount = (int)await _freqReader.CountAsync();
             var freqData = await _freqReader.ReadAsync(freqCount - 1, freqCount);
             var freqLatest = await freqData.FirstOrDefault();
-            var frequencyData = new IndexModel.FrequencyModel(freqLatest.Frequency, freqLatest.Update.InZone(s_tzLondon));
-            var model = new IndexModel(fuelInstHhCurData, frequencyData);
-            return View(model);
+            return new IndexModel.FrequencyModel(freqLatest.Frequency, freqLatest.Update.InZone(s_tzLondon));
+        }
+
+        private async Task<IndexModel.GasFlowModel> GetIndexGasFlowDataAsync()
+        {
+            var count = (int)await _gasFlowReader.CountAsync();
+            var datasAsync = await _gasFlowReader.ReadAsync(count - 500, count);
+            var datas = await datasAsync.ToList();
+            var lastTotal = datas
+                .Where(x => x.Type == InstantaneousFlow.SupplyType.TotalSupply)
+                .OrderByDescending(x => x.Update)
+                .FirstOrDefault();
+            var terminals = datas
+                .Where(x => x.Type == InstantaneousFlow.SupplyType.TerminalSupply && x.Update == lastTotal.Update);
+            var strings = _gasFlowReader.Strings;
+            var terminalRows = await terminals
+                .SelectAsync(SystemTaskHelper.Instance, async x =>
+                    new IndexModel.GasFlowModel.Row((await x.NameAsync(strings)).ToUpperInvariant(), x.FlowRate, MassFlow.Zero));
+            var totalRow = new IndexModel.GasFlowModel.Row("Total", lastTotal.FlowRate, MassFlow.Zero);
+            return new IndexModel.GasFlowModel(terminalRows, totalRow, lastTotal.Update.InZone(s_tzLondon));
         }
 
         [HttpGet("/powerstations")]
