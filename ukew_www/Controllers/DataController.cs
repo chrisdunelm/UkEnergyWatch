@@ -22,7 +22,6 @@ namespace ukew_www.Controllers
         [HttpPost("/Auth/Login.asmx")]
         public IActionResult AuthLogin()
         {
-            Response.ContentType = "text/xml; charset=utf-8";
             var soapAction = Request.Headers["SOAPAction"][0].Trim('"', ' ');
             switch (soapAction)
             {
@@ -43,7 +42,7 @@ namespace ukew_www.Controllers
     </Auth1Response>
 </soap:Body>
 </soap:Envelope>".Trim();
-                    return Ok(response1);
+                    return Content(response1, "text/xml");
                 case "http://data.ukenergywatch.org.uk/Auth2":
                     string response2 = @"
 <?xml version=""1.0"" encoding=""utf-16""?>
@@ -56,7 +55,7 @@ namespace ukew_www.Controllers
     </Auth2Response>
   </soap:Body>
 </soap:Envelope>".Trim();
-                    return Ok(response2);
+                    return Content(response2, "text/xml");
                 default:
                     throw new InvalidOperationException($"Invalid SOAP action: '{soapAction}'");
             }
@@ -65,7 +64,6 @@ namespace ukew_www.Controllers
         [HttpPost("/Data/Summary.asmx")]
         public async Task<IActionResult> DataSummary()
         {
-            Response.ContentType = "text/xml; charset=utf-8";
             var soapAction = Request.Headers["SOAPAction"][0].Trim('"', ' ');
             switch (soapAction)
             {
@@ -102,7 +100,7 @@ namespace ukew_www.Controllers
     </GetSummaryResponse>
   </soap:Body>
 </soap:Envelope>".Trim();
-                    return Ok(response);
+                    return Content(response, "text/xml");
                 default:
                     throw new InvalidOperationException($"Invalid SOAP action: '{soapAction}'");
             }
@@ -111,7 +109,6 @@ namespace ukew_www.Controllers
         [HttpPost("/Data/Electricity.asmx")]
         public async Task<IActionResult> DataElectricity()
         {
-            Response.ContentType = "text/xml; charset=utf-8";
             var soapAction = Request.Headers["SOAPAction"][0].Trim('"', ' ');
             switch (soapAction)
             {
@@ -147,7 +144,7 @@ namespace ukew_www.Controllers
     </GetCurrentDetailsResponse>
   </soap:Body>
 </soap:Envelope>".Trim();
-                    return Ok(response);
+                    return Content(response, "text/xml");
                 default:
                     throw new InvalidOperationException($"Invalid SOAP action: '{soapAction}'");
             }
