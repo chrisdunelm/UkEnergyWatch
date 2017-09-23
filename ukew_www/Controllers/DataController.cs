@@ -4,20 +4,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 using Ukew.Elexon;
+using Ukew.NationalGrid;
 using Ukew.Utils;
+using Ukew.Utils.Tasks;
 
 namespace ukew_www.Controllers
 {
     public class DataController : Controller
     {
-        public DataController(FuelInstHhCur.Reader fuelInstHhCurReader, Freq.Reader freqReader)
+        public DataController(ITaskHelper taskHelper,
+            FuelInstHhCur.Reader fuelInstHhCurReader, Freq.Reader freqReader, InstantaneousFlow.Reader gasFlowReader)
         {
+            _taskHelper = taskHelper;
             _fuelInstHhCurReader = fuelInstHhCurReader;
             _freqReader = freqReader;
+            _gasFlowReader = gasFlowReader;
         }
 
+        private readonly ITaskHelper _taskHelper;
         private readonly FuelInstHhCur.Reader _fuelInstHhCurReader;
         private readonly Freq.Reader _freqReader;
+        private readonly InstantaneousFlow.Reader _gasFlowReader;
 
         [HttpPost("/Auth/Login.asmx")]
         public IActionResult AuthLogin()
@@ -74,7 +81,13 @@ namespace ukew_www.Controllers
                     var freqCount = (int)await _freqReader.CountAsync();
                     var freqData = await _freqReader.ReadAsync(freqCount - 1, freqCount);
                     var freq = await freqData.First();
-                    var zeroInstant = Instant.FromUtc(2000, 1, 1, 0, 0);
+                    var gasCount = (int)await _gasFlowReader.CountAsync();
+                    var gasDatasAsync = await _gasFlowReader.ReadAsync(gasCount - 500, gasCount);
+                    var gasDatas = await gasDatasAsync.ToList();
+                    var gasLastTotal = gasDatas
+                        .Where(x => x.Type == InstantaneousFlow.SupplyType.TotalSupply)
+                        .OrderByDescending(x => x.Update)
+                        .FirstOrDefault();
 
                     string response = $@"
 <?xml version=""1.0"" encoding=""utf-16""?>
@@ -93,8 +106,8 @@ namespace ukew_www.Controllers
           <Value>{freq.Frequency.Hertz}</Value>
         </ElecFrequency>
         <GasTotalFlowIn>
-          <When>{zeroInstant}</When>
-          <Value>0.0</Value>
+          <When>{gasLastTotal.Update}</When>
+          <Value>{gasLastTotal.FlowRate.CubicMetersPerHour * 24 / 1e6}</Value>
         </GasTotalFlowIn>
       </GetSummaryResult>
     </GetSummaryResponse>
@@ -142,6 +155,49 @@ namespace ukew_www.Controllers
         <Other>{(int)(fuelInst.Other.Megawatts)}</Other>
       </GetCurrentDetailsResult>
     </GetCurrentDetailsResponse>
+  </soap:Body>
+</soap:Envelope>".Trim();
+                    return Content(response, "text/xml");
+                default:
+                    throw new InvalidOperationException($"Invalid SOAP action: '{soapAction}'");
+            }
+        }
+
+        [HttpPost("/Data/Gas.asmx")]
+        public async Task<IActionResult> DataGas()
+        {
+            var soapAction = Request.Headers["SOAPAction"][0].Trim('"', ' ');
+            switch (soapAction)
+            {
+                case "http://data.ukenergywatch.org.uk/GetCurrentFlows":
+                    var count = (int)await _gasFlowReader.CountAsync();
+                    var datasAsync = await _gasFlowReader.ReadAsync(count - 500, count);
+                    var datas = await datasAsync.ToList();
+                    var lastTotal = datas
+                        .Where(x => x.Type == InstantaneousFlow.SupplyType.TotalSupply)
+                        .OrderByDescending(x => x.Update)
+                        .FirstOrDefault();
+                    async Task<string> Details(InstantaneousFlow.SupplyType supplyType) =>
+                        (await datas
+                            .Where(x => x.Type == supplyType && x.Update == lastTotal.Update)
+                            .SelectAsync(_taskHelper, async flow => (flow, name: await flow.NameAsync(_gasFlowReader.Strings))))
+                            .Select(x => $"<Detail><Location>{x.name}</Location><FlowRate>{x.flow.FlowRate.CubicMetersPerHour * 24 / 1e6}</FlowRate></Detail>")
+                            .Aggregate("", (acc, x) => acc + x);
+
+                    string response = $@"
+<?xml version=""1.0"" encoding=""utf-16""?>
+<soap:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
+      xmlns:xsd=""http://www.w3.org/2001/XMLSchema""
+      xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"">
+  <soap:Body>
+    <GetCurrentFlowsResponse xmlns=""http://data.ukenergywatch.org.uk/"">
+      <GetCurrentFlowsResult>
+        <When>{lastTotal.Update}</When>
+        <ZoneSupply>{await Details(InstantaneousFlow.SupplyType.ZoneSupply)}</ZoneSupply>
+        <TerminalSupply>{await Details(InstantaneousFlow.SupplyType.TerminalSupply)}</TerminalSupply>
+        <TotalSupply>{await Details(InstantaneousFlow.SupplyType.TotalSupply)}</TotalSupply>
+      </GetCurrentFlowsResult>
+    </GetCurrentFlowsResponse>
   </soap:Body>
 </soap:Envelope>".Trim();
                     return Content(response, "text/xml");
