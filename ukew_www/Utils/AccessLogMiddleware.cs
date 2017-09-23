@@ -37,8 +37,8 @@ namespace Ukew.Utils
             var responseDelay = responseInstant - requestInstant;
             var line0 = $"{requestInstant.ToString("uuuu-MM-dd HH:mm:ss.fff", null)}, {(int)responseDelay.TotalMilliseconds}";
             var line1 = $"{Quote(request.Method)}, {Quote(request.Path)}, {Quote(request.QueryString.ToString())}, {Quote(remoteIp)}";
-            var line2 = $"{Quote(string.Join(", ", request.Headers["User-Agent"]))}, {response.StatusCode}";
-            await _appender.AppendLineAsync($"1, {line0}, {line1}, {line2}");
+            var line2 = $"{Quote(string.Join(", ", request.Headers["User-Agent"]))}, {response.StatusCode}, {request.ContentLength ?? -1}, {response.ContentLength ?? -1}";
+            await _appender.AppendLineAsync($"2, {line0}, {line1}, {line2}");
             // Version, Request time, response delay (ms), req method, req path, req querystring, remoteip:port, user agent, response status code
         }
     }
