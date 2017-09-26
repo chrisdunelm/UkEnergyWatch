@@ -59,15 +59,17 @@ namespace ukew_www.Controllers
             {
                 public class Row
                 {
-                    public Row(string name, Flow gasFlow, MassFlow co2)
+                    public Row(string name, Flow gasFlow, MassFlow co2, InstantaneousFlow.SupplyType supplyType)
                     {
                         Name = name;
                         GasFlow = gasFlow;
                         Co2 = co2;
+                        SupplyType = supplyType;
                     }
                     public string Name { get; }
                     public Flow GasFlow { get; }
                     public MassFlow Co2 { get; }
+                    public InstantaneousFlow.SupplyType SupplyType { get; }
                 }
 
                 public GasFlowModel(IEnumerable<Row> rows, Row total, ZonedDateTime updateTime)
@@ -205,8 +207,9 @@ namespace ukew_www.Controllers
             return new IndexModel.FrequencyModel(freqLatest.Frequency, freqLatest.Update.InZone(s_tzLondon));
         }
 
-        private async Task<IndexModel.GasFlowModel> GetIndexGasFlowDataAsync()
+        private async Task<IndexModel.GasFlowModel> GetIndexGasFlowDataAsync(bool includeZones = false)
         {
+            var terminalSupply = InstantaneousFlow.SupplyType.TerminalSupply;
             var count = (int)await _gasFlowReader.CountAsync();
             var datasAsync = await _gasFlowReader.ReadAsync(count - 500, count);
             var datas = await datasAsync.ToList();
@@ -215,13 +218,22 @@ namespace ukew_www.Controllers
                 .OrderByDescending(x => x.Update)
                 .FirstOrDefault();
             var terminals = datas
-                .Where(x => x.Type == InstantaneousFlow.SupplyType.TerminalSupply && x.Update == lastTotal.Update);
+                .Where(x => x.Type == terminalSupply && x.Update == lastTotal.Update);
             var strings = _gasFlowReader.Strings;
-            var terminalRows = await terminals
+            var rows = await terminals
                 .SelectAsync(SystemTaskHelper.Instance, async x =>
-                    new IndexModel.GasFlowModel.Row((await x.NameAsync(strings)).ToUpperInvariant(), x.FlowRate, MassFlow.Zero));
-            var totalRow = new IndexModel.GasFlowModel.Row("Total", lastTotal.FlowRate, MassFlow.Zero);
-            return new IndexModel.GasFlowModel(terminalRows, totalRow, lastTotal.Update.InZone(s_tzLondon));
+                    new IndexModel.GasFlowModel.Row((await x.NameAsync(strings)).ToUpperInvariant(), x.FlowRate, MassFlow.Zero, terminalSupply));
+            if (includeZones)
+            {
+                var zoneSupply = InstantaneousFlow.SupplyType.ZoneSupply;
+                var zoneRows = await datas
+                    .Where(x => x.Type == zoneSupply && x.Update == lastTotal.Update)
+                    .SelectAsync(SystemTaskHelper.Instance, async x =>
+                        new IndexModel.GasFlowModel.Row((await x.NameAsync(strings)).ToUpperInvariant(), x.FlowRate, MassFlow.Zero, zoneSupply));
+                rows = rows.Concat(zoneRows);
+            }
+            var totalRow = new IndexModel.GasFlowModel.Row("Total", lastTotal.FlowRate, MassFlow.Zero, InstantaneousFlow.SupplyType.TotalSupply);
+            return new IndexModel.GasFlowModel(rows, totalRow, lastTotal.Update.InZone(s_tzLondon));
         }
 
         [HttpGet("/powerstations")]
@@ -335,6 +347,13 @@ namespace ukew_www.Controllers
                 .OrderBy(x => fuelTypeOrder[x.Key])
                 .ToList();
             return new PowerStationsModel.GenModel(ret);
+        }
+
+        [HttpGet("/gasinflow")]
+        public async Task<IActionResult> GasInFlow()
+        {
+            var model = await GetIndexGasFlowDataAsync(includeZones: true);
+            return View(model);
         }
 
         [HttpGet("/contact")]
