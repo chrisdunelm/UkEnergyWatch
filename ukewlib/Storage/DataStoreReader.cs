@@ -10,7 +10,8 @@ using Ukew.Utils.Tasks;
 
 namespace Ukew.Storage
 {
-    public abstract class DataStoreReader<T, TFactory> : DataStore where T : IStorable<T, TFactory> where TFactory : IStorableFactory<T>, new()
+    public abstract class DataStoreReader<T, TFactory> : DataStore, IReader<T>
+        where T : IStorable<T, TFactory> where TFactory : IStorableFactory<T>, new()
     {
         public DataStoreReader(ITaskHelper taskHelper, IDirectory dir, string prefix)
         {
@@ -129,7 +130,6 @@ namespace Ukew.Storage
                 {
                     throw new InvalidDataException("Invalid data checksum");
                 }
-                // TODO: Check checksum
                 _current = _factory.Load(_files[_filesIndex].FileName.Version, bytes);
                 return true;
             }
