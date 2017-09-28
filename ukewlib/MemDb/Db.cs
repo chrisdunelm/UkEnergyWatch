@@ -109,7 +109,11 @@ namespace Ukew.MemDb
                     }
                 }
             }
-            throw new InvalidOperationException("Should not ever get here");
+            if (count != 0)
+            {
+                throw new InvalidOperationException("count != 0. Bug somewhere!");
+            }
+            return result.ToImmutable();
         }
 
         public ImmutableArray<TResult> WhereSelect<TResult>(Func<T, TResult?> predicateProjection) where TResult : struct
@@ -132,7 +136,11 @@ namespace Ukew.MemDb
                     }
                 }
             }
-            throw new InvalidOperationException("Should not ever get here");
+            if (count != 0)
+            {
+                throw new InvalidOperationException("count != 0. Bug somewhere!");
+            }
+            return result.ToImmutable();
         }
 
         public void Dispose()
