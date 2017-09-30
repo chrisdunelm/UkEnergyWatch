@@ -36,6 +36,7 @@ namespace Ukew.MemDb
             _cts = new CancellationTokenSource();
             _tcs = new TaskCompletionSource<int>();
             _rnd = new Random();
+            // Start load of initial data
             taskHelper.Run(ReadAsync);
         }
 
@@ -96,18 +97,15 @@ namespace Ukew.MemDb
             var result = ImmutableArray.CreateBuilder<T>(_blockSize);
             foreach (var block in _blocks)
             {
-                foreach (var item in block)
+                var length = Math.Min(count, block.Length);
+                for (int i = 0; i < length; i += 1)
                 {
-                    if (count == 0)
+                    if (predicate(block[i]))
                     {
-                        return result.ToImmutable();
-                    }
-                    count -= 1;
-                    if (predicate(item))
-                    {
-                        result.Add(item);
+                        result.Add(block[i]);
                     }
                 }
+                count -= length;
             }
             if (count != 0)
             {
@@ -122,19 +120,16 @@ namespace Ukew.MemDb
             var result = ImmutableArray.CreateBuilder<TResult>(_blockSize);
             foreach (var block in _blocks)
             {
-                foreach (var item0 in block)
+                var length = Math.Min(count, block.Length);
+                for (int i = 0; i < length; i += 1)
                 {
-                    if (count == 0)
+                    var projN = predicateProjection(block[i]);
+                    if (projN is TResult proj)
                     {
-                        return result.ToImmutable();
-                    }
-                    count -= 1;
-                    var item1 = predicateProjection(item0);
-                    if (item1 != null)
-                    {
-                        result.Add(item1.Value);
+                        result.Add(proj);
                     }
                 }
+                count -= length;
             }
             if (count != 0)
             {
