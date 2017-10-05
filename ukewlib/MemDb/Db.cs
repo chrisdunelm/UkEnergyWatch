@@ -62,53 +62,5 @@ namespace Ukew.MemDb
         {
             _cts.Cancel();
         }
-
-        /*public ImmutableArray<T> Where(Func<T, bool> predicate)
-        {
-            var count = _count;
-            var result = ImmutableArray.CreateBuilder<T>(_blockSize);
-            foreach (var block in _blocks)
-            {
-                var length = Math.Min(count, block.Length);
-                for (int i = 0; i < length; i += 1)
-                {
-                    if (predicate(block[i]))
-                    {
-                        result.Add(block[i]);
-                    }
-                }
-                count -= length;
-            }
-            if (count != 0)
-            {
-                throw new InvalidOperationException("count != 0. Bug somewhere!");
-            }
-            return result.ToImmutable();
-        }
-
-        public ImmutableArray<TResult> WhereSelect<TResult>(Func<T, TResult?> predicateProjection) where TResult : struct
-        {
-            var count = _count;
-            var result = ImmutableArray.CreateBuilder<TResult>(_blockSize);
-            foreach (var block in _blocks)
-            {
-                var length = Math.Min(count, block.Length);
-                for (int i = 0; i < length; i += 1)
-                {
-                    var projN = predicateProjection(block[i]);
-                    if (projN is TResult proj)
-                    {
-                        result.Add(proj);
-                    }
-                }
-                count -= length;
-            }
-            if (count != 0)
-            {
-                throw new InvalidOperationException("count != 0. Bug somewhere!");
-            }
-            return result.ToImmutable();
-        }*/
-
     }
 }
