@@ -17,7 +17,7 @@ namespace Ukew.MemDb
             using (var db = new Db<int>(th, reader))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
-                Assert.Equal(new [] { 2, 3 }, db.Where(x => x >= 2));
+                Assert.Equal(new [] { 2, 3 }, db.Where(x => x >= 2).ToImmutableArray());
             }
         });
 
@@ -28,13 +28,13 @@ namespace Ukew.MemDb
         {
             var reader = new FakeReader<int>();
             reader.AddRange(Enumerable.Range(0, 100_000));
-            using (var db = new Db<int>(th, reader, blockSize: blockSize))
+            using (var db = new Db<int>(th, reader, requestedBlockSize: blockSize))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
-                Assert.Equal(new [] { 0, 1 }, db.Where(x => x < 2));
-                Assert.Equal(new [] { 99_998, 99_999 }, db.Where(x => x >= 99_998));
-                Assert.Equal(50_000, db.Where(x => (x & 1) == 0).Length);
-                Assert.Equal(new [] { 0.0, 1.0 }, db.WhereSelect(x => x < 2 ? (double?)x : null));
+                Assert.Equal(new [] { 0, 1 }, db.Where(x => x < 2).ToImmutableArray());
+                Assert.Equal(new [] { 99_998, 99_999 }, db.Where(x => x >= 99_998).ToImmutableArray());
+                Assert.Equal(50_000, db.Where(x => (x & 1) == 0).ToImmutableArray().Length);
+                Assert.Equal(new [] { 0.0, 1.0 }, db.WhereSelect(x => x < 2 ? (double?)x : null).ToImmutableArray());
             }
         });
 
@@ -54,13 +54,13 @@ namespace Ukew.MemDb
         {
             var reader = new FakeReader<Data>();
             reader.AddRange(Enumerable.Range(0, dataSize).Select(i => new Data { a = i, b = (byte)i, c = i, d = (short)i }));
-            using (var db = new Db<Data>(th, reader, blockSize: blockSize))
+            using (var db = new Db<Data>(th, reader, requestedBlockSize: blockSize))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
-                Assert.Equal(new [] { 0L, 1L }, db.Where(x => x.a < 2).Select(x => x.c));
-                Assert.Equal(new long [] { dataSize - 2, dataSize - 1 }, db.Where(x => x.a >= dataSize - 2).Select(x => x.c));
-                Assert.Equal((dataSize + 1) / 2, db.Where(x => (x.b & 1) == 0).Length);
-                Assert.Equal(new [] { 0.0, 1.0 }, db.WhereSelect(x => x.a < 2 ? (double?)x.d : null));
+                Assert.Equal(new [] { 0L, 1L }, db.Where(x => x.a < 2).ToImmutableArray().Select(x => x.c));
+                Assert.Equal(new long [] { dataSize - 2, dataSize - 1 }, db.Where(x => x.a >= dataSize - 2).ToImmutableArray().Select(x => x.c));
+                Assert.Equal((dataSize + 1) / 2, db.Where(x => (x.b & 1) == 0).ToImmutableArray().Length);
+                Assert.Equal(new [] { 0.0, 1.0 }, db.WhereSelect(x => x.a < 2 ? (double?)x.d : null).ToImmutableArray());
             }
         });
 
@@ -71,7 +71,7 @@ namespace Ukew.MemDb
         ) => TimeRunner.Run(async (time, th) =>
         {
             var reader = new FakeReader<int>();
-            using (var db = new Db<int>(th, reader, blockSize: blockSize, pollInterval: Duration.FromMinutes(5), maxJitter: Duration.Zero))
+            using (var db = new Db<int>(th, reader, requestedBlockSize: blockSize, pollInterval: Duration.FromMinutes(5), maxJitter: Duration.Zero))
             {
                 await th.Delay(Duration.FromMinutes(1)).ConfigureAwait(th);
                 for (int i = 0; i < loadCycles; i += 1)
@@ -79,9 +79,9 @@ namespace Ukew.MemDb
                     var count0 = reader.Count;
                     reader.AddRange(Enumerable.Repeat(i, i));
                     await th.Delay(Duration.FromMinutes(3)).ConfigureAwait(th);
-                    Assert.Equal(reader.Take(count0), db.Where(_ => true));
+                    Assert.Equal(reader.Take(count0), db.Where(_ => true).ToImmutableArray());
                     await th.Delay(Duration.FromMinutes(2)).ConfigureAwait(th);
-                    Assert.Equal(reader, db.Where(_ => true));
+                    Assert.Equal(reader, db.ToImmutableArray());
                 }
             }
         });

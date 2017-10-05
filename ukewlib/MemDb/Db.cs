@@ -10,27 +10,13 @@ using Ukew.Utils.Tasks;
 
 namespace Ukew.MemDb
 {
-    public class Db<T> : IDisposable where T : struct
+    public class Db<T> : DbReader<T>, IDisposable where T : struct
     {
-        public Db(ITaskHelper taskHelper, IReader<T> reader, int blockSize = 0, Duration? pollInterval = null, Duration? maxJitter = null)
+        public Db(ITaskHelper taskHelper, IReader<T> reader, int requestedBlockSize = 0, Duration? pollInterval = null, Duration? maxJitter = null)
+            : base(requestedBlockSize)
         {
-            if (blockSize == 0)
-            {
-                int tSize = System.Runtime.InteropServices.Marshal.SizeOf<T>();
-                blockSize = 2_000_000 / tSize; // Make each block take ~2MB
-            }
             _taskHelper = taskHelper;
             _reader = reader;
-            // Minimum block size is 2^6 = 64 items
-            for (_blockPower = 6; ; _blockPower += 1)
-            {
-                _blockSize = 1 << _blockPower;
-                if (_blockSize >= blockSize)
-                {
-                    break;
-                }
-            }
-            _blockMask = _blockSize - 1;
             _pollInterval = pollInterval ?? Duration.FromMinutes(15);
             _maxJitter = maxJitter ?? _pollInterval / 4;
             _cts = new CancellationTokenSource();
@@ -42,32 +28,13 @@ namespace Ukew.MemDb
 
         private readonly ITaskHelper _taskHelper;
         private readonly IReader<T> _reader;
-        private readonly int _blockPower;
-        private readonly int _blockSize;
-        private readonly int _blockMask;
         private readonly Duration _pollInterval;
         private readonly Duration _maxJitter;
         private readonly CancellationTokenSource _cts;
         private readonly TaskCompletionSource<int> _tcs;
         private readonly Random _rnd;
 
-        private List<T[]> _blocks = new List<T[]>();
-        private T[] _lastData;
-        private int _count = 0;
-
         public Task InitialiseTask => _tcs.Task;
-
-        private void Add(T item)
-        {
-            var index = _count & _blockMask;
-            if (index == 0)
-            {
-                _lastData = new T[_blockSize];
-                _blocks.Add(_lastData);
-            }
-            _lastData[index] = item;
-            _count += 1;
-        }
 
         private async Task ReadAsync()
         {
@@ -75,7 +42,7 @@ namespace Ukew.MemDb
             while (true)
             {
                 // Read as much as is available
-                var en = (await _reader.ReadAsync(_count, ct: _cts.Token).ConfigureAwait(_taskHelper)).GetEnumerator();
+                var en = (await _reader.ReadAsync(Count, ct: _cts.Token).ConfigureAwait(_taskHelper)).GetEnumerator();
                 while (await en.MoveNext(_cts.Token).ConfigureAwait(_taskHelper))
                 {
                     Add(en.Current);
@@ -91,7 +58,12 @@ namespace Ukew.MemDb
             }
         }
 
-        public ImmutableArray<T> Where(Func<T, bool> predicate)
+        public void Dispose()
+        {
+            _cts.Cancel();
+        }
+
+        /*public ImmutableArray<T> Where(Func<T, bool> predicate)
         {
             var count = _count;
             var result = ImmutableArray.CreateBuilder<T>(_blockSize);
@@ -136,11 +108,7 @@ namespace Ukew.MemDb
                 throw new InvalidOperationException("count != 0. Bug somewhere!");
             }
             return result.ToImmutable();
-        }
+        }*/
 
-        public void Dispose()
-        {
-            _cts.Cancel();
-        }
     }
 }
