@@ -34,7 +34,7 @@ namespace Ukew.MemDb
         private T[] _lastData;
         private int _count = 0;
 
-        protected int Count => _count;
+        public long Count => _count;
 
         protected void Add(T item)
         {
@@ -105,6 +105,34 @@ namespace Ukew.MemDb
             }
             return result;
         }
+
+        public static IReadOnlyDictionary<TKey, DbReader<T>> GroupBy<T, TKey>(this IDbReader<T> source, Func<T, TKey> keyProjection)
+            where T : struct
+        {
+            var result = new Dictionary<TKey, DbReaderWriter<T>>();
+            var blocks = source.GetBlocks();
+            var segmenBblockSize = Math.Min(10_000, blocks.Count == 0 ? 1 : blocks[0].blockSize);
+            foreach (var (blockSize, block) in blocks)
+            {
+                for (int i = 0; i < blockSize; i += 1)
+                {
+                    var item = block[i];
+                    var key = keyProjection(item);
+                    if (!result.TryGetValue(key, out var dbReader))
+                    {
+                        dbReader = new DbReaderWriter<T>(segmenBblockSize);
+                        result.Add(key, dbReader);
+                    }
+                    dbReader.Add(item);
+                }
+            }
+            return result.ToDictionary(x => x.Key, x => (DbReader<T>)x.Value);
+        }
+
+        public static IReadOnlyDictionary<TKey, TResult> GroupBy<T, TKey, TResult>(this IDbReader<T> source,
+            Func<T, TKey> keyProjection, Func<DbReader<T>, TResult> resultAggregator)
+            where T : struct =>
+                source.GroupBy(keyProjection).ToDictionary(x => x.Key, x => resultAggregator(x.Value));
 
         public static ImmutableArray<T> ToImmutableArray<T>(this IDbReader<T> source) where T : struct
         {

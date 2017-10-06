@@ -42,7 +42,7 @@ namespace Ukew.MemDb
             while (true)
             {
                 // Read as much as is available
-                var en = (await _reader.ReadAsync(Count, ct: _cts.Token).ConfigureAwait(_taskHelper)).GetEnumerator();
+                var en = (await _reader.ReadAsync((int)Count, ct: _cts.Token).ConfigureAwait(_taskHelper)).GetEnumerator();
                 while (await en.MoveNext(_cts.Token).ConfigureAwait(_taskHelper))
                 {
                     Add(en.Current);

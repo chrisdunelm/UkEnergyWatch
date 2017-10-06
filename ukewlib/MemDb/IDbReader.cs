@@ -5,6 +5,7 @@ namespace Ukew.MemDb
 {
     public interface IDbReader<T> where T : struct
     {
+        long Count { get; }
         IReadOnlyList<(int blockSize, T[] block)> GetBlocks();
     }
 }
