@@ -26,7 +26,7 @@ namespace Ukew.Aggregators
 
         private Db<FuelInstHhCur.Data> _db;
 
-        public IList<(LocalDate date, FuelInstHhCur.Data data)> ByDay(LocalDate fromInclusive, LocalDate toExclusive)
+        public IList<(LocalDate date, int count, FuelInstHhCur.Data data)> ByDay(LocalDate fromInclusive, LocalDate toExclusive)
         {
             var fromInstant = fromInclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
             var toInstant = toExclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
@@ -73,10 +73,11 @@ namespace Ukew.Aggregators
                     intNed += data.IntNed;
                     intEw += data.IntEw;
                 }
-                return new FuelInstHhCur.Data(Instant.MinValue,
+                var result = new FuelInstHhCur.Data(Instant.MinValue,
                     ccgt, ocgt, oil, coal, nuclear, wind, ps, npshyd, other, intFr, intIrl, intNed, intEw);
+                return (length: a.Length, result);
             });
-            return grouped.OrderBy(x => x.Key).Select(x => (x.Key, x.Value)).ToList();
+            return grouped.OrderBy(x => x.Key).Select(x => (x.Key, x.Value.length, x.Value.result)).ToList();
         }
     }
 }
