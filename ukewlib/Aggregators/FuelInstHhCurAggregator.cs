@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Ukew.Aggregators
         {
             var fromInstant = fromInclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
             var toInstant = toExclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
-            var byDate = _db.WhereSelect(data =>
+            return Aggregated(data =>
             {
                 var update = data.Update;
                 if (update >= fromInstant && update < toInstant)
@@ -40,7 +41,30 @@ namespace Ukew.Aggregators
                 }
                 return ((LocalDate date, FuelInstHhCur.Data data)?)null;
             });
-            var grouped = byDate.GroupBy(x => x.date, xs =>
+        }
+
+        public IList<(LocalDate month, int count, FuelInstHhCur.Data data)> ByMonth(LocalDate fromInclusive, LocalDate toExclusive)
+        {
+            var fromInstant = fromInclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
+            var toInstant = toExclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
+            return Aggregated(data =>
+            {
+                var update = data.Update;
+                if (update >= fromInstant && update < toInstant)
+                {
+                    var date = update.InZone(s_tzLondon).Date;
+                    date = new LocalDate(date.Year, date.Month, 1);
+                    return (date, data);
+                }
+                return ((LocalDate date, FuelInstHhCur.Data data)?)null;
+            });
+        }
+
+        public IList<(TKey key, int count, FuelInstHhCur.Data data)> Aggregated<TKey>(
+            Func<FuelInstHhCur.Data, (TKey key, FuelInstHhCur.Data data)?> fn)
+        {
+            var byKey = _db.WhereSelect(fn);
+            var grouped = byKey.GroupBy(x => x.key, xs =>
             {
                 var a = xs.ToImmutableArray();
                 var ccgt = Power.Zero;
