@@ -43,6 +43,29 @@ namespace Ukew.Aggregators
             });
         }
 
+        internal static LocalDate FirstDateOfWeek(LocalDate date, IsoDayOfWeek weekStartDay)
+        {
+            var sub = ((int)date.DayOfWeek - (int)weekStartDay + 7) % 7;
+            return date.PlusDays(-sub);
+        }
+
+        public IList<(LocalDate date, int count, FuelInstHhCur.Data data)> ByWeek(
+            LocalDate fromInclusive, LocalDate toExclusive, IsoDayOfWeek weekStartDay = IsoDayOfWeek.Sunday)
+        {
+            var fromInstant = fromInclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
+            var toInstant = toExclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();
+            return Aggregated(data =>
+            {
+                var update = data.Update;
+                if (update >= fromInstant && update < toInstant)
+                {
+                    var date = FirstDateOfWeek(update.InZone(s_tzLondon).Date, weekStartDay);
+                    return (date, data);
+                }
+                return ((LocalDate date, FuelInstHhCur.Data data)?)null;
+            });
+        }
+
         public IList<(LocalDate month, int count, FuelInstHhCur.Data data)> ByMonth(LocalDate fromInclusive, LocalDate toExclusive)
         {
             var fromInstant = fromInclusive.AtStartOfDayInZone(s_tzLondon).ToInstant();

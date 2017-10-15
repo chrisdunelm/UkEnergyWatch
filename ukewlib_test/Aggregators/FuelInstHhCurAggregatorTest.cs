@@ -12,6 +12,18 @@ namespace Ukew.Aggregators
     {
         private static readonly DateTimeZone s_tzLondon = DateTimeZoneProviders.Tzdb["Europe/London"];
 
+        [Theory]
+        [InlineData(2017, 1, 1, IsoDayOfWeek.Saturday, 2016, 12, 31)]
+        [InlineData(2017, 1, 1, IsoDayOfWeek.Sunday, 2017, 1, 1)]
+        [InlineData(2017, 1, 1, IsoDayOfWeek.Monday, 2016, 12, 26)]
+        [InlineData(2017, 1, 1, IsoDayOfWeek.Tuesday, 2016, 12, 27)]
+        [InlineData(2017, 1, 2, IsoDayOfWeek.Monday, 2017, 1, 2)]
+        public void FirstDateOfWeek(int year, int month, int day, IsoDayOfWeek weekStartDay, int expectedYear, int expectedMonth, int expectedDay)
+        {
+            var expected = new LocalDate(expectedYear, expectedMonth, expectedDay);
+            Assert.Equal(expected, FuelInstHhCurAggregator.FirstDateOfWeek(new LocalDate(year, month, day), weekStartDay));
+        }
+
         [Fact]
         public void ByDay()
         {
