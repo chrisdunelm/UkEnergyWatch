@@ -10,7 +10,7 @@ namespace Ukew.Utils
     {
         // Everything big-endian
 
-        public static Bits Empty => new Bits(ImmutableArray<byte>.Empty);
+        public static Bits Empty { get; } = new Bits(ImmutableArray<byte>.Empty);
 
         private Bits(ImmutableArray<byte> bytes) => _bytes = bytes;
 
