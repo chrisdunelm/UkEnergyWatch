@@ -39,7 +39,7 @@ namespace Ukew.NationalGrid
             TotalSupply = 3,
         }
 
-        public struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>, IStringMap<Data>
+        public readonly struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>, IStringMap<Data>
         {
             public Data(Instant update, SupplyType type, ushort nameIndex, Flow flowRate)
                 : this((uint)update.ToUnixTimeSeconds(), (byte)type, nameIndex, (uint)(flowRate.CubicMetersPerHour * 24.0)) { }

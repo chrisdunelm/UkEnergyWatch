@@ -24,7 +24,7 @@ namespace Ukew.Elexon
             public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "fuelinsthhcur") { }
         }
 
-        public struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>
+        public readonly struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>
         {
             public Data(
                 Instant update,

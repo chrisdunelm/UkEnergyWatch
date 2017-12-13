@@ -25,7 +25,7 @@ namespace Ukew.Elexon
             public Writer(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "b1610") { }
         }
 
-        public struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>
+        public readonly struct Data : IStorable<Data, Data>, IStorableFactory<Data>, IEquatable<Data>
         {
             public Data(string resourceName, Instant settlementPeriodStart, Power power)
                 : this(EicIds.Hash(resourceName), (uint)settlementPeriodStart.ToUnixTimeSeconds(), (int)power.Kilowatts) { }

@@ -25,7 +25,7 @@ namespace Ukew.Elexon
             public FpnWriter(ITaskHelper taskHelper, IDirectory dir) : base (taskHelper, dir, "fpndata") { }
         }
 
-        public struct FpnData : IStorable<FpnData, FpnData>, IStorableFactory<FpnData>, IEquatable<FpnData>
+        public readonly struct FpnData : IStorable<FpnData, FpnData>, IStorableFactory<FpnData>, IEquatable<FpnData>
         {
             public FpnData(string resourceName, Instant timeFrom, Power levelFrom, Instant timeTo, Power levelTo)
                 : this(EicIds.Hash(resourceName), (uint)timeFrom.ToUnixTimeSeconds(), (short)levelFrom.Megawatts,
