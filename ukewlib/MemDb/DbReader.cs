@@ -111,7 +111,7 @@ namespace Ukew.MemDb
         {
             var result = new Dictionary<TKey, DbReaderWriter<T>>();
             var blocks = source.GetBlocks();
-            var segmenBblockSize = Math.Min(10_000, blocks.Count == 0 ? 1 : blocks[0].blockSize);
+            var segmentBlockSize = Math.Min(10_000, blocks.Count == 0 ? 1 : blocks[0].blockSize);
             foreach (var (blockSize, block) in blocks)
             {
                 for (int i = 0; i < blockSize; i += 1)
@@ -120,7 +120,7 @@ namespace Ukew.MemDb
                     var key = keyProjection(item);
                     if (!result.TryGetValue(key, out var dbReader))
                     {
-                        dbReader = new DbReaderWriter<T>(segmenBblockSize);
+                        dbReader = new DbReaderWriter<T>(segmentBlockSize);
                         result.Add(key, dbReader);
                     }
                     dbReader.Add(item);
