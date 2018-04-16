@@ -24,7 +24,7 @@ namespace Ukew.Utils
         private readonly ITime _time;
         private readonly ITextAppender _appender;
 
-        private string Quote(string s) => $"\"{s.Replace("\"", "\\\"").Replace("\\", "\\\\")}\"";
+        private string Quote(string s) => $"\"{s.Replace("\\", "\\\\").Replace("\"", "\\\"")}\"";
 
         public async Task Invoke(HttpContext context, Func<Task> next)
         {
@@ -39,7 +39,9 @@ namespace Ukew.Utils
             var line1 = $"{Quote(request.Method)}, {Quote(request.Path)}, {Quote(request.QueryString.ToString())}, {Quote(remoteIp)}";
             var line2 = $"{Quote(string.Join(", ", request.Headers["User-Agent"]))}, {response.StatusCode}, {request.ContentLength ?? -1}, {response.ContentLength ?? -1}";
             await _appender.AppendLineAsync($"2, {line0}, {line1}, {line2}");
-            // Version, Request time, response delay (ms), req method, req path, req querystring, remoteip:port, user agent, response status code
+            // Version,
+            // Request time, response delay (ms), req method, req path, req querystring,
+            // remoteip:port, user agent, response status code, request content length, response content length
         }
     }
 
