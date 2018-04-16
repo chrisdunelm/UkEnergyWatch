@@ -15,8 +15,8 @@ namespace Ukew.MemDb
                 int tSize = System.Runtime.InteropServices.Marshal.SizeOf<T>();
                 requestedBlockSize = 2_000_000 / tSize; // Make each block take ~2MB
             }
-            // Minimum block size is 2^6 = 64 items
-            for (_blockPower = 6; ; _blockPower += 1)
+            // Minimum block size is 2^8 = 256 items
+            for (_blockPower = 8; ; _blockPower += 1)
             {
                 _blockSize = 1 << _blockPower;
                 if (_blockSize >= requestedBlockSize)
