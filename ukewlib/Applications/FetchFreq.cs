@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using NodaTime;
@@ -38,7 +39,7 @@ namespace Ukew.Applications
                 {
                     await Start0(startImmediately, ct);
                 }
-                catch (IOException)
+                catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
                 {
                     await _scheduler.ScheduleOne(Duration.FromMinutes(1), Duration.FromSeconds(0));
                     await _scheduler.ScheduleOne(Duration.FromMinutes(1), Duration.FromSeconds(0));
