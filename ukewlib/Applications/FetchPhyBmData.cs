@@ -35,15 +35,15 @@ namespace Ukew.Applications
             {
                 if (wait)
                 {
-                    await _scheduler.ScheduleOne(Duration.FromMinutes(30), Duration.FromMinutes(20), ct);
+                    await _scheduler.ScheduleOne(Duration.FromMinutes(30), Duration.FromMinutes(20), ct).ConfigureAwait(_taskHelper);
                 }
                 wait = true;
                 try
                 {
                     // Fetch for the next settlement period. This should be ready 10 minutes beforehand.
                     Instant fetchTime = _time.GetCurrentInstant() + Duration.FromMinutes(30);
-                    var data = await _phyBmData.GetAsync(fetchTime.SettlementDate(), fetchTime.SettlementPeriod(), ct);
-                    await _writer.AppendAsync(data, ct);
+                    var data = await _phyBmData.GetAsync(fetchTime.SettlementDate(), fetchTime.SettlementPeriod(), ct).ConfigureAwait(_taskHelper);
+                    await _writer.AppendAsync(data, ct).ConfigureAwait(_taskHelper);
                 }
                 catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
                 {

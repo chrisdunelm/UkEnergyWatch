@@ -37,11 +37,11 @@ namespace Ukew.Applications
             {
                 try
                 {
-                    await Start0(ct);
+                    await Start0(ct).ConfigureAwait(_taskHelper);
                 }
                 catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
                 {
-                    await _taskHelper.Delay(Duration.FromMinutes(45), ct);
+                    await _taskHelper.Delay(Duration.FromMinutes(45), ct).ConfigureAwait(_taskHelper);
                 }
             }
         }
