@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using NodaTime;
@@ -35,10 +38,17 @@ namespace Ukew.Applications
                     await _scheduler.ScheduleOne(Duration.FromMinutes(30), Duration.FromMinutes(20), ct);
                 }
                 wait = true;
-                // Fetch for the next settlement period. This should be ready 10 minutes beforehand.
-                Instant fetchTime = _time.GetCurrentInstant() + Duration.FromMinutes(30);
-                var data = await _phyBmData.GetAsync(fetchTime.SettlementDate(), fetchTime.SettlementPeriod(), ct);
-                await _writer.AppendAsync(data, ct);
+                try
+                {
+                    // Fetch for the next settlement period. This should be ready 10 minutes beforehand.
+                    Instant fetchTime = _time.GetCurrentInstant() + Duration.FromMinutes(30);
+                    var data = await _phyBmData.GetAsync(fetchTime.SettlementDate(), fetchTime.SettlementPeriod(), ct);
+                    await _writer.AppendAsync(data, ct);
+                }
+                catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
+                {
+                    await _taskHelper.Delay(Duration.FromMinutes(15)).ConfigureAwait(_taskHelper);
+                }
             }
         }
     }

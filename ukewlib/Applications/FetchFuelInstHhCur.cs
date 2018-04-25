@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using NodaTime;
@@ -30,9 +33,16 @@ namespace Ukew.Applications
         {
             while (true)
             {
-                await _scheduler.ScheduleOne(s_downloadInterval, s_downloadOffset, ct).ConfigureAwait(_taskHelper);
-                var data = await _fuelInstHhCur.GetAsync(ct).ConfigureAwait(_taskHelper);
-                await _datastoreWriter.AppendAsync(data, ct).ConfigureAwait(_taskHelper);
+                try
+                {
+                    await _scheduler.ScheduleOne(s_downloadInterval, s_downloadOffset, ct).ConfigureAwait(_taskHelper);
+                    var data = await _fuelInstHhCur.GetAsync(ct).ConfigureAwait(_taskHelper);
+                    await _datastoreWriter.AppendAsync(data, ct).ConfigureAwait(_taskHelper);
+                }
+                catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
+                {
+                    await _taskHelper.Delay(Duration.FromSeconds(57)).ConfigureAwait(_taskHelper);
+                }
             }
         }
     }

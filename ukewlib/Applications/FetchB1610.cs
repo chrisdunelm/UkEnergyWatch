@@ -1,4 +1,7 @@
+using System;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using NodaTime;
@@ -29,6 +32,21 @@ namespace Ukew.Applications
         private readonly B1610.Writer _writer;
 
         public async Task Start(CancellationToken ct = default(CancellationToken))
+        {
+            while (true)
+            {
+                try
+                {
+                    await Start0(ct);
+                }
+                catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
+                {
+                    await _taskHelper.Delay(Duration.FromMinutes(45), ct);
+                }
+            }
+        }
+
+        private async Task Start0(CancellationToken ct)
         {
             while (true)
             {
