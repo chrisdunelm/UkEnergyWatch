@@ -41,8 +41,7 @@ namespace Ukew.Applications
                 }
                 catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
                 {
-                    await _scheduler.ScheduleOne(Duration.FromMinutes(1), Duration.FromSeconds(0));
-                    await _scheduler.ScheduleOne(Duration.FromMinutes(1), Duration.FromSeconds(0));
+                    await _taskHelper.Delay(Duration.FromSeconds(90), ct);
                 }
                 startImmediately = false;
             }
