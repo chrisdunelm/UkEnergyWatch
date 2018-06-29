@@ -137,6 +137,10 @@ namespace Ukew.NationalGrid
             var soapAction = "http://www.NationalGrid.com/EDP/UI/GetInstantaneousFlowData";
             var requestSoapBody = "<GetInstantaneousFlowData xmlns=\"http://www.NationalGrid.com/EDP/UI/\" />";
             var responseSoapBody = await _soapDownloader.GetSoapAsync(uri, soapAction, requestSoapBody, ct);
+            if (responseSoapBody == null)
+            {
+                return new String.Map<Data>[0];
+            }
             var collection = responseSoapBody
                 .Element(s_ns + "GetInstantaneousFlowDataResult")
                 .Element(s_nsEntities + "EDPReportPage")

@@ -36,7 +36,7 @@ namespace Ukew.NationalGrid
                 var response = await httpClient.PostAsync(uri, content, ct).ConfigureAwait(_taskHelper);
                 var bodyStream = await response.Content.ReadAsStreamAsync();
                 var xDoc = XDocument.Load(bodyStream);
-                return xDoc.Root.Element(s_ns + "Body").Elements().First();
+                return xDoc.Root.Element(s_ns + "Body").Elements().FirstOrDefault();
             }
         }
     }
