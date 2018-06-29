@@ -139,7 +139,7 @@ namespace Ukew.NationalGrid
             var responseSoapBody = await _soapDownloader.GetSoapAsync(uri, soapAction, requestSoapBody, ct);
             if (responseSoapBody == null)
             {
-                return new String.Map<Data>[0];
+                return new Strings.Map<Data>[0];
             }
             var collection = responseSoapBody
                 .Element(s_ns + "GetInstantaneousFlowDataResult")
