@@ -12,9 +12,11 @@ using Ukew.Utils.Tasks;
 
 namespace Ukew.Applications
 {
+    // B1610 – Actual Generation Output per Generation Unit
     public class FetchB1610
     {
-        public FetchB1610(ITaskHelper taskHelper, IElexonDownloader downloader, IDirectory dir, ITime time)
+        public FetchB1610(ITaskHelper taskHelper, IElexonDownloader downloader, IDirectory dir, ITime time,
+            string errorLogFilename)
         {
             _taskHelper = taskHelper;
             _time = time;
@@ -22,6 +24,7 @@ namespace Ukew.Applications
             _b1610 = new B1610(taskHelper, downloader);
             _reader = new B1610.Reader(taskHelper, dir);
             _writer = new B1610.Writer(taskHelper, dir);
+            _errorLogFilename = errorLogFilename;
         }
 
         private readonly ITaskHelper _taskHelper;
@@ -30,6 +33,7 @@ namespace Ukew.Applications
         private readonly B1610 _b1610;
         private readonly B1610.Reader _reader;
         private readonly B1610.Writer _writer;
+        private readonly string _errorLogFilename;
 
         public async Task Start(CancellationToken ct = default(CancellationToken))
         {
@@ -41,7 +45,19 @@ namespace Ukew.Applications
                 }
                 catch (Exception e) when (e.Is<IOException>() || e.Is<HttpRequestException>())
                 {
+                    if (_errorLogFilename != null)
+                    {
+                        File.WriteAllText(_errorLogFilename, e.ToString());
+                    }
                     await _taskHelper.Delay(Duration.FromMinutes(45), ct).ConfigureAwait(_taskHelper);
+                }
+                catch (Exception e)
+                {
+                    if (_errorLogFilename != null)
+                    {
+                        File.WriteAllText(_errorLogFilename, e.ToString());
+                    }
+                    throw;
                 }
             }
         }

@@ -140,6 +140,9 @@ namespace Ukew
 
             [Option(Required = true, HelpText = "Absolute or relative directory path for B1610 data storage")]
             public string DataDirectory { get; set; }
+
+            [Option(Required = false, HelpText = "Absolute or relative filename for error log")]
+            public string ErrorLogFilename { get; set; }
         }
 
         static async Task<int> GetB1610(GetB1610Options opts)
@@ -147,7 +150,7 @@ namespace Ukew
             var taskHelper = SystemTaskHelper.Instance;
             var downloader = new ElexonDownloader(taskHelper, opts.ElexonApiKey);
             var dir = new SystemDirectory(taskHelper, opts.DataDirectory);
-            var fetch = new FetchB1610(taskHelper, downloader, dir, SystemTime.Instance);
+            var fetch = new FetchB1610(taskHelper, downloader, dir, SystemTime.Instance, opts.ErrorLogFilename);
             await fetch.Start();
             return 0;
         }
