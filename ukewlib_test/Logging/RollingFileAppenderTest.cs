@@ -23,7 +23,7 @@ namespace Ukew.Logging
                 await appender.AppendLineAsync("one").ConfigureAwait(th);
                 await appender.AppendLineAsync("two").ConfigureAwait(th);
                 var files = (await dir.ListFilesAsync().ConfigureAwait(th)).ToList();
-                Assert.Equal(1, files.Count);
+                Assert.Single(files);
                 Assert.Equal(expected.Length, files[0].Length);
                 var stream = await dir.ReadAsync(files[0].Id).ConfigureAwait(th);
                 var ms = new MemoryStream();

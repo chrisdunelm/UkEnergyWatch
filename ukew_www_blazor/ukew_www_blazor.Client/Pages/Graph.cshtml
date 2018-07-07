@@ -1,0 +1,29 @@
+@page "/graph"
+@using ukew_www_blazor.Shared
+@inject HttpClient Http
+
+<h1>Graph</h1>
+
+@if (data == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Ccgt: @data.CcgtMw MW</p>
+    <p>Ocgt: @data.OcgtMw MW</p>
+    <p>Oil: @data.OilMw MW</p>
+    <p>Coal: @data.CoalMw MW</p>
+    <p>Wind: @data.WindMw MW</p>
+}
+
+@functions
+{
+    FuelInstHhCurData data;
+
+    protected override async Task OnInitAsync()
+    {
+        data = await Http.GetJsonAsync<FuelInstHhCurData>("api/ElexonData/FuelInstHhCur");
+    }
+}
+

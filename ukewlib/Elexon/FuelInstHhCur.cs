@@ -123,9 +123,17 @@ namespace Ukew.Elexon
 
             public Power Total => Ccgt + Ocgt + Oil + Coal + Nuclear + Wind + Ps + Npshyd + Other + IntFr + IntIrl + IntNed + IntEw;
 
+            public MassFlow CcgtCo2 => Ccgt.CcgtCo2();
+            public MassFlow OcgtCo2 => Ocgt.OcgtCo2();
+            public MassFlow OilCo2 => Oil.OilCo2();
+            public MassFlow CoalCo2 => Coal.CoalCo2();
+            public MassFlow TotalCo2 => CcgtCo2 + OcgtCo2 + OilCo2 + CoalCo2;
+
+            public double Co2KgPerKWh => TotalCo2.KilogramsPerHour / Total.Kilowatts;
+
             int IStorableFactory<Data>.CurrentVersion => 1;
 
-            Data IStorableFactory<Data>.Load(int version, ImmutableArray<byte> bytes)
+            Data IStorableFactory<Data>.Load(int version, ReadOnlySpan<byte> bytes)
             {
                 switch (version)
                 {

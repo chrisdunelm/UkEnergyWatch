@@ -10,7 +10,7 @@ namespace Ukew.Storage
     {
         public int CurrentVersion => 3;
 
-        public Data Load(int version, ImmutableArray<byte> bytes)
+        public Data Load(int version, ReadOnlySpan<byte> bytes)
         {
             switch (version)
             {

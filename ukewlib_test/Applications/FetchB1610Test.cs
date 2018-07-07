@@ -20,7 +20,7 @@ namespace Ukew.Applications
             {
                 var downloader = new FakeElexonDownloader();
                 var dir = new FakeDirectory();
-                var fetcher = new FetchB1610(th, downloader, dir, time);
+                var fetcher = new FetchB1610(th, downloader, dir, time, null);
 
                 var cts = new CancellationTokenSource();
                 Task unused = th.Run(async () =>

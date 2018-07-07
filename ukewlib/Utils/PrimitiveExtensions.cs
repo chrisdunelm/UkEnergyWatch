@@ -38,5 +38,7 @@ namespace Ukew.Utils
             var (date, period) = dateAndPeriod;
             return date.AtStartOfDayInZone(s_tzLondon).ToInstant() + Duration.FromMinutes(30) * (period - 1);
         }
+
+        public static string Append(this string s, string t) => s + t;
     }
 }

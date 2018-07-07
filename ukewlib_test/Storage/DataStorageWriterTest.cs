@@ -23,7 +23,7 @@ namespace Ukew.Storage
                 Assert.Equal(new [] { new Data(1, 2, 3) }, await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
                 await writer.AppendAsync(new Data(4, 5, 6)).ConfigureAwait(th);
                 Assert.Equal(new [] { new Data(1, 2, 3), new Data(4, 5, 6) }, await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
-                Assert.Equal(1, (await dir.ListFilesAsync().ConfigureAwait(th)).Count());
+                Assert.Single(await dir.ListFilesAsync().ConfigureAwait(th));
             });
         }
         

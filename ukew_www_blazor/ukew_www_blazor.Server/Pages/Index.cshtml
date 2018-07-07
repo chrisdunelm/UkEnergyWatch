@@ -1,0 +1,112 @@
+@page "/"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, ukew_www_blazor.Server
+@using System.Linq
+@using Ukew.Elexon
+@using Ukew.NationalGrid
+@using Ukew.MemDb
+@using Ukew.Utils
+@using UnitsNet
+@using NodaTime
+@using ukew_www_blazor.Server.Utils
+@inject Db<FuelInstHhCur.Data> fuelInstHhCurDb
+@inject Db<Freq.Data> freqDb
+@inject Db<InstantaneousFlow.Data> gasFlowDb
+@inject InstantaneousFlow.Reader gasFlowReader
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Summary";
+
+    DateTimeZone tzLondon = DateTimeZoneProviders.Tzdb["Europe/London"];
+
+    await fuelInstHhCurDb.InitialiseTask;
+    var fuel = fuelInstHhCurDb.ReverseView.FirstOrDefault().Value;
+    await freqDb.InitialiseTask;
+    var freq = freqDb.ReverseView.FirstOrDefault().Value;
+    await gasFlowDb.InitialiseTask;
+    var gasSub = gasFlowDb.ReverseView.Take(500);
+    var gasTotal = gasSub
+        .Where(x => x.Type == InstantaneousFlow.SupplyType.TotalSupply)
+        .ToImmutableArray()
+        .OrderByDescending(x => x.Update)
+        .First();
+    var gasTerminals0 = gasSub
+        .Where(x => x.Type == InstantaneousFlow.SupplyType.TerminalSupply && x.Update == gasTotal.Update)
+        .ToImmutableArray()
+        .Select(x => (nameTask: x.NameAsync(gasFlowReader.Strings), terminal: x))
+        .ToList();
+    await Task.WhenAll(gasTerminals0.Select(x => x.nameTask));
+    var gasTerminals = gasTerminals0
+        .Select((x, index) => (index, name: x.nameTask.Result.ToUpperInvariant(), x.terminal))
+        .OrderBy(x => x.name)
+        .ToList();
+}
+
+<div class="subtitle">
+Electricity Fuel Type - Instantaneous real-time data
+</div>
+<div class="data">
+    <table class="power">
+        <tr class="header"><td>Fuel type</td><td>Current Power</td><td>CO<sub>2</sub> emissions</td></tr>
+        <fuel-inst index="0" name="Combined Cycle Gas Turbine" power="@fuel.Ccgt" all="@fuel" co2="@fuel.CcgtCo2" />
+        <fuel-inst index="1" name="Open Cycle Gas Turbine" power="@fuel.Ocgt" all="@fuel" co2="@fuel.OcgtCo2" />
+        <fuel-inst index="2" name="Oil" power="@fuel.Oil" all="@fuel" co2="@fuel.OilCo2" />
+        <fuel-inst index="3" name="Coal" power="@fuel.Coal" all="@fuel" co2="@fuel.CoalCo2" />
+        <fuel-inst index="4" name="Nuclear" power="@fuel.Nuclear" all="@fuel" co2="@MassFlow.Zero" />
+        <fuel-inst index="5" name="Wind" power="@fuel.Wind" all="@fuel" co2="@MassFlow.Zero" />
+        <fuel-inst index="6" name="Pumped Storage Hydro" power="@fuel.Ps" all="@fuel" co2="@MassFlow.Zero" />
+        <fuel-inst index="7" name="Non Pumped Storage Hydro" power="@fuel.Npshyd" all="@fuel" co2="@MassFlow.Zero" />
+        <fuel-inst index="8" name="Other" power="@fuel.Other" all="@fuel" />
+        <fuel-inst index="9" name="Interconnect - France" power="@fuel.IntFr" all="@fuel" />
+        <fuel-inst index="10" name="Interconnect - Ireland (Moyle)" power="@fuel.IntIrl" all="@fuel" />
+        <fuel-inst index="11" name="Interconnect - Netherlands" power="@fuel.IntNed" all="@fuel" />
+        <fuel-inst index="12" name="Interconnect - Ireland (East-West)" power="@fuel.IntEw" all="@fuel" />
+        <tr class="footer">
+            <td>Total</td>
+            <td><span class="mw">@fuel.Total.DisplayMW()</span><span class="percent">100.0 %</span></td>
+            <td>@fuel.TotalCo2.DisplayKg_s()<br/>@fuel.Co2KgPerKWh.DisplayKg_kWh()</td>
+        </tr>
+    </table>
+    <div class="update">
+        <update-time instant="@fuel.Update" />
+    </div>
+</div>
+
+<br/>
+
+<div class="subtitle">
+    Electricity Grid Frequency - Instantaneous real-time data
+</div>
+<div class="data">
+    <table class="power">
+        <tr class="header"><td>Grid Frequency</td></tr>
+        <tr class="highlight"><td>@freq.Frequency.DisplayHz()</td></tr>
+    </table>
+    <div class="update">
+        <update-time instant="@freq.Update" />
+    </div>
+</div>
+
+<br/>
+
+<div class="subtitle">
+    Gas in-flow - Instantaneous real-time data
+</div>
+<div class="data">
+    <table class="power">
+        <tr class="header"><td>Terminal</td><td>Current gas in-flow</td><td>CO<sub>2</sub> emissions</td></td>
+        @foreach (var row in gasTerminals)
+        {
+            <gas-flow index="@row.index" name="@row.name" flow="@row.terminal.FlowRate" />
+        }
+        <gas-flow name="Total" flow="@gasTotal.FlowRate" />
+    </table>
+    <div class="update">
+        <update-time instant="@gasTotal.Update" />
+    </div>
+</div>
+
+<br/>
+
+<partial name="_IndexInfoPartial" />

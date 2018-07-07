@@ -36,6 +36,12 @@ namespace Ukew.MemDb
 
         public Task InitialiseTask => _tcs.Task;
 
+        public Db<T> WaitUntilInitialised()
+        {
+            InitialiseTask.Wait(_taskHelper);
+            return this;
+        }
+
         private async Task ReadAsync()
         {
             bool first = true;

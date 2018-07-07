@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - Uk Energy Watch</title>
+        <link rel="stylesheet" href="~/bootstrap.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/site.css" asp-append-version="true" />
+    </head>
+    <body>
+        <div class="container body-content">
+            <div class="title">
+                UK Energy Watch
+            </div>
+            <div class="menu">
+                <a href="/">Summary</a>@* Comment here required to remove gap between spans
+            *@<a href="/powerstations">Power Stations</a>@*
+            *@<a href="/gasinflow">Gas In-Flow</a>
+                <a class="right" href="/contact" >Contact</a>
+            </div>
+            @RenderBody()
+        </div>
+    </body>
+</html>

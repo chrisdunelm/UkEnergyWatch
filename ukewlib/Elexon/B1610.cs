@@ -13,6 +13,7 @@ using UnitsNet;
 
 namespace Ukew.Elexon
 {
+    // B1610 – Actual Generation Output per Generation Unit
     public class B1610
     {
         public class Reader : DataStoreReader<Data, Data>
@@ -53,7 +54,7 @@ namespace Ukew.Elexon
                 .AddUInt(item._settlementPeriodStartUnixSeconds)
                 .AddInt(item._powerKw);
 
-            Data IStorableFactory<Data>.Load(int version, ImmutableArray<byte> bytes)
+            Data IStorableFactory<Data>.Load(int version, ReadOnlySpan<byte> bytes)
             {
                 switch (version)
                 {

@@ -85,6 +85,7 @@ namespace Ukew.Storage
             public Enumerator(ITaskHelper taskHelper, IDirectory dir, IReadOnlyList<FileIndex> files, int fromIndex, int toIndex) =>
                 (_taskHelper, _dir, _files, _index, _toIndex) = (taskHelper, dir, files, fromIndex - 1, toIndex);
 
+            private const int BUFFER_SIZE = 10 * 1024 * 1024;
             private readonly ITaskHelper _taskHelper;
             private readonly IDirectory _dir;
             private readonly IReadOnlyList<FileIndex> _files;
@@ -95,7 +96,11 @@ namespace Ukew.Storage
             private int _filesIndex = -1;
             private Stream _fileStream;
             private T _current;
+            private int _elementSize;
             private byte[] _readBuffer;
+            private int _readBufferIndex;
+            private int _readBufferEndIndex;
+            private int _version;
 
             public async Task<bool> MoveNext(CancellationToken ct)
             {
@@ -105,32 +110,51 @@ namespace Ukew.Storage
                     Dispose();
                     return false;
                 }
-                if (_filesIndex == -1 || _index >= _files[_filesIndex].ToIndex)
+                if (_readBufferIndex >= _readBufferEndIndex)
                 {
-                    Dispose();
-                    _filesIndex += 1;
-                    var file = _files[_filesIndex];
-                    _fileStream = await _dir.ReadAsync(file.FileName.Id, ct).ConfigureAwait(_taskHelper);
-                    _fileStream.Seek((_index - file.FromIndex) * file.FileName.ElementSize, SeekOrigin.Begin);
-                    _readBuffer = new byte[file.FileName.ElementSize];
+                    // TODO: Buffer-ahead the file, concurrently with reading.
+                    if (_filesIndex == -1 || _index >= _files[_filesIndex].ToIndex)
+                    {
+                        Dispose();
+                        _filesIndex += 1;
+                        var file = _files[_filesIndex];
+                        _elementSize = file.FileName.ElementSize;
+                        _fileStream = await _dir.ReadAsync(file.FileName.Id, ct).ConfigureAwait(_taskHelper);
+                        _fileStream.Seek((_index - file.FromIndex) * _elementSize, SeekOrigin.Begin);
+                        int bufferCount = BUFFER_SIZE / _elementSize;
+                        int bufferSize = Math.Min(bufferCount, file.ToIndex - file.FromIndex) * _elementSize;
+                        _readBuffer = new byte[bufferSize];
+                        _version = file.FileName.Version;
+                    }
+                    int toIndex = _files[_filesIndex].ToIndex;
+                    int readCount = Math.Min((toIndex - _index) * _elementSize, _readBuffer.Length);
+                    int byteCount = await _fileStream.ReadAsync(_readBuffer, 0, readCount).ConfigureAwait(_taskHelper);
+                    if (byteCount != readCount)
+                    {
+                        throw new InvalidDataException("Failed to load data");
+                    }
+                    _readBufferIndex = 0;
+                    _readBufferEndIndex = readCount;
                 }
-                int byteCount = await _fileStream.ReadAsync(_readBuffer, 0, _readBuffer.Length).ConfigureAwait(_taskHelper);
-                if (byteCount != _readBuffer.Length)
+                _current = Load();
+                _readBufferIndex += _elementSize;
+                T Load()
                 {
-                    throw new InvalidDataException("Failed to load data");
+                    // Local sync function, so we can use Span<T> in an async method.
+                    var span = new ReadOnlySpan<byte>(_readBuffer, _readBufferIndex, _elementSize);
+                    // TODO later: Recovery from corrupt data
+                    if (span[0] != ID_BYTE_1 || span[1] != ID_BYTE_2)
+                    {
+                        throw new InvalidDataException("Invalid ID bytes");
+                    }
+                    var dataSpan = span.Slice(2, _elementSize - 4);
+                    var calcChecksum = FletcherChecksum.Calc16Bytes(dataSpan);
+                    if (calcChecksum[0] != span[_elementSize - 2] || calcChecksum[1] != span[_elementSize - 1])
+                    {
+                        throw new InvalidDataException("Invalid data checksum");
+                    }
+                    return _factory.Load(_version, dataSpan);
                 }
-                // TODO later: Recovery from corrupt data
-                if (_readBuffer[0] != ID_BYTE_1 || _readBuffer[1] != ID_BYTE_2)
-                {
-                    throw new InvalidDataException("Invalid ID bytes");
-                }
-                var bytes = ImmutableArray.Create(_readBuffer, 2, byteCount - 4);
-                var calcChecksum = FletcherChecksum.Calc16Bytes(bytes);
-                if (calcChecksum[0] != _readBuffer[byteCount - 2] || calcChecksum[1] != _readBuffer[byteCount - 1])
-                {
-                    throw new InvalidDataException("Invalid data checksum");
-                }
-                _current = _factory.Load(_files[_filesIndex].FileName.Version, bytes);
                 return true;
             }
 

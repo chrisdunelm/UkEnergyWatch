@@ -75,7 +75,7 @@ namespace Ukew.NationalGrid
                 .AddUShort(item._nameIndex)
                 .AddUInt(item._flowRateCubicMetresPerDay);
 
-            Data IStorableFactory<Data>.Load(int version, ImmutableArray<byte> bytes)
+            Data IStorableFactory<Data>.Load(int version, ReadOnlySpan<byte> bytes)
             {
                 switch (version)
                 {

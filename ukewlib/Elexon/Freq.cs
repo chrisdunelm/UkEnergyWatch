@@ -49,7 +49,7 @@ namespace Ukew.Elexon
                 .AddUInt(item._updateUnixSeconds)
                 .AddUInt(item._freqMicroHz);
 
-            Data IStorableFactory<Data>.Load(int version, ImmutableArray<byte> bytes)
+            Data IStorableFactory<Data>.Load(int version, ReadOnlySpan<byte> bytes)
             {
                 switch (version)
                 {

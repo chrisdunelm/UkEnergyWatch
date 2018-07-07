@@ -58,6 +58,14 @@ namespace Ukew.Storage
                 }
                 _bytes = bytes;
             }
+            private Data(ReadOnlySpan<byte> bytes, bool validate)
+            {
+                if (validate && bytes.Length != PartLengthV1)
+                {
+                    throw new ArgumentException($"array length must be {PartLengthV1}; found {bytes.Length}", nameof(bytes));
+                }
+                _bytes = bytes.ToArray().ToImmutableArray();
+            }
 
             public Data(ImmutableArray<byte> bytes) : this(bytes, true) { }
 
@@ -69,7 +77,7 @@ namespace Ukew.Storage
 
             ImmutableArray<byte> IStorableFactory<Data>.Store(Data item) => item._bytes;
 
-            Data IStorableFactory<Data>.Load(int version, ImmutableArray<byte> bytes)
+            Data IStorableFactory<Data>.Load(int version, ReadOnlySpan<byte> bytes)
             {
                 switch (version)
                 {

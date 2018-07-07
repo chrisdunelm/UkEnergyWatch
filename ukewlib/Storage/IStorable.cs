@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
@@ -7,7 +8,7 @@ namespace Ukew.Storage
     {
         int CurrentVersion { get; }
         ImmutableArray<byte> Store(T item);
-        T Load(int version, ImmutableArray<byte> bytes);
+        T Load(int version, ReadOnlySpan<byte> bytes);
     }
 
     public interface IStorable<T, TFactory> where TFactory : IStorableFactory<T>, new()

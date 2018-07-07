@@ -74,7 +74,7 @@ namespace Ukew.Elexon
                 .AddUInt(item._timeToUnixSeconds)
                 .AddShort(item._levelToMw);
 
-            FpnData IStorableFactory<FpnData>.Load(int version, ImmutableArray<byte> bytes)
+            FpnData IStorableFactory<FpnData>.Load(int version, ReadOnlySpan<byte> bytes)
             {
                 switch (version)
                 {

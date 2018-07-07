@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace Ukew.Utils
 {
     public static class FletcherChecksum
     {
-        public static ushort Calc16(ImmutableArray<byte> bytes)
+        public static ushort Calc16(ReadOnlySpan<byte> bytes)
         {
             // https://en.wikipedia.org/wiki/Fletcher%27s_checksum#Optimizations
             ushort sum1 = 0xff;
@@ -32,6 +34,11 @@ namespace Ukew.Utils
         }
 
         public static ImmutableArray<byte> Calc16Bytes(ImmutableArray<byte> bytes)
+        {
+            return Calc16Bytes(new ReadOnlySpan<byte>(bytes.ToArray()));
+        }
+
+        public static ImmutableArray<byte> Calc16Bytes(ReadOnlySpan<byte> bytes)
         {
             ushort f = Calc16(bytes);
             return (new [] { (byte)(f & 0xff), (byte)(f >> 8) }).ToImmutableArray();
