@@ -1,0 +1,24 @@
+@page "/contact"
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Contact";
+}
+
+@section Header
+{
+<script>
+    function email() {
+        var a=String.fromCharCode(64),b="chr",c="is.bacon",d="uken",e="ergywatch.org.uk",f=b+c+a+d+e;
+        document.write(f);
+    }
+</script>
+}
+
+<div class="subtitle">
+Contact
+</div>
+
+<div class="email">
+    Chris Bacon: <span><script>email();</script></span>
+</div>
