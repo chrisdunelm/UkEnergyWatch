@@ -13,8 +13,9 @@ namespace ukew_www_blazor.Server.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var rowClass = Index >= 0 ? $"row{Index & 1}" : "footer";
+            var highlightClass = Index >= 0 ? "highlight" : "";
             var html = $@"
-<tr class=""{rowClass} highlight"">
+<tr class=""{rowClass} {highlightClass}"">
     <td>{Name}</td>
     <td>
         <span class=""mw"">{Flow.DisplayM3_s()}</span>
