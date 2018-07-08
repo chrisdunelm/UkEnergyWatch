@@ -95,7 +95,7 @@ Electricity Fuel Type - Instantaneous real-time data
 </div>
 <div class="data">
     <table class="power">
-        <tr class="header"><td>Terminal</td><td>Current gas in-flow</td><td>CO<sub>2</sub> emissions</td></td>
+        <tr class="header"><td>Terminal</td><td>Current gas in-flow</td><td>CO<sub>2</sub> emissions</td></tr>
         @foreach (var row in gasTerminals)
         {
             <gas-flow index="@row.index" name="@row.name" flow="@row.terminal.FlowRate" />

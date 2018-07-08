@@ -1,0 +1,69 @@
+@page "/gasinflow"
+@addTagHelper *, ukew_www_blazor.Server
+@using System.Linq
+@using Ukew.NationalGrid
+@using Ukew.MemDb
+@inject Db<InstantaneousFlow.Data> gasFlowDb
+@inject InstantaneousFlow.Reader gasFlowReader
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Gas In-Flow";
+
+    await gasFlowDb.InitialiseTask;
+    var gasSub = gasFlowDb.ReverseView.Take(500);
+    var gasTotal = gasSub
+        .Where(x => x.Type == InstantaneousFlow.SupplyType.TotalSupply)
+        .ToImmutableArray()
+        .OrderByDescending(x => x.Update)
+        .First();
+    var gasTerminals0 = gasSub
+        .Where(x => x.Type == InstantaneousFlow.SupplyType.TerminalSupply && x.Update == gasTotal.Update)
+        .ToImmutableArray()
+        .Select(x => (nameTask: x.NameAsync(gasFlowReader.Strings), terminal: x))
+        .ToList();
+    await Task.WhenAll(gasTerminals0.Select(x => x.nameTask));
+    var gasTerminals = gasTerminals0
+        .Select((x, index) => (index, name: x.nameTask.Result.ToUpperInvariant(), x.terminal))
+        .OrderBy(x => x.name)
+        .ToList();
+    var gasZones0 = gasSub
+        .Where(x => x.Type == InstantaneousFlow.SupplyType.ZoneSupply && x.Update == gasTotal.Update)
+        .ToImmutableArray()
+        .Select(x => (nameTask: x.NameAsync(gasFlowReader.Strings), terminal: x))
+        .ToList();
+    await Task.WhenAll(gasZones0.Select(x => x.nameTask));
+    var gasZones = gasZones0
+        .Select((x, index) => (index, name: x.nameTask.Result.ToUpperInvariant(), x.terminal))
+        .OrderBy(x => x.name)
+        .ToList();
+}
+
+<div class="subtitle">
+Gas In-Flow - real-time data
+</div>
+<div class="data">
+    <table class="power">
+        <tr class="header"><td>Terminal</td><td>Current gas in-flow</td><td>CO<sub>2</sub> emissions</td></tr>
+        @foreach (var row in gasTerminals)
+        {
+            <gas-flow index="@row.index" name="@row.name" flow="@row.terminal.FlowRate" />
+        }
+        <gas-flow name="Total" flow="@gasTotal.FlowRate" />
+    </table>
+    <div class="update">
+        <update-time instant="@gasTotal.Update" />
+    </div>
+    <div>&nbsp;</div>
+    <table class="power">
+        <tr class="header"><td>Terminal</td><td>Current gas in-flow</td><td>CO<sub>2</sub> emissions</td></tr>
+        @foreach (var row in gasZones)
+        {
+            <gas-flow index="@row.index" name="@row.name" flow="@row.terminal.FlowRate" />
+        }
+        <gas-flow name="Total" flow="@gasTotal.FlowRate" />
+    </table> 
+    <div class="update">
+        <update-time instant="@gasTotal.Update" />
+    </div>
+</div>
