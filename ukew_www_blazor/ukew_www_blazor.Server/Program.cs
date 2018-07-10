@@ -22,6 +22,12 @@ namespace ukew_www_blazor.Server
 
         [Option(Required = true, HelpText = "Absolute or relative directory path for gas-flow storage")]
         public string GasFlowDataDirectory { get; set; }
+
+        [Option(Required = false, HelpText = "True to listen on all network interfaces, not just localhost")]
+        public bool NonLocalhost { get; set; } = false;
+
+        [Option(Required = false, HelpText = "Absolute or relative directory path for access log. Defaults to ./logs")]
+        public string AccessLogDirectory { get; set; } = "./logs";
     }
 
     public class Program
@@ -37,8 +43,9 @@ namespace ukew_www_blazor.Server
             BuildWebHost(args, cmdLineResult.Value).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args, CmdLineOptions options) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args, CmdLineOptions options)
+        {
+            var builder = WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(new ConfigurationBuilder()
                     .AddCommandLine(args)
                     .Build())
@@ -46,7 +53,14 @@ namespace ukew_www_blazor.Server
                 {
                     services.AddSingleton(options);
                 })
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
+
+            if (options.NonLocalhost)
+            {
+                builder = builder.UseUrls("http://*:5000");
+            }
+
+            return builder.Build();
+        }
     }
 }

@@ -14,6 +14,7 @@ using Ukew.NationalGrid;
 using Ukew.Storage;
 using Ukew.Utils;
 using Ukew.Utils.Tasks;
+using ukew_www_blazor.Server.Utils;
 
 namespace ukew_www_blazor.Server
 {
@@ -84,9 +85,14 @@ namespace ukew_www_blazor.Server
             });
         }
 
+        private T Di<T>(IApplicationBuilder app) => (T)app.ApplicationServices.GetRequiredService(typeof(T));
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var dir = new SystemDirectory(Di<ITaskHelper>(app), Di<CmdLineOptions>(app).AccessLogDirectory);
+            app.UseAccessLog(dir);
+
             app.UseResponseCompression();
 
             if (env.IsDevelopment())
