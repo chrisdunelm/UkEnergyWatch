@@ -14,6 +14,12 @@ namespace ukew_www_blazor.Server
         [Option(Required = true, HelpText = "Absolute or relative directory path for grid frequency storage")]
         public string FreqDataDirectory { get; set; }
 
+        [Option(Required = true, HelpText = "Absolute or relative directory path for Physical FPN storage")]
+        public string FpnDataDirectory { get; set; }
+
+        [Option(Required = true, HelpText = "Absolute or relative directory path for B1610 (actual per-unit generation) storage")]
+        public string B1610DataDirectory { get; set; }
+
         [Option(Required = true, HelpText = "Absolute or relative directory path for gas-flow storage")]
         public string GasFlowDataDirectory { get; set; }
     }

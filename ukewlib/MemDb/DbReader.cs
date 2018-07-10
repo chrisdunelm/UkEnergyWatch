@@ -149,6 +149,20 @@ namespace Ukew.MemDb
 
     public static class DbReaderExtensions
     {
+        public static IEnumerable<T> AsEnumerable<T>(this IChunkedEnumerable<T> source) where T : struct
+        {
+            var en = source.GetEnumerator();
+            while (en.MoveNext())
+            {
+                var len = en.Current.DataLength;
+                var data = en.Current.Data;
+                for (int i = 0; i < len; i++)
+                {
+                    yield return data[i];
+                }
+            }
+        }
+
         public static ImmutableArray<T> ToImmutableArray<T>(this IChunkedEnumerable<T> source) where T : struct
         {
             var b = ImmutableArray.CreateBuilder<T>();

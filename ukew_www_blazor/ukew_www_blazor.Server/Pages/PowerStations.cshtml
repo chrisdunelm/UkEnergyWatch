@@ -1,0 +1,89 @@
+@page "/powerstations"
+@addTagHelper *, ukew_www_blazor.Server
+@using System.Linq
+@using Ukew.Elexon
+@using Ukew.MemDb
+@using Ukew.Utils
+@using UnitsNet
+@using NodaTime
+@using ukew_www_blazor.Server.Utils
+@using ukew_www_blazor.Server.PageHelpers
+@inject ITime Time
+@inject Db<B1610.Data> B1610Db
+@inject Db<PhyBmData.FpnData> FpnDb
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Power Stations";
+
+    Instant now = Time.GetCurrentInstant();
+    await FpnDb.InitialiseTask;
+    var fpnData = FpnDb.ReverseView.Take(2_000).ToImmutableArray().Reverse().ToList();
+    await B1610Db.InitialiseTask;
+    var b1610Data = B1610Db.ReverseView.Take(1_000).ToImmutableArray().Reverse().ToList();
+    var genUnitFpn = new Dictionary<string, (Power power, Instant update)>();
+    foreach (var fpn in fpnData.Where(x => now >= x.TimeFrom))
+    {
+        Power? level = fpn.LevelAt(now);
+        genUnitFpn[fpn.ResourceName] = (level ?? fpn.LevelTo, level != null ? now : fpn.TimeTo);
+    }
+    var genUnitB1610 = new Dictionary<string, (Power power, Instant update)>();
+    foreach (var b1610 in b1610Data)
+    {
+        genUnitB1610[b1610.ResourceName] = (b1610.Power, b1610.SettlementPeriodStart + NodaTime.Duration.FromMinutes(30));
+    }
+    var lastInstant = b1610Data.Select(x => x.SettlementPeriodStart).Max();
+    foreach (var b1610Name in PowerStations.Seen(Time, B1610Db))
+    {
+        if (!genUnitB1610.ContainsKey(b1610Name))
+        {
+            genUnitB1610.Add(b1610Name, (Power.Zero, lastInstant));
+        }
+    }
+    var byFuelType = PowerStations.ByFuelType();
+    var fpnTime = genUnitFpn.Values.Select(x => x.update).Max();
+    var b1610Time = genUnitB1610.Values.Select(x => x.update).Max();
+}
+
+@section Header
+{
+    <style type="text/css">
+        #box_fpn:checked ~ table .reveal_fpn { display: table-row; }
+        #box_b1610:checked ~ table .reveal_b1610 { display: table-row; }
+        @foreach (var ps in EicIds.PowerStations)
+        {
+            <text>
+                #box_fpn:checked ~ #box@(ps.CssId()):checked ~ table .reveal@(ps.CssId())_fpn { display: table-row; }
+                #box_b1610:checked ~ #box@(ps.CssId()):checked ~ table .reveal@(ps.CssId())_b1610 { display: table-row; }
+            </text>
+        }
+    </style>
+}
+
+<div class="subtitle">
+Electricity Power Stations - real-time data
+</div>
+<div class="subnote">
+    <em>Important:</em> This data is either predicted and up to date; or actual and one week out of date.
+    <br/>
+    <em>Warning:</em> This page is work-in-progress, and contains errors and mistakes.
+</div>
+<br/>
+<div class="data">
+    <input class="x" type="radio" id="box_fpn" name="fpnb1610" checked="yes"/>
+    <input class="x" type="radio" id="box_b1610" name="fpnb1610"/>
+    @foreach (var ps in EicIds.PowerStations)
+    {
+        <input class="x" type="checkbox" id="box@(ps.CssId())"/>
+    }
+    <table class="power">
+        @foreach (var (fuelType, pss) in byFuelType)
+        {
+            <power-type-header fuel-type="@fuelType" fpn-time="@fpnTime" b1610-time="@b1610Time" />
+            @foreach (var (ps, index) in pss.Select((x, index) => (x, index)))
+            {
+                <power-station index="@index" ps="@ps" fpn="@genUnitFpn" b1610="@genUnitB1610" />
+            }
+        }
+    </table>
+</div>

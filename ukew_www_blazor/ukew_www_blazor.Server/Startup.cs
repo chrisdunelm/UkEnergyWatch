@@ -59,12 +59,27 @@ namespace ukew_www_blazor.Server
                 var dir = new SystemDirectory(taskHelper, options.GasFlowDataDirectory);
                 return new InstantaneousFlow.Reader(taskHelper, dir);
             });
-            //services.AddSingleton<Db<InstantaneousFlow.Data>>();
             services.AddSingleton<Db<InstantaneousFlow.Data>>(svcs =>
             {
                 var taskHelper = svcs.GetRequiredService<ITaskHelper>();
                 var reader = svcs.GetRequiredService<InstantaneousFlow.Reader>();
                 return new Db<InstantaneousFlow.Data>(taskHelper, reader);
+            });
+            services.AddSingleton<Db<B1610.Data>>(svcs =>
+            {
+                var taskHelper = svcs.GetRequiredService<ITaskHelper>();
+                var options = svcs.GetRequiredService<CmdLineOptions>();
+                var dir = new SystemDirectory(taskHelper, options.B1610DataDirectory);
+                var reader = new B1610.Reader(taskHelper, dir);
+                return new Db<B1610.Data>(taskHelper, reader);
+            });
+            services.AddSingleton<Db<PhyBmData.FpnData>>(svcs =>
+            {
+                var taskHelper = svcs.GetRequiredService<ITaskHelper>();
+                var options = svcs.GetRequiredService<CmdLineOptions>();
+                var dir = new SystemDirectory(taskHelper, options.FpnDataDirectory);
+                var reader = new PhyBmData.FpnReader(taskHelper, dir);
+                return new Db<PhyBmData.FpnData>(taskHelper, reader);
             });
         }
 
