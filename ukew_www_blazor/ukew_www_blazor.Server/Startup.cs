@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using NodaTime;
 using System.Linq;
 using System.Net.Mime;
 using Ukew.Elexon;
@@ -42,7 +43,7 @@ namespace ukew_www_blazor.Server
                 var options = svcs.GetRequiredService<CmdLineOptions>();
                 var dir = new SystemDirectory(taskHelper, options.FuelInstHhCurDataDirectory);
                 var reader = new FuelInstHhCur.Reader(taskHelper, dir);
-                return new Db<FuelInstHhCur.Data>(taskHelper, reader);
+                return new Db<FuelInstHhCur.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(1.5));
             });
             services.AddSingleton<Db<Freq.Data>>(svcs =>
             {
@@ -50,7 +51,7 @@ namespace ukew_www_blazor.Server
                 var options = svcs.GetRequiredService<CmdLineOptions>();
                 var dir = new SystemDirectory(taskHelper, options.FreqDataDirectory);
                 var reader = new Freq.Reader(taskHelper, dir);
-                return new Db<Freq.Data>(taskHelper, reader);
+                return new Db<Freq.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(0.7));
             });
             services.AddSingleton<InstantaneousFlow.Reader>(svcs =>
             {
@@ -63,7 +64,7 @@ namespace ukew_www_blazor.Server
             {
                 var taskHelper = svcs.GetRequiredService<ITaskHelper>();
                 var reader = svcs.GetRequiredService<InstantaneousFlow.Reader>();
-                return new Db<InstantaneousFlow.Data>(taskHelper, reader);
+                return new Db<InstantaneousFlow.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(3));
             });
             services.AddSingleton<Db<B1610.Data>>(svcs =>
             {
@@ -71,7 +72,7 @@ namespace ukew_www_blazor.Server
                 var options = svcs.GetRequiredService<CmdLineOptions>();
                 var dir = new SystemDirectory(taskHelper, options.B1610DataDirectory);
                 var reader = new B1610.Reader(taskHelper, dir);
-                return new Db<B1610.Data>(taskHelper, reader);
+                return new Db<B1610.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(15));
             });
             services.AddSingleton<Db<PhyBmData.FpnData>>(svcs =>
             {
@@ -79,7 +80,7 @@ namespace ukew_www_blazor.Server
                 var options = svcs.GetRequiredService<CmdLineOptions>();
                 var dir = new SystemDirectory(taskHelper, options.FpnDataDirectory);
                 var reader = new PhyBmData.FpnReader(taskHelper, dir);
-                return new Db<PhyBmData.FpnData>(taskHelper, reader);
+                return new Db<PhyBmData.FpnData>(taskHelper, reader, pollInterval: Duration.FromMinutes(5));
             });
         }
 
