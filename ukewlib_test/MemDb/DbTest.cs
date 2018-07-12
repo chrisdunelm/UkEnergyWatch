@@ -64,8 +64,26 @@ namespace Ukew.MemDb
             }
         });
 
+        [Fact]
+        public void PollNewData_Simple() => TimeRunner.Run(async (time, th) =>
+        {
+            var reader = new FakeReader<int>();
+            using (var db = new Db<int>(th, reader, pollInterval: Duration.FromMinutes(5), maxJitter:Duration.Zero))
+            {
+                // Wait required here, to make sure the initial db load has happened
+                //await th.Delay(Duration.FromMinutes(1)).ConfigureAwait(th);
+                await db.InitialiseTask.ConfigureAwait(th);
+                Assert.Empty(db.AsEnumerable());
+                reader.Add(1);
+                await th.Delay(Duration.FromMinutes(3)).ConfigureAwait(th);
+                Assert.Empty(db.AsEnumerable());
+                await th.Delay(Duration.FromMinutes(3)).ConfigureAwait(th);
+                Assert.Single(db.AsEnumerable(), 1);
+            }
+        });
+
         [Theory, CombinatorialData]
-        public void PollNewData(
+        public void PollNewData_Complex(
             [CombinatorialValues(0, 1, 100, 1000)] int blockSize,
             [CombinatorialValues(0, 1, 99, 101)] int loadCycles
         ) => TimeRunner.Run(async (time, th) =>
@@ -73,14 +91,20 @@ namespace Ukew.MemDb
             var reader = new FakeReader<int>();
             using (var db = new Db<int>(th, reader, requestedBlockSize: blockSize, pollInterval: Duration.FromMinutes(5), maxJitter: Duration.Zero))
             {
+                await db.InitialiseTask.ConfigureAwait(th);
                 await th.Delay(Duration.FromMinutes(1)).ConfigureAwait(th);
+                var expectedCount = 0;
                 for (int i = 0; i < loadCycles; i += 1)
                 {
                     var count0 = reader.Count;
                     reader.AddRange(Enumerable.Repeat(i, i));
                     await th.Delay(Duration.FromMinutes(3)).ConfigureAwait(th);
+                    Assert.Equal(expectedCount, db.AsEnumerable().Count());
+                    Assert.Equal(expectedCount + i, reader.Count);
                     Assert.Equal(reader.Take(count0), db.Where(_ => true).ToImmutableArray());
                     await th.Delay(Duration.FromMinutes(2)).ConfigureAwait(th);
+                    expectedCount += i;
+                    Assert.Equal(expectedCount, db.AsEnumerable().Count());
                     Assert.Equal(reader, db.ToImmutableArray());
                 }
             }
