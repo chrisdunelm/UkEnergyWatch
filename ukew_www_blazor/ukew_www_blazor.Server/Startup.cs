@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using NodaTime;
@@ -90,6 +91,10 @@ namespace ukew_www_blazor.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseRewriter(new RewriteOptions()
+                .AddRedirect("^index(.html?)?$", "/")
+            );
+
             var dir = new SystemDirectory(Di<ITaskHelper>(app), Di<CmdLineOptions>(app).AccessLogDirectory);
             app.UseAccessLog(dir);
 
@@ -107,7 +112,7 @@ namespace ukew_www_blazor.Server
                 routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
             });
 
-            app.UseBlazor<Client.Program>();
+            //app.UseBlazor<Client.Program>();
         }
     }
 }
