@@ -60,7 +60,8 @@ namespace Ukew.MemDb
                 }
                 // Schedule next read
                 var ofs = Duration.FromSeconds((_rnd.NextDouble() - 0.5) * _maxJitter.TotalSeconds);
-                await _taskHelper.Delay(_pollInterval + ofs, _cts.Token).ConfigureAwait(_taskHelper);
+                var delay = _pollInterval + ofs;
+                await _taskHelper.Delay(delay, _cts.Token).ConfigureAwait(_taskHelper);
             }
         }
 

@@ -29,8 +29,8 @@ namespace Ukew.Storage
             public FileIndex(FileName fileName, int fromIndex, int toIndex) =>
                 (FileName, FromIndex, ToIndex) = (fileName, fromIndex, toIndex);
             public FileName FileName { get; }
-            public int FromIndex { get; }
-            public int ToIndex { get; }
+            public int FromIndex { get; } // Inclusive
+            public int ToIndex { get; } // Exclusive
         }
 
         private async Task<ImmutableList<FileIndex>> BuildIndex(CancellationToken ct)
@@ -64,8 +64,8 @@ namespace Ukew.Storage
             {
                 int rangedFromIndex = fromIndex.InRange(0, count);
                 int rangedToIndex = toIndex.InRange(0, count);
-                int fromFileIndex = indexedFiles.BinarySearch(rangedFromIndex, (x, i) => i < x.FromIndex ? -1 : i >= x.ToIndex ? 1 : 0);
-                return new Enumerable(_taskHelper, _dir, indexedFiles.Skip(fromFileIndex).ToImmutableArray(), rangedFromIndex, rangedToIndex);
+                var fileIndexes = indexedFiles.SkipWhile(x => x.ToIndex <= rangedFromIndex);
+                return new Enumerable(_taskHelper, _dir, fileIndexes.ToList(), rangedFromIndex, rangedToIndex);
             }
         }
 
