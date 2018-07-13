@@ -23,6 +23,27 @@ namespace Ukew.Storage
             });
         }
 
+        [Fact]
+        public void AddEntries()
+        {
+            TimeRunner.Run(async (time, th) =>
+            {
+                const string filename = "data.seqid.00000001.version.1.elementsize.8.datastore";
+                var e = Bits.Empty;
+                var idBits = e.Concat(ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2));
+                var data = e.Concat(idBits).Concat(e.AddInt(100).AddFletcher16);
+                var dir = new FakeDirectory();
+                var reader = new Data.Reader(th, dir);
+                Assert.Empty(await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
+                await dir.AppendAsync(filename, data);
+                Assert.Equal(1, await reader.CountAsync().ConfigureAwait(th));
+                Assert.Single(await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
+                await dir.AppendAsync(filename, data);
+                Assert.Equal(2, await reader.CountAsync().ConfigureAwait(th));
+                Assert.Equal(2, (await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th)).Count());
+            });
+        }
+
         private (IDirectory, Data[]) BuildData()
         {
             var version1 = "data.seqid.00000001.version.1.elementsize.8.datastore";
