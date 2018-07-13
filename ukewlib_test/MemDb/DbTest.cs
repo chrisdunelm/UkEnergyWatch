@@ -60,7 +60,7 @@ namespace Ukew.MemDb
                 Assert.Equal(new [] { 0L, 1L }, db.Where(x => x.a < 2).ToImmutableArray().Select(x => x.c));
                 Assert.Equal(new long [] { dataSize - 2, dataSize - 1 }, db.Where(x => x.a >= dataSize - 2).ToImmutableArray().Select(x => x.c));
                 Assert.Equal((dataSize + 1) / 2, db.Where(x => (x.b & 1) == 0).ToImmutableArray().Length);
-                //Assert.Equal(new [] { 0.0, 1.0 }, db.WhereSelect(x => x.a < 2 ? (double?)x.d : null).ToImmutableArray());
+                Assert.Equal(new [] { 0.0, 1.0 }, db.WhereSelect(x => x.a < 2 ? (double?)x.d : null).ToImmutableArray());
             }
         });
 
@@ -70,8 +70,6 @@ namespace Ukew.MemDb
             var reader = new FakeReader<int>();
             using (var db = new Db<int>(th, reader, pollInterval: Duration.FromMinutes(5), maxJitter:Duration.Zero))
             {
-                // Wait required here, to make sure the initial db load has happened
-                //await th.Delay(Duration.FromMinutes(1)).ConfigureAwait(th);
                 await db.InitialiseTask.ConfigureAwait(th);
                 Assert.Empty(db.AsEnumerable());
                 reader.Add(1);
