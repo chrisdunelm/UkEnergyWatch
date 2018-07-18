@@ -49,6 +49,8 @@ namespace Ukew.Storage
                 });
         }
 
+        public Task AwaitChange(CancellationToken ct = default) => _dir.AwaitChange("*.datastore", ct);
+
         public async Task<long> CountAsync(CancellationToken ct = default(CancellationToken)) =>
             (await _taskHelper.ConfigureAwait(BuildIndex(ct))).LastOrDefault()?.ToIndex ?? 0;
 

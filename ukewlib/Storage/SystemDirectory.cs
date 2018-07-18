@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileProviders;
 using NodaTime;
 using Ukew.Utils;
 using Ukew.Utils.Tasks;
@@ -20,13 +21,12 @@ namespace Ukew.Storage
             {
                 throw new ArgumentException($"Directory: '{_path}' does not exist, or is not a directory.");
             }
+            _fileProvider = new PhysicalFileProvider(path);
         }
 
         private readonly ITaskHelper _taskHelper;
         private readonly string _path;
-        private readonly LinkedList<Action> _onChange = new LinkedList<Action>();
-        private CancellationTokenSource _watcherCts;
-        private Task _watcherTask;
+        private readonly IFileProvider _fileProvider;
 
         public Task<IEnumerable<FileInfo>> ListFilesAsync(CancellationToken ct) =>
             Task.FromResult(Directory.EnumerateFiles(_path).Select(x => new FileInfo(Path.GetFileName(x), new System.IO.FileInfo(x).Length)));
@@ -44,52 +44,12 @@ namespace Ukew.Storage
         public Task<Stream> ReadAsync(string fileId, CancellationToken ct) =>
             Task.FromResult((Stream)File.OpenRead(Path.Combine(_path, fileId)));
 
-        private async Task Watcher(CancellationToken ct)
+        public Task AwaitChange(string filter, CancellationToken ct = default)
         {
-            var pollingInterval = Duration.FromSeconds(10);
-            string FingerPrint() =>
-                string.Join(":", Directory.EnumerateFiles(_path)
-                    .OrderBy(x => x)
-                    .Select(x => new System.IO.FileInfo(x))
-                    .Select(x => $"{x.Name}/{x.LastWriteTimeUtc.Ticks}/{x.Length}"));
-            var fingerPrint = FingerPrint();
-            while (true)
-            {
-                await _taskHelper.Delay(pollingInterval, ct);
-                var fingerPrint1 = FingerPrint();
-                if (fingerPrint != fingerPrint1)
-                {
-                    _onChange.Locked(() => _onChange.ToList()).ForEach(fn => Task.Run(fn));
-                }
-                fingerPrint = fingerPrint1;
-            }
-        }
-
-        public IDisposable RegisterOnChange(Action fn)
-        {
-            lock (_onChange)
-            {
-                if (_onChange.Count == 0)
-                {
-                    _watcherCts = new CancellationTokenSource();
-                    Task.Run(() => Watcher(_watcherCts.Token));
-                }
-                var node = _onChange.AddLast(fn);
-                return new DisposeFn(() =>
-                {
-                    lock (_onChange)
-                    {
-                        _onChange.Remove(node);
-                        if (_onChange.Count == 0)
-                        {
-                            _watcherCts.Cancel();
-                            _watcherCts = null;
-                            _watcherTask.Wait();
-                            _watcherTask = null;
-                        }
-                    }
-                });
-            }
+            var tcs = new TaskCompletionSource<int>();
+            var token = _fileProvider.Watch(filter);
+            token.RegisterChangeCallback(_ => tcs.TrySetResult(0), null);
+            return tcs.Task;
         }
     }
 }
