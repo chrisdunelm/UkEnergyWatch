@@ -7,5 +7,6 @@ namespace ukew_www_blazor.Shared
         ElectricityFuelInstOil = 3,
         ElectricityFuelInstCoal = 4,
         ElectricityFuelInstWind = 5,
+        // TODO: more...
     }
 }
