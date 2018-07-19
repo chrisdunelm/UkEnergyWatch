@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Immutable;
 using System.Linq;
 using NodaTime;
 using Ukew.Elexon;
 using Ukew.Storage;
 using Ukew.Testing;
+using Ukew.Utils;
 using Ukew.Utils.Tasks;
 using Xunit;
 
@@ -105,6 +108,41 @@ namespace Ukew.MemDb
                     Assert.Equal(expectedCount, db.AsEnumerable().Count());
                     Assert.Equal(reader, db.ToImmutableArray());
                 }
+            }
+        });
+
+        private struct IntData : IStorable<IntData, IntData>, IStorableFactory<IntData>, IEquatable<IntData>
+        {
+            public int Value { get; private set; }
+
+            public ImmutableArray<byte> Store(IntData data) => throw new NotImplementedException();
+            public IntData Load(int version, ReadOnlySpan<byte> data) => new IntData { Value = 42 };
+            public int CurrentVersion => 1;
+            public bool Equals(IntData other) => Value == other.Value;
+        }
+
+        private class IntReader : DataStoreReader<IntData, IntData>
+        {
+            public IntReader(ITaskHelper taskHelper, IDirectory dir) : base(taskHelper, dir, "int") { }
+        }
+
+        [Fact]
+        public void Watcher() => TimeRunner.Run(async (time, th) =>
+        {
+            var filename = "int.seqid.00000001.version.1.elementsize.8.datastore";
+            var e = Bits.Empty;
+            var idBits = e.Concat(ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2));
+            var data = e.Concat(idBits).Concat(e.AddInt(314).AddFletcher16);
+
+            var dir = new FakeDirectory();
+            var reader = new IntReader(th, dir);
+            using (var db = new Db<IntData>(th, reader))
+            {
+                await db.InitialiseTask.ConfigureAwait(th);
+                Assert.Empty(db.AsEnumerable());
+                await dir.AppendAsync(filename, data).ConfigureAwait(th);
+                await th.Delay(Duration.FromSeconds(1)).ConfigureAwait(th);
+                Assert.Single(db.AsEnumerable());
             }
         });
     }
