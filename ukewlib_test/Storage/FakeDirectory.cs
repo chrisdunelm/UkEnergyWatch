@@ -17,7 +17,7 @@ namespace Ukew.Storage
         }
 
         private readonly Dictionary<string, ImmutableArray<byte>> _files;
-        private readonly LinkedList<Action> _onChange = new LinkedList<Action>();
+        private readonly LinkedList<TaskCompletionSource<int>> _watchTcss = new LinkedList<TaskCompletionSource<int>>();
 
         public Task<IEnumerable<FileInfo>> ListFilesAsync(CancellationToken ct = default(CancellationToken)) =>
             Task.FromResult(_files.Select(x => new FileInfo(x.Key, x.Value.Length)));
@@ -30,12 +30,13 @@ namespace Ukew.Storage
                 data = ImmutableArray<byte>.Empty;
             }
             _files[fileId] = data.AddRange(bytes);
-            lock (_onChange)
+            lock (_watchTcss)
             {
-                foreach (var fn in _onChange)
+                foreach (var tcs in _watchTcss)
                 {
-                    Task.Run(fn);
+                    tcs.SetResult(0);
                 }
+                _watchTcss.Clear();
             }
             return Task.CompletedTask;
         }
@@ -43,19 +44,22 @@ namespace Ukew.Storage
         public Task<Stream> ReadAsync(string fileId, CancellationToken ct = default(CancellationToken)) =>
             Task.FromResult((Stream)new MemoryStream(_files[fileId].ToArray()));
 
-        public IDisposable RegisterOnChange(Action fn)
+        public Task AwaitChange(string filter, CancellationToken ct)
         {
-            lock (_onChange)
+            // Ignores filter, but never mind, it's probably OK for testing.
+            var tcs = new TaskCompletionSource<int>();
+            lock (_watchTcss)
             {
-                var node = _onChange.AddLast(fn);
-                return new DisposeFn(() =>
+                var node = _watchTcss.AddLast(tcs);
+                ct.Register(() =>
                 {
-                    lock (_onChange)
+                    lock (_watchTcss)
                     {
-                        _onChange.Remove(node);
+                        _watchTcss.Remove(node);
                     }
                 });
             }
+            return tcs.Task;
         }
     }
 }

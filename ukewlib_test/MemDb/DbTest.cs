@@ -14,7 +14,7 @@ namespace Ukew.MemDb
         public void FewInt() => TimeRunner.Run(async (time, th) =>
         {
             var reader = new FakeReader<int> { 0, 1, 2, 3 };
-            using (var db = new Db<int>(th, reader))
+            using (var db = new Db<int>(th, reader, disableWatch: true))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
                 Assert.Equal(new [] { 2, 3 }, db.Where(x => x >= 2).ToImmutableArray());
@@ -68,7 +68,7 @@ namespace Ukew.MemDb
         public void PollNewData_Simple() => TimeRunner.Run(async (time, th) =>
         {
             var reader = new FakeReader<int>();
-            using (var db = new Db<int>(th, reader, pollInterval: Duration.FromMinutes(5), maxJitter:Duration.Zero))
+            using (var db = new Db<int>(th, reader, pollInterval: Duration.FromMinutes(5), maxJitter: Duration.Zero, disableWatch: true))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
                 Assert.Empty(db.AsEnumerable());
