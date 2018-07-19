@@ -18,6 +18,7 @@ namespace Ukew.Storage
 
         private readonly Dictionary<string, ImmutableArray<byte>> _files;
         private readonly LinkedList<TaskCompletionSource<int>> _watchTcss = new LinkedList<TaskCompletionSource<int>>();
+        private int _watchTcssEpoch = 0;
 
         public Task<IEnumerable<FileInfo>> ListFilesAsync(CancellationToken ct = default(CancellationToken)) =>
             Task.FromResult(_files.Select(x => new FileInfo(x.Key, x.Value.Length)));
@@ -37,6 +38,7 @@ namespace Ukew.Storage
                     tcs.SetResult(0);
                 }
                 _watchTcss.Clear();
+                _watchTcssEpoch += 1;
             }
             return Task.CompletedTask;
         }
@@ -51,11 +53,15 @@ namespace Ukew.Storage
             lock (_watchTcss)
             {
                 var node = _watchTcss.AddLast(tcs);
+                var epoch = _watchTcssEpoch;
                 ct.Register(() =>
                 {
                     lock (_watchTcss)
                     {
-                        _watchTcss.Remove(node);
+                        if (epoch == _watchTcssEpoch)
+                        {
+                            _watchTcss.Remove(node);
+                        }
                     }
                 });
             }
