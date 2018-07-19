@@ -45,7 +45,7 @@ namespace ukew_www_blazor.Server
                 var options = svcs.GetRequiredService<CmdLineOptions>();
                 var dir = new SystemDirectory(taskHelper, options.FuelInstHhCurDataDirectory);
                 var reader = new FuelInstHhCur.Reader(taskHelper, dir);
-                return new Db<FuelInstHhCur.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(1.5));
+                return new Db<FuelInstHhCur.Data>(taskHelper, reader);
             });
             services.AddSingleton<Db<Freq.Data>>(svcs =>
             {
@@ -53,7 +53,7 @@ namespace ukew_www_blazor.Server
                 var options = svcs.GetRequiredService<CmdLineOptions>();
                 var dir = new SystemDirectory(taskHelper, options.FreqDataDirectory);
                 var reader = new Freq.Reader(taskHelper, dir);
-                return new Db<Freq.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(0.7));
+                return new Db<Freq.Data>(taskHelper, reader);
             });
             services.AddSingleton<InstantaneousFlow.Reader>(svcs =>
             {
@@ -66,7 +66,7 @@ namespace ukew_www_blazor.Server
             {
                 var taskHelper = svcs.GetRequiredService<ITaskHelper>();
                 var reader = svcs.GetRequiredService<InstantaneousFlow.Reader>();
-                return new Db<InstantaneousFlow.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(3));
+                return new Db<InstantaneousFlow.Data>(taskHelper, reader);
             });
             services.AddSingleton<Db<B1610.Data>>(svcs =>
             {
@@ -74,7 +74,7 @@ namespace ukew_www_blazor.Server
                 var options = svcs.GetRequiredService<CmdLineOptions>();
                 var dir = new SystemDirectory(taskHelper, options.B1610DataDirectory);
                 var reader = new B1610.Reader(taskHelper, dir);
-                return new Db<B1610.Data>(taskHelper, reader, pollInterval: Duration.FromMinutes(15));
+                return new Db<B1610.Data>(taskHelper, reader);
             });
             services.AddSingleton<Db<PhyBmData.FpnData>>(svcs =>
             {
