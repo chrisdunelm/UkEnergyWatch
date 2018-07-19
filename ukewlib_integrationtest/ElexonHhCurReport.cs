@@ -18,7 +18,6 @@ namespace Ukew
             var elexonDownloader = new ElexonDownloader(taskHelper, elexonApiKey);
             var fuelInstHhCur = new FuelInstHhCur(taskHelper, elexonDownloader);
             var data = await fuelInstHhCur.GetAsync();
-            Assert.NotNull(data);
             // The following are expected to be correct just about all the time.
             Assert.InRange(data.Nuclear, Power.FromGigawatts(4), Power.FromGigawatts(10));
             Assert.InRange(data.Ccgt, Power.FromGigawatts(4), Power.FromGigawatts(40));
