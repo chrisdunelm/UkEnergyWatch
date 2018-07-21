@@ -1,0 +1,7 @@
+language: csharp
+mono: none
+dotnet: 2.1.301
+script:
+ - dotnet restore ukewlib_test
+ - dotnet build ukewlib_test
+ - dotnet test ukewlib_test
