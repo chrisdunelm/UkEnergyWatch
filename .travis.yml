@@ -2,7 +2,8 @@ language: csharp
 mono: none
 dotnet: 2.1.301
 script:
- - dotnet build ukewlib_test
- - dotnet build ukew_www_blazor
  - dotnet build ukew_getdata
+ - dotnet build ukew_www_blazor
+ - dotnet publish -c Release ukew_www_blazor/ukew_www_blazor.Server
+ - dotnet build ukewlib_test
  - dotnet test ukewlib_test
