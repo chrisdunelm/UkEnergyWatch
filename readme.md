@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/chrisdunelm/UkEnergyWatch.svg?branch=master)](https://travis-ci.org/chrisdunelm/UkEnergyWatch)
+
 UK Energy Watch
 ===============
 
