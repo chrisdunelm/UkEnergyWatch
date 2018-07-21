@@ -7,23 +7,7 @@ using System.Linq;
 
 namespace Ukew.MemDb
 {
-    public readonly struct Chunk<T>
-    {
-        public Chunk(int dataLength, T[] data)
-        {
-            DataLength = dataLength;
-            Data = data;
-        }
-        public int DataLength { get; }
-        public T[] Data { get; }
-    }
-
-    public interface IChunkedEnumerable<T>
-    {
-        IEnumerator<Chunk<T>> GetEnumerator();
-    }
-
-    public abstract class DbReader<T> : /*IDbReader<T>, */IChunkedEnumerable<T> where T : struct
+    public abstract class DbReader<T> : IChunkedEnumerable<T> where T : struct
     {
 
         protected DbReader(int requestedBlockSize)
