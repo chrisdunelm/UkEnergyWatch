@@ -18,7 +18,7 @@ namespace Ukew.MemDb
             _taskHelper = taskHelper;
             _reader = reader;
             _pollInterval = pollInterval ?? Duration.FromMinutes(15);
-            _maxJitter = maxJitter ?? _pollInterval / 4;
+            _maxJitter = maxJitter ?? (_pollInterval / 4);
             _enableWatch = !disableWatch;
             _cts = new CancellationTokenSource();
             _tcs = new TaskCompletionSource<int>();
