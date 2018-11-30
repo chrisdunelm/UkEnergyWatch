@@ -111,18 +111,22 @@ namespace Ukew.MemDb
                 }
                 // Care needed, as there may be more blocks, or more items in the last block.
                 var numBlocks = count == 0 ? 0 : ((count - 1) >> _source._blockPower) + 1;
+                // The last block of the source probably won't be full.
                 int blockSize = ((count - 1) & _source._blockMask) + 1;
                 if (count != 0 && blockSize == 0) blockSize = _source._blockSize;
+                // Reverse chunks one-by-one on-demand.
                 for (int i = numBlocks - 1; i >= 0; i--)
                 {
                     var block = blocks[i];
                     var result = new T[blockSize];
                     int blockSizeM1 = blockSize - 1;
+                    // Copy the block whilst reversing the contents.
                     for (int j = 0; j < result.Length; j++)
                     {
                         result[j] = block[blockSizeM1 - j];
                     }
                     yield return new Chunk<T>(blockSize, result);
+                    // All blocks except the last block will be full.
                     blockSize = _source._blockSize;
                 }
             }
@@ -291,112 +295,5 @@ namespace Ukew.MemDb
             }
             return new ChunkedEnumerable<T>(Inner(source, count));
         }
-
-        //public static IEnumerable<(TKey, TAgg)> AggregateBy<T, TKey, TAgg>(IChunkedEnumerable<T> source,
-        //    Func<T, TKey> keySelector, Func<IEnumerable)
-
-        // private class DbReaderWriter<T> : DbReader<T> where T : struct
-        // {
-        //     public DbReaderWriter(int blockSize) : base(blockSize) { }
-
-        //     public new void Add(T item) => base.Add(item);
-        // }
-
-        /*public static DbReader<T> Where<T>(this IDbReader<T> source, Func<T, bool> predicate) where T : struct
-        {
-            var blocks = source.GetBlocks();
-            var result = new DbReaderWriter<T>(blocks.Count == 0 ? 1 : blocks[0].blockSize);
-            foreach (var (blockSize, block) in blocks)
-            {
-                for (int i = 0; i < blockSize; i += 1)
-                {
-                    if (predicate(block[i]))
-                    {
-                        result.Add(block[i]);
-                    }
-                }
-            }
-            return result;
-        }
-
-        public static DbReader<TResult> WhereSelect<T, TResult>(this IDbReader<T> source, Func<T, TResult?> predicateProjection)
-            where T : struct where TResult : struct
-        {
-            var blocks = source.GetBlocks();
-            var result = new DbReaderWriter<TResult>(blocks.Count == 0 ? 1 : blocks[0].blockSize);
-            foreach (var (blockSize, block) in blocks)
-            {
-                for (int i = 0; i < blockSize; i += 1)
-                {
-                    if (predicateProjection(block[i]) is TResult item)
-                    {
-                        result.Add(item);
-                    }
-                }
-            }
-            return result;
-        }
-
-        public static IReadOnlyDictionary<TKey, DbReader<T>> GroupBy<T, TKey>(this IDbReader<T> source, Func<T, TKey> keyProjection)
-            where T : struct
-        {
-            var result = new Dictionary<TKey, DbReaderWriter<T>>();
-            var blocks = source.GetBlocks();
-            var segmentBlockSize = Math.Min(10_000, blocks.Count == 0 ? 1 : blocks[0].blockSize);
-            foreach (var (blockSize, block) in blocks)
-            {
-                for (int i = 0; i < blockSize; i += 1)
-                {
-                    var item = block[i];
-                    var key = keyProjection(item);
-                    if (!result.TryGetValue(key, out var dbReader))
-                    {
-                        dbReader = new DbReaderWriter<T>(segmentBlockSize);
-                        result.Add(key, dbReader);
-                    }
-                    dbReader.Add(item);
-                }
-            }
-            return result.ToDictionary(x => x.Key, x => (DbReader<T>)x.Value);
-        }
-
-        public static IReadOnlyDictionary<TKey, TResult> GroupBy<T, TKey, TResult>(this IDbReader<T> source,
-            Func<T, TKey> keyProjection, Func<DbReader<T>, TResult> resultAggregator)
-            where T : struct =>
-                source.GroupBy(keyProjection).ToDictionary(x => x.Key, x => resultAggregator(x.Value));
-
-        public static ImmutableArray<T> ToImmutableArray<T>(this IDbReader<T> source) where T : struct
-        {
-            var blocks = source.GetBlocks();
-            var size = blocks.Sum(x => x.blockSize);
-            var builder = ImmutableArray.CreateBuilder<T>(size);
-            foreach (var (blockSize, block) in blocks)
-            {
-                builder.AddRange(block.Length == blockSize ? block : block.Take(blockSize));
-            }
-            return builder.MoveToImmutable();
-        }
-
-        public static T Last<T>(this IDbReader<T> source) where T : struct
-        {
-            var blocks = source.GetBlocks();
-            var lastBlock = blocks[blocks.Count - 1];
-            return lastBlock.block[lastBlock.blockSize - 1];
-        }
-
-        public static T? LastOrDefault<T>(this IDbReader<T> source) where T : struct
-        {
-            var blocks = source.GetBlocks();
-            if (blocks.Count == 0)
-            {
-                return null;
-            }
-            var lastBlock = blocks[blocks.Count - 1];
-            if (lastBlock.blockSize == 0)
-            {
-                return null;
-            }
-            return lastBlock.block[lastBlock.blockSize - 1];
-        }*/
     }
 }

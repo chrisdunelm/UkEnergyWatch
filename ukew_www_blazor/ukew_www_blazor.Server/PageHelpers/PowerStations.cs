@@ -15,6 +15,7 @@ namespace ukew_www_blazor.Server.PageHelpers
         private readonly static NodaTime.Duration s_seenUpdateInterval = NodaTime.Duration.FromHours(24);
         private static Instant s_nextSeenUpdate = Instant.MinValue;
         private static HashSet<string> s_seen = null;
+
         public static HashSet<string> Seen(ITime time, Db<B1610.Data> b1610Db)
         {
             lock (s_seenLock)
@@ -47,6 +48,7 @@ namespace ukew_www_blazor.Server.PageHelpers
             { EicIds.FuelType.Other, 12 },
             { EicIds.FuelType.Unknown, 13 },
         };
+
         public static IReadOnlyList<(EicIds.FuelType fuelType, IReadOnlyList<EicIds.PowerStation> powerStations)> ByFuelType()
         {
             return EicIds.PowerStations

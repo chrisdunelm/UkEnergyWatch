@@ -21,7 +21,7 @@ namespace Ukew.Storage
             {
                 throw new ArgumentException($"Directory: '{_path}' does not exist, or is not a directory.");
             }
-            _fileProvider = new PhysicalFileProvider(path);
+            _fileProvider = new PhysicalFileProvider(_path);
         }
 
         private readonly ITaskHelper _taskHelper;
