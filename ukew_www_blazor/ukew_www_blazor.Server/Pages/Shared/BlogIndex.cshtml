@@ -1,0 +1,14 @@
+@model IEnumerable<Post>
+@using ukew_www_blazor.Server.Blogging
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Index";
+}
+
+<h1>Blog Index!</h1>
+
+@foreach (var post in @Model)
+{
+    <h2><a href="/blog/@post.Id">@post.Title</a></h2>
+}

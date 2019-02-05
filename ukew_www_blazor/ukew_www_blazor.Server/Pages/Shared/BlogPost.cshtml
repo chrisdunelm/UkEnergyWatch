@@ -1,0 +1,9 @@
+@model Post
+@using ukew_www_blazor.Server.Blogging
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = @Model.Title;
+}
+
+@Html.Raw(Model.Html)

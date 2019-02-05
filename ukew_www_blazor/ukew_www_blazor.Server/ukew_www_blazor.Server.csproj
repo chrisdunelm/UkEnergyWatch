@@ -10,8 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.4.0" />
     <PackageReference Include="NodaTime" Version="2.0.1" />
     <PackageReference Include="CommandLineParser" Version="2.1.1-beta" />
+    <PackageReference Include="MarkDig" Version="0.15.7" />
     <ProjectReference Include="..\..\ukewlib\ukewlib.csproj" />
-    <PackageReference Include="Markdig" Version="0.15.2" />
   </ItemGroup>
 
   <ItemGroup>

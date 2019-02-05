@@ -28,6 +28,9 @@ namespace ukew_www_blazor.Server
 
         [Option(Required = false, HelpText = "Absolute or relative directory path for access log. Defaults to ./logs")]
         public string AccessLogDirectory { get; set; } = "./logs";
+
+        [Option(Required = false, HelpText = "Absolute or relative directory path to the blog root")]
+        public string BlogRootDirectory { get; set; } = null;
     }
 
     public class Program

@@ -15,6 +15,8 @@ using Ukew.NationalGrid;
 using Ukew.Storage;
 using Ukew.Utils;
 using Ukew.Utils.Tasks;
+using ukew_www_blazor.Server.Blogging;
+using ukew_www_blazor.Server.Controllers;
 using ukew_www_blazor.Server.Utils;
 
 namespace ukew_www_blazor.Server
@@ -84,6 +86,8 @@ namespace ukew_www_blazor.Server
                 var reader = new PhyBmData.FpnReader(taskHelper, dir);
                 return new Db<PhyBmData.FpnData>(taskHelper, reader, pollInterval: Duration.FromMinutes(5));
             });
+
+            services.AddSingleton<PostBag>();
         }
 
         private T Di<T>(IApplicationBuilder app) => (T)app.ApplicationServices.GetRequiredService(typeof(T));
