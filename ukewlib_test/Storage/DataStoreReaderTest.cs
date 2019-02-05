@@ -16,7 +16,7 @@ namespace Ukew.Storage
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var reader = new Data.Reader(th, dir);
                 var data = await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th);
                 Assert.Empty(data);
@@ -32,7 +32,7 @@ namespace Ukew.Storage
                 var e = Bits.Empty;
                 var idBits = e.Concat(ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2));
                 var data = e.Concat(idBits).Concat(e.AddInt(100).AddFletcher16);
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var reader = new Data.Reader(th, dir);
                 Assert.Empty(await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
                 await dir.AppendAsync(filename, data);
@@ -44,14 +44,14 @@ namespace Ukew.Storage
             });
         }
 
-        private (IDirectory, Data[]) BuildData()
+        private (IDirectory, Data[]) BuildData(ITaskHelper th)
         {
             var version1 = "data.seqid.00000001.version.1.elementsize.8.datastore";
             var version2 = "data.seqid.00000002.version.2.elementsize.d.datastore";
             var version3 = "data.seqid.00000003.version.3.elementsize.12.datastore";
             var e = Bits.Empty;
             var idBits = e.Concat(ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2));
-            var dir = new FakeDirectory(
+            var dir = new FakeDirectory(th, 
                 (version1, e.Concat(idBits).Concat(e.AddInt(100).AddFletcher16).Concat(idBits).Concat(e.AddInt(101).AddFletcher16)),
                 (version2, e.Concat(idBits).Concat(e.AddInt(200).AddIntN(201).AddFletcher16).Concat(idBits).Concat(e.AddInt(300).AddIntN(301).AddFletcher16)),
                 (version3, e.Concat(idBits).Concat(e.AddInt(400).AddIntN(401).AddIntN(402).AddFletcher16))
@@ -71,7 +71,7 @@ namespace Ukew.Storage
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var (dir, expected) = BuildData();
+                var (dir, expected) = BuildData(th);
                 var reader = new Data.Reader(th, dir);
                 var data = await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th);
                 Assert.Equal(expected, data);
@@ -83,7 +83,7 @@ namespace Ukew.Storage
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var (dir, expected) = BuildData();
+                var (dir, expected) = BuildData(th);
                 var reader = new Data.Reader(th, dir);
                 async Task<Data[]> Read(int from, int to) =>
                     await (await reader.ReadAsync(from, to).ConfigureAwait(th)).ToArray().ConfigureAwait(th);
@@ -102,7 +102,7 @@ namespace Ukew.Storage
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var (dir, _) = BuildData();
+                var (dir, _) = BuildData(th);
                 var reader = new Data.Reader(th, dir);
                 Assert.Equal(5, await reader.CountAsync().ConfigureAwait(th));
             });

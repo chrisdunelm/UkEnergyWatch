@@ -18,7 +18,7 @@ namespace Ukew.Logging
             {
                 var nl = Environment.NewLine;
                 var expected = $"one{nl}two{nl}";
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var appender = new RollingFileAppender(dir, "abc", th);
                 await appender.AppendLineAsync("one").ConfigureAwait(th);
                 await appender.AppendLineAsync("two").ConfigureAwait(th);

@@ -47,7 +47,7 @@ namespace Ukew.NationalGrid
                 };
                 var fakeSoapDownloader = new FakeSoapDownloader(entries);
                 var flow = new InstantaneousFlow(th, fakeSoapDownloader);
-                var stringsDir = new FakeDirectory();
+                var stringsDir = new FakeDirectory(th);
                 var strings = new Strings(th, stringsDir);
                 var data = await (await flow.GetInstantaneousFlowDataAsync().ConfigureAwait(th)).WriteStringsAsync(th, strings).ConfigureAwait(th);
                 Assert.Equal(258, data.Count);

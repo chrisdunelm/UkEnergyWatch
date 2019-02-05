@@ -134,7 +134,7 @@ namespace Ukew.MemDb
             var idBits = e.Concat(ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2));
             var data = e.Concat(idBits).Concat(e.AddInt(314).AddFletcher16);
 
-            var dir = new FakeDirectory();
+            var dir = new FakeDirectory(th);
             var reader = new IntReader(th, dir);
             using (var db = new Db<IntData>(th, reader))
             {

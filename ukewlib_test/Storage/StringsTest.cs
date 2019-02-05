@@ -13,7 +13,7 @@ namespace Ukew.Storage
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var strings = new Strings(th, dir);
                 var all0 = await (await strings.AllStrings().ConfigureAwait(th)).ToList().ConfigureAwait(th);
                 Assert.Empty(all0);
@@ -41,7 +41,7 @@ namespace Ukew.Storage
                 string s1 = new string('a', 1000);
                 string s2 = new string('b', 2000);
 
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var strings = new Strings(th, dir);
                 var all0 = await (await strings.AllStrings().ConfigureAwait(th)).ToList().ConfigureAwait(th);
                 Assert.Empty(all0);
@@ -69,7 +69,7 @@ namespace Ukew.Storage
             {
                 var ls = new[] { 1, 100, 2, 200, Strings.PartLengthV1, Strings.PartLengthV1 - 1, Strings.PartLengthV1 + 1,
                     10000, 1, 10000, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var strings = new Strings(th, dir);
 
                 var expected = new List<(long, string)>();
@@ -92,7 +92,7 @@ namespace Ukew.Storage
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var strings = new Strings(th, dir);
 
                 var index0 = await strings.AddOrGetIndexAsync("a").ConfigureAwait(th);

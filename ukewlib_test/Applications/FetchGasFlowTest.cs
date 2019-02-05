@@ -32,7 +32,7 @@ namespace Ukew.Applications
                         Soap.LoadBody("GetInstantaneousFlowData1") }
                 };
                 var downloader = new FakeSoapDownloader(entries);
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var fetcher = new FetchGasFlow(th, downloader, dir, time);
 
                 var cts = new CancellationTokenSource();

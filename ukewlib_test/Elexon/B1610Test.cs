@@ -39,7 +39,7 @@ namespace Ukew.Elexon
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var freq = new B1610(th, new FakeElexonDownloader());
                 var data = await freq.GetAsync(new LocalDate(2017, 8, 1), 1).ConfigureAwait(th);
                 var writer = new B1610.Writer(th, dir);

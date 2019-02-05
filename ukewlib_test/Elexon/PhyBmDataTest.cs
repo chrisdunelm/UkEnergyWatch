@@ -57,7 +57,7 @@ namespace Ukew.Elexon
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var phy = new PhyBmData(th, new FakeElexonDownloader());
                 var data = await phy.GetAsync(new LocalDate(2017, 8, 6), 1).ConfigureAwait(th);
                 var writer = new PhyBmData.FpnWriter(th, dir);

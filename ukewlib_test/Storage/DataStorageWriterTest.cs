@@ -15,7 +15,7 @@ namespace Ukew.Storage
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var writer = new Data.Writer(th, dir);
                 var reader = new Data.Reader(th, dir);
                 Assert.Empty(await (await reader.ReadAsync().ConfigureAwait(th)).ToArray().ConfigureAwait(th));
@@ -33,7 +33,7 @@ namespace Ukew.Storage
             TimeRunner.Run(async (time, th) =>
             {
                 var idBits = ImmutableArray.Create(DataStore.ID_BYTE_1, DataStore.ID_BYTE_2);
-                var dir = new FakeDirectory(
+                var dir = new FakeDirectory(th,
                     ("data.seqid.00000001.version.1.elementsize.8.datastore", Bits.Empty.Concat(idBits).Concat(Bits.Empty.AddInt(1).AddFletcher16))
                 );
                 var writer = new Data.Writer(th, dir);

@@ -19,7 +19,7 @@ namespace Ukew.Applications
             TimeRunner.Run(async (time, th) =>
             {
                 var downloader = new FakeElexonDownloader();
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var fetcher = new FetchFreq(th, downloader, dir, time);
 
                 var cts = new CancellationTokenSource();

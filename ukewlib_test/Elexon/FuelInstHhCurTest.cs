@@ -42,7 +42,7 @@ namespace Ukew.Elexon
         {
             TimeRunner.Run(async (time, th) =>
             {
-                var dir = new FakeDirectory();
+                var dir = new FakeDirectory(th);
                 var fuelInstHhCur = new FuelInstHhCur(th, new FakeElexonDownloader());
                 var data = await fuelInstHhCur.GetAsync().ConfigureAwait(th);
                 var writer = new FuelInstHhCur.Writer(th, dir);
