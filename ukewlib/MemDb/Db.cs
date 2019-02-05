@@ -47,25 +47,20 @@ namespace Ukew.MemDb
         private async Task ReadAsync()
         {
             var ct = _cts.Token;
-            await ReadAvailableAsync(ct).ConfigureAwait(_taskHelper);
-            _tcs.SetResult(0);
             while (true)
             {
                 // Start watch now, so no watch events are missed
                 var delay = _pollInterval + _maxJitter * (_rnd.NextDouble() - 0.5);
                 Task watchTask = _enableWatch ? _reader.AwaitChange(delay, ct) : _taskHelper.Delay(delay, ct);
                 // Read as much as is available
-                await ReadAvailableAsync(ct).ConfigureAwait(_taskHelper);
-                // Schedule/wait-for next read
-                await watchTask.ConfigureAwait(_taskHelper);
-            }
-            async Task ReadAvailableAsync(CancellationToken ct0)
-            {
-                var en = (await _reader.ReadAsync((int)Count, ct: ct0).ConfigureAwait(_taskHelper)).GetEnumerator();
-                while (await en.MoveNext(ct0).ConfigureAwait(_taskHelper))
+                var en = (await _reader.ReadAsync((int)Count, ct: ct).ConfigureAwait(_taskHelper)).GetEnumerator();
+                while (await en.MoveNext(ct).ConfigureAwait(_taskHelper))
                 {
                     Add(en.Current);
                 }
+                _tcs.TrySetResult(0);
+                // Schedule/wait-for next read
+                await watchTask.ConfigureAwait(_taskHelper);
             }
         }
 
