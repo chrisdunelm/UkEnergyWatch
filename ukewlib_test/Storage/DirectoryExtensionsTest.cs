@@ -1,3 +1,4 @@
+using System.Threading;
 using NodaTime;
 using Ukew.Testing;
 using Ukew.Utils.Tasks;
@@ -18,6 +19,18 @@ namespace Ukew.Storage
             await dir.AppendAsync("afile", new byte[] { 0 }).ConfigureAwait(th);
             var timedOut1 = await timedOut1Task.ConfigureAwait(th);
             Assert.False(timedOut1);
+        });
+
+        [Fact]
+        public void WatchTimeoutCancelled() => TimeRunner.Run(async (NodaTime, th) =>
+        {
+            var dir = new FakeDirectory(th);
+            var cts = new CancellationTokenSource();
+            var timedOutTask = dir.AwaitChange("", Duration.FromSeconds(10), cts.Token);
+            await th.Delay(Duration.FromSeconds(5));
+            cts.Cancel();
+            var cancelled = await timedOutTask.ConfigureAwaitHideCancel(th);
+            Assert.True(cancelled);
         });
     }
 }
