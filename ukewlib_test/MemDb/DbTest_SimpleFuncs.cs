@@ -10,7 +10,7 @@ namespace Ukew.MemDb
         [Fact]
         public void FirstOrDefault() => TimeRunner.Run(async (time, th) =>
         {
-            var reader = new FakeReader<int> { 0, 1, 2, 3 };
+            var reader = new FakeReader<int>(th) { 0, 1, 2, 3 };
             using (var db = new Db<int>(th, reader))
             {
                 await db.InitialiseTask.ConfigureAwait(th);

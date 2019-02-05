@@ -46,32 +46,25 @@ namespace Ukew.MemDb
 
         private async Task ReadAsync()
         {
-            bool first = true;
+            var ct = _cts.Token;
+            await ReadAvailableAsync(ct).ConfigureAwait(_taskHelper);
+            _tcs.SetResult(0);
             while (true)
             {
-                using (var combCts = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token))
+                // Start watch now, so no watch events are missed
+                var delay = _pollInterval + _maxJitter * (_rnd.NextDouble() - 0.5);
+                Task watchTask = _enableWatch ? _reader.AwaitChange(delay, ct) : _taskHelper.Delay(delay, ct);
+                // Read as much as is available
+                await ReadAvailableAsync(ct).ConfigureAwait(_taskHelper);
+                // Schedule/wait-for next read
+                await watchTask.ConfigureAwait(_taskHelper);
+            }
+            async Task ReadAvailableAsync(CancellationToken ct0)
+            {
+                var en = (await _reader.ReadAsync((int)Count, ct: ct0).ConfigureAwait(_taskHelper)).GetEnumerator();
+                while (await en.MoveNext(ct0).ConfigureAwait(_taskHelper))
                 {
-                    // Start watch now, so no watch events are missed
-                    Task watchTask = _enableWatch ? _reader.AwaitChange(combCts.Token) : null;
-                    // Read as much as is available
-                    var en = (await _reader.ReadAsync((int)Count, ct: _cts.Token).ConfigureAwait(_taskHelper)).GetEnumerator();
-                    while (await en.MoveNext(_cts.Token).ConfigureAwait(_taskHelper))
-                    {
-                        Add(en.Current);
-                    }
-                    if (first)
-                    {
-                        _tcs.SetResult(0);
-                        first = false;
-                    }
-                    // Schedule/wait-for next read
-                    var ofs = Duration.FromSeconds((_rnd.NextDouble() - 0.5) * _maxJitter.TotalSeconds);
-                    var delay = _pollInterval + ofs;
-                    Task delayTask = _taskHelper.Delay(delay, combCts.Token);
-                    var tasks = watchTask == null ? new[] { delayTask } : new[] { delayTask, watchTask };
-                    await _taskHelper.WhenAny(tasks).ConfigureAwait(_taskHelper);
-                    combCts.Cancel();
-                    await _taskHelper.WhenAll(tasks).ConfigureAwaitHideCancel(_taskHelper);
+                    Add(en.Current);
                 }
             }
         }

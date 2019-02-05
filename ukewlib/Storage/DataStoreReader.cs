@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using NodaTime;
 using Ukew.Utils;
 using Ukew.Utils.Tasks;
 
@@ -50,6 +51,7 @@ namespace Ukew.Storage
         }
 
         public Task AwaitChange(CancellationToken ct = default) => _dir.AwaitChange("*.datastore", ct);
+        public Task AwaitChange(Duration timeout, CancellationToken ct = default) => _dir.AwaitChange("*.datastore", timeout, ct);
 
         public async Task<long> CountAsync(CancellationToken ct = default(CancellationToken)) =>
             (await _taskHelper.ConfigureAwait(BuildIndex(ct))).LastOrDefault()?.ToIndex ?? 0;

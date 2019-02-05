@@ -16,7 +16,7 @@ namespace Ukew.MemDb
         [Fact]
         public void FewInt() => TimeRunner.Run(async (time, th) =>
         {
-            var reader = new FakeReader<int> { 0, 1, 2, 3 };
+            var reader = new FakeReader<int>(th) { 0, 1, 2, 3 };
             using (var db = new Db<int>(th, reader, disableWatch: true))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
@@ -29,7 +29,7 @@ namespace Ukew.MemDb
             [CombinatorialValues(0, 1, 100, 1000)] int blockSize
         ) => TimeRunner.Run(async (time, th) =>
         {
-            var reader = new FakeReader<int>();
+            var reader = new FakeReader<int>(th);
             reader.AddRange(Enumerable.Range(0, 100_000));
             using (var db = new Db<int>(th, reader, requestedBlockSize: blockSize))
             {
@@ -55,7 +55,7 @@ namespace Ukew.MemDb
             [CombinatorialValues(2, 3_004, 100_001)] int dataSize
         ) => TimeRunner.Run(async (time, th) =>
         {
-            var reader = new FakeReader<Data>();
+            var reader = new FakeReader<Data>(th);
             reader.AddRange(Enumerable.Range(0, dataSize).Select(i => new Data { a = i, b = (byte)i, c = i, d = (short)i }));
             using (var db = new Db<Data>(th, reader, requestedBlockSize: blockSize))
             {
@@ -70,7 +70,7 @@ namespace Ukew.MemDb
         [Fact]
         public void PollNewData_Simple() => TimeRunner.Run(async (time, th) =>
         {
-            var reader = new FakeReader<int>();
+            var reader = new FakeReader<int>(th);
             using (var db = new Db<int>(th, reader, pollInterval: Duration.FromMinutes(5), maxJitter: Duration.Zero, disableWatch: true))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
@@ -89,7 +89,7 @@ namespace Ukew.MemDb
             [CombinatorialValues(0, 1, 99, 101)] int loadCycles
         ) => TimeRunner.Run(async (time, th) =>
         {
-            var reader = new FakeReader<int>();
+            var reader = new FakeReader<int>(th);
             using (var db = new Db<int>(th, reader, requestedBlockSize: blockSize, pollInterval: Duration.FromMinutes(5), maxJitter: Duration.Zero))
             {
                 await db.InitialiseTask.ConfigureAwait(th);
