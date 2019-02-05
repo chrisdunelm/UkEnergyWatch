@@ -9,7 +9,7 @@ namespace Ukew.Storage
     public class DirectoryExtensionsTest
     {
         [Fact]
-        public void WatchTimeout() => TimeRunner.Run(async (NodaTime, th) =>
+        public void WatchTimeout() => TimeRunner.Run(async (time, th) =>
         {
             var dir = new FakeDirectory(th);
             var timedOut0 = await dir.AwaitChange("", Duration.FromSeconds(10)).ConfigureAwait(th);
@@ -22,7 +22,7 @@ namespace Ukew.Storage
         });
 
         [Fact]
-        public void WatchTimeoutCancelled() => TimeRunner.Run(async (NodaTime, th) =>
+        public void WatchTimeoutCancelled() => TimeRunner.Run(async (time, th) =>
         {
             var dir = new FakeDirectory(th);
             var cts = new CancellationTokenSource();
