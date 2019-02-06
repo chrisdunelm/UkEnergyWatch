@@ -30,7 +30,8 @@ namespace ukew_www_blazor.Server.Blogging
             var preambleParts = md.Split("---", 3);
             var preamble = preambleParts[1].Trim().Split('\n').Select(x => x.Split(':', 2))
                 .ToDictionary(x => x[0].Trim(), x => x[1].Trim());
-            var html = Markdown.ToHtml(preambleParts[2]);
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            var html = Markdown.ToHtml(preambleParts[2], pipeline);
             return new Post(time, preamble, html);
         }
 
