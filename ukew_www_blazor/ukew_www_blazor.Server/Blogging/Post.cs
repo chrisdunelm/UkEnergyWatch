@@ -39,12 +39,13 @@ namespace ukew_www_blazor.Server.Blogging
         {
             _time = time;
             Id = preamble["id"];
-            PublishTime = InstantPattern.ExtendedIso.Parse(preamble["publish-time-utc"]).Value;
+            var publishTimeUtc = preamble.TryGetValue("publish-time-utc", out var pt) ?
+                InstantPattern.ExtendedIso.Parse(pt).Value : Instant.FromUtc(2100, 1, 1, 0, 0);
             Title = preamble["title"];
             Html = html;
         }
 
-        private ITime _time;
+        private readonly ITime _time;
 
         public string Id { get; }
         public Instant PublishTime { get; }
